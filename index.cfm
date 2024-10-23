@@ -1,0 +1,1 @@
+<cfoutput>This is a sample file</cfoutput>
