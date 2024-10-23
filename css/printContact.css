@@ -1,0 +1,23 @@
+@media print {
+ 	.no-print{
+		display: none;
+	}
+	
+	#contactList th,tr,td {
+		border: 0;
+	} 
+	
+	#contactList tr{
+		border: 1px solid black;
+	}
+	
+	#contactList tr th:first-child,
+	#contactList tr td:first-child,
+	#contactList tr th:nth-child(3),
+	#contactList tr td:nth-child(3),
+	#contactList tr th:nth-child(4),
+	#contactList tr td:nth-child(4)
+	{
+		border: 1px solid black;
+	}   
+}

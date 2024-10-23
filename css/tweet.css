@@ -1,0 +1,105 @@
+
+.container {
+ 	min-height: 95vh;
+ 	color: #e7e9ea;
+        margin-top: 5vh;
+ 	
+}
+
+#x img {
+ 	width: 40vw;
+}
+
+.container-1 {
+ 	display: flex;
+ 	flex-direction: row;
+ 	justify-content: flex-start;
+	flex-wrap: wrap;
+ 	column-gap: 1vh;
+ 	list-style-type: none;
+ 	margin: 0;
+ 	padding: auto;
+        float: bottom;
+}
+
+.container-1 ul {
+ 	list-style-type: none;
+ 	margin: 0;
+}
+
+.container-1 li {
+ 	padding-right: 3vh;
+}
+
+.container-1 li a{
+  	text-decoration: none;
+  	color: #71767b;
+  	font-size: 2.2vh;
+  	/*font-family: twitter-chirp;*/
+}
+
+.container-1 li a:hover {
+	text-decoration: underline;
+}
+ 
+.row-1 {
+ 	flex: 1;
+ 	align-items: center;
+ 	padding: auto;
+}
+
+.row-2 {
+ 	display: flex;
+ 	flex-direction: column; 
+ 	justify-content: center;
+ 	align-items: center;
+ 	padding: auto;
+}
+
+#sign-in {
+ 	font: arial;
+}
+
+.desc {
+ 	font-size: 2vh;
+ 	color: #999999;
+}
+
+.or {
+	display: flex;
+        flex-direction: row;   
+} 
+
+#g1 {
+	z-index: 1;
+        width: 3vw;
+        height: 3vh;
+        object-fit: contain;
+        border-radius: 50vw;
+}
+
+p {
+ 	font-family: Arial;	
+}
+
+.big {
+ 	font-weight: 800;
+ 	font-size: 5vw;
+	font-style: bold;
+}
+
+.medium {
+ 	font-weight: 800;
+ 	font-size: 2.5vw;
+	font-style: bold;
+}
+
+.small {
+ 	font-weight: 800;
+ 	font-size: 3vw;
+}
+
+.line {
+ height: 1px;
+ border: 1px solid grey;
+}
