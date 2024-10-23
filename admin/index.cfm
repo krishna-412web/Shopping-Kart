@@ -8,7 +8,7 @@
     		<title>Shopping cart-Admin</title>
 		<link href="../css/bootstrap.min.css" rel="stylesheet" >
     		<script src="../js/bootstrap.min.js"></script>
-		<!---<link href="../css/styles.css" rel="stylesheet">--->
+		<!---<link href="../css/styles.css" rel="stylesheet">11111--->
   	</head>
   	<body>
 		<div class="container-fluid">
