@@ -75,7 +75,7 @@
                     <div class="card">
                         <div class="card-body p-1 row">
                             <h3 class="col-8">Products</h3>
-                            <button type="button" class="btn btn-success w-25" data-bs-toggle="modal" data-bs-target="#myModal">Add</button>
+                            <button type="button" class="btn btn-success w-25" data-bs-toggle="modal" data-bs-target="#productModal">Add</button>
                         </div>
                     </div>
 					<table class="table table-bordered table-sm" id="productList">	
@@ -130,91 +130,87 @@
         				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       				</div>
            			<div class="modal-body">
-					<form action="" method="post" enctype="multipart/form-data">
-						<div class="row">
-							<h5 class="text-dark text-center">UPLOAD SPREADSHEET</h5>
-						</div>
-						<div class="row">
-							<div class="col-1"></div>
-							<div class="col-5">
-								<a class="btn btn-info" href="excelFeature.cfm?excelData=1">Template With Data</a>
+						<form action="" method="post" enctype="multipart/form-data">
+							<div class="row">
+								<h5 class="text-dark text-center">UPLOAD SPREADSHEET</h5>
 							</div>
-							<div class="col-5">
-								<a class="btn btn-info" href="excelFeature.cfm">Plain Template</a>
+							<div class="row">
+								<div class="col-1"></div>
+								<div class="col-5">
+									<a class="btn btn-info" href="excelFeature.cfm?excelData=1">Template With Data</a>
+								</div>
+								<div class="col-5">
+									<a class="btn btn-info" href="excelFeature.cfm">Plain Template</a>
+								</div>
+								<div class="col-1"></div>
 							</div>
-							<div class="col-1"></div>
-						</div>
-						<div class="mt-1"></div>
-						<input type="file" id="spreadsheet" name="spreadsheet" accept=".xls, .xlsx, .csv"/>
-						<div class="mt-2"></div>
-						<div class="row">
-							<div class="col-5"><button type="button" class="btn btn-sm btn-primary w-100" name="close" data-bs-dismiss="modal" data-bs-target="#uploadModal">Cancel</button></div>
-							<div class="col-2"></div>
-							<div class="col-5"><button type="submit" class="btn btn-sm btn-danger w-100" id="uploadSubmit" name="uploadSubmit">Upload</button></div>
-						</div>
-					</form>
+							<div class="mt-1"></div>
+							<input type="file" id="spreadsheet" name="spreadsheet" accept=".xls, .xlsx, .csv"/>
+							<div class="mt-2"></div>
+							<div class="row">
+								<div class="col-5"><button type="button" class="btn btn-sm btn-primary w-100" name="close" data-bs-dismiss="modal" data-bs-target="#uploadModal">Cancel</button></div>
+								<div class="col-2"></div>
+								<div class="col-5"><button type="submit" class="btn btn-sm btn-danger w-100" id="uploadSubmit" name="uploadSubmit">Upload</button></div>
+							</div>
+						</form>
+					</div>
 				</div>
 			</div>
 		</div>
 	</div>
 
 
-	<div class="modal" id="myModal">
-  		<div class="modal-dialog modal-lg">
-    			<div class="modal-content">
-      				<div class="modal-header">
-        				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      				</div>
-           			<div class="modal-body">
-					<cfoutput>
-        				<div id="addDiv" class="content-div">
-                        	<div class="container-fluid">
+	<div class="modal" id="productModal">
+  		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<div id="addDiv" class="content-div">
+						<div class="container-fluid">
 							<form id="myForm1" class="needs-validation" action="" method="post" enctype="multipart/form-data">
 									<h3 class="text-center border-bottom border-primary" id="heading">ADD/EDIT PRODUCTS</h3>
-									<h5 class="text-decoration-underline text-primary text-start">Personal Contact</h5>
-                                    <div class="form-floating">
-                                        <input class="form-control" type="text" id="lastName" name="lastName" placeholder="" required>
-                                        <label for="lastName" class="text-dark fw-bold form-label">lastname*</label>
-                                    </div>
+									<h5 class="text-decoration-underline text-primary text-start">Product Details</h5>
+									<div class="form-floating">
+										<input class="form-control" type="text" id="lastName" name="lastName" placeholder="" required>
+										<label for="lastName" class="text-dark fw-bold form-label">Category</label>
+									</div>
 
-                                    <div class="form-floating">
-                                        <input class="form-control" type="text" id="houseName" name="houseName" placeholder="" required>
-                                        <label for="houseName" class="form-label text-dark fw-bold">House name</label>
-                                    </div>
+									<div class="form-floating">
+										<input class="form-control" type="text" id="houseName" name="houseName" placeholder="" required>
+										<label for="houseName" class="form-label text-dark fw-bold">Subcategory</label>
+									</div>
 
-                                    <div class="form-floating">
-                                        <input class="form-control" type="text" id="productName" name="productName" placeholder="" required>
-                                        <label for="productName" class="form-label text-dark fw-bold">Product Namme</label>
-                                    </div>
+									<div class="form-floating">
+										<input class="form-control" type="text" id="productName" name="productName" placeholder="" required>
+										<label for="productName" class="form-label text-dark fw-bold">Product Name</label>
+									</div>
 
-                                    <div class="form-floating">
-                                        <input class="form-control" type="text" id="street" name="street" placeholder="" required>
-                                        <label for="street" class="form-label text-dark fw-bold">Street</label>
-                                    </div>
+									<div class="form-floating">
+										<input class="form-control" type="text" id="productDesc" name="productDesc" placeholder="" required>
+										<label for="productDesc" class="form-label text-dark fw-bold">Product Description</label>
+									</div>
 
-                                    <div class="form-floating">
-                                        <input class="form-control" type="text" id="city" name="city" placeholder="" required>
-                                        <label for="city" class="form-label text-dark fw-bold">City</label>
-                                    </div>	
+									<div class="form-floating">
+										<input class="form-control" type="text" id="price" name="price" placeholder="" required>
+										<label for="price" class="form-label text-dark fw-bold">Price</label>
+									</div>	
 
-                                    <div class="form-floating">
-                                        <input class="form-control" type="file" name="profile" id ="profile" accept="image/jpeg, image/png" required>
-                                        <label for="profile" class="form-label text-decoration-underline text-primary text-start">Upload Photo</label>	
-                                    </div>
+									<div class="form-floating">
+										<input class="form-control" type="file" name="productPicture" id ="productPicture" accept="image/jpeg, image/png" required>
+										<label for="productPicture" class="form-label text-decoration-underline text-primary text-start">Product Picture</label>	
+									</div>
 									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
 									<button class="btn btn-primary w-100" type="submit" name="updateSubmit" id="submit1">Add Product</button>
 							</form>
 						</div>
-                    </div>
-					</cfoutput>
-      				<!---<div class="modal-footer">
-        				<button type="button" class="btn btn-danger" data-bs-dismiss="modal">Close</button>
-      				</div>--->
-
-    			</div>
+					</div>
+				</div>
+			</div>
   		</div>
 	</div>
-	</div>
+
 	<!---<script src="./js/jQuery.js"></script>
 	<script src="./js/modal-script.js"></script>--->
 </body>
