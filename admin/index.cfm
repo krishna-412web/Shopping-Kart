@@ -10,7 +10,7 @@
     		<script src="../js/bootstrap.min.js"></script>
 		<!---<link href="../css/styles.css" rel="stylesheet">11111--->
   	</head>
-  	<body>
+  	<body class="bg-light">
 		<div class="container-fluid">
 			<nav class="navbar navbar-expand-sm bg-secondary navbar-dark fixed-top">
   				<div class="container-fluid row">
