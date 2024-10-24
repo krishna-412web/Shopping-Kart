@@ -27,7 +27,7 @@
                     <div class="card">
                         <div class="card-body p-1 row">
                             <h3 class="col-8">Categories</h3>
-                            <button type="button" class="btn btn-success w-25"  data-bs-toggle="modal" data-bs-target="#uploadModal">Add</button>
+                            <button type="button" class="btn btn-success w-25"  data-bs-toggle="modal" data-bs-target="#CategoryModal">Add</button>
                         </div>
                     </div>
 					<table class="table table-bordered table-sm" id="categoryList">	
@@ -51,7 +51,7 @@
                     <div class="card">
                         <div class="card-body p-1 row">
                             <h3 class="col-8">Subcategories</h3>
-                            <button type="button" class="btn btn-success w-25" data-bs-toggle="modal" data-bs-target="#uploadModal">Add</button>
+                            <button type="button" class="btn btn-success w-25" data-bs-toggle="modal" data-bs-target="#subCategoryModal">Add</button>
                         </div>
                     </div>
 					<table class="table table-bordered table-sm" id="subCategoryList">	
@@ -159,6 +159,64 @@
 		</div>
 	</div>
 
+	<div class="modal" id="CategoryModal">
+  		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<div id="addCategory" class="content-div">
+						<div class="container-fluid">
+							<form id="subCategoryForm" class="needs-validation" action="" method="post" enctype="multipart/form-data">
+									<h3 class="text-center border-bottom border-primary" id="heading">ADD/EDIT CATEGORY</h3>
+									<h5 class="text-decoration-underline text-primary text-start">Category Details</h5>
+									<div class="form-floating mt-1">
+										<input class="form-control" type="text" id="categoryName" name="categoryName" placeholder="" required>
+										<label for="categoryName" class="form-label text-dark fw-bold">Category Name</label>
+									</div>
+									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
+									<button class="btn btn-primary mt-1 w-100" type="submit" name="subcategorySubmit" id="subcategory">Add Category</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+  		</div>
+	</div>
+
+	<div class="modal" id="subCategoryModal">
+  		<div class="modal-dialog modal-md">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+				</div>
+				<div class="modal-body">
+					<div id="addSubCategory" class="content-div">
+						<div class="container-fluid">
+							<form id="subCategoryForm" class="needs-validation" action="" method="post" enctype="multipart/form-data">
+									<h3 class="text-center border-bottom border-primary" id="heading">ADD/EDIT SUBCATEGORY</h3>
+									<h5 class="text-decoration-underline text-primary text-start">Subcategory Details</h5>
+									<div class="form-floating">
+										<select id="categorySelect" name="Category" class="form-select" placeholder="" required>
+												<option value="" selected></option>
+												<option value="1">Electronics</option>
+										</select>
+										<label for="productCategory" class="text-dark fw-bold form-label">Subcategory</label>
+									</div>
+									<div class="form-floating mt-1">
+										<input class="form-control" type="text" id="subCategoryName" name="subCategoryName" placeholder="" required>
+										<label for="subCategoryName" class="form-label text-dark fw-bold">Subcategory Name</label>
+									</div>
+									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
+									<button class="btn btn-primary mt-1 w-100" type="submit" name="subcategorySubmit" id="subcategory">Add Subcategory</button>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+  		</div>
+	</div>
 
 	<div class="modal" id="productModal">
   		<div class="modal-dialog modal-md">
@@ -171,38 +229,44 @@
 						<div class="container-fluid">
 							<form id="myForm1" class="needs-validation" action="" method="post" enctype="multipart/form-data">
 									<h3 class="text-center border-bottom border-primary" id="heading">ADD/EDIT PRODUCTS</h3>
-									<h5 class="text-decoration-underline text-primary text-start">Product Details</h5>
-									<div class="form-floating">
-										<input class="form-control" type="text" id="lastName" name="lastName" placeholder="" required>
-										<label for="lastName" class="text-dark fw-bold form-label">Category</label>
+									<h5 class="text-decoration-underline text-primary text-start mt-1">Product Details</h5>
+									<div class="form-floating mt-1">
+										<select id="productCategory" name="productCategory" class="form-select" placeholder="" required>
+												<option value="" selected></option>
+												<option value="1">Electronics</option>
+										</select>
+										<label for="productCategory" class="text-dark fw-bold form-label">Category</label>
 									</div>
 
-									<div class="form-floating">
-										<input class="form-control" type="text" id="houseName" name="houseName" placeholder="" required>
-										<label for="houseName" class="form-label text-dark fw-bold">Subcategory</label>
+									<div class="form-floating mt-1">
+										<select id="productSubCategory" name="productSubCategory" class="form-select" placeholder="" required>
+													<option value="" selected></option>
+													<option value="1">Mobile Phones</option>
+										</select>
+										<label for="productCategory" class="text-dark fw-bold form-label">Subcategory</label>
 									</div>
 
-									<div class="form-floating">
+									<div class="form-floating mt-1">
 										<input class="form-control" type="text" id="productName" name="productName" placeholder="" required>
 										<label for="productName" class="form-label text-dark fw-bold">Product Name</label>
 									</div>
 
-									<div class="form-floating">
+									<div class="form-floating mt-1">
 										<input class="form-control" type="text" id="productDesc" name="productDesc" placeholder="" required>
 										<label for="productDesc" class="form-label text-dark fw-bold">Product Description</label>
 									</div>
 
-									<div class="form-floating">
+									<div class="form-floating mt-1">
 										<input class="form-control" type="text" id="price" name="price" placeholder="" required>
 										<label for="price" class="form-label text-dark fw-bold">Price</label>
 									</div>	
 
-									<div class="form-floating">
+									<div class="form-floating mt-1">
 										<input class="form-control" type="file" name="productPicture" id ="productPicture" accept="image/jpeg, image/png" required>
 										<label for="productPicture" class="form-label text-decoration-underline text-primary text-start">Product Picture</label>	
 									</div>
 									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
-									<button class="btn btn-primary w-100" type="submit" name="updateSubmit" id="submit1">Add Product</button>
+									<button class="btn btn-primary w-100 mt-1" type="submit" name="updateSubmit" id="submit1">Add Product</button>
 							</form>
 						</div>
 					</div>
