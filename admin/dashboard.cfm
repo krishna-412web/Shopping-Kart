@@ -202,7 +202,7 @@
 												<option value="" selected></option>
 												<option value="1">Electronics</option>
 										</select>
-										<label for="productCategory" class="text-dark fw-bold form-label">Subcategory</label>
+										<label for="productCategory" class="text-dark fw-bold form-label">Category</label>
 									</div>
 									<div class="form-floating mt-1">
 										<input class="form-control" type="text" id="subCategoryName" name="subCategoryName" placeholder="" required>

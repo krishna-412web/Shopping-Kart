@@ -40,15 +40,6 @@ $(document).ready(() => {
 		}
 		
 	});
-
-	$("#pdfFeature").click(function(){
-		window.location.href="pdfFeature.cfm";
-	});
-
-
-	$("#printFeature").click(function(){
-        	window.print();
-	});
 		
 
 	$(document).on('click', '[data-bs-toggle="modal"]', function() {
@@ -151,6 +142,7 @@ $(document).ready(() => {
 		}
 		
 	});
+
 		
 	$("#myForm1").submit(function(event){
 		var class1 = $(this).attr('class');
@@ -175,37 +167,23 @@ $(document).ready(() => {
 		let row = $(this).parent().parent().attr('id');
 		$("#delInp").attr('value',row);
 	});
+	$(document).on('click', '[data-bs-toggle="modal"]', function() {
+		// Get the target modal's ID from the trigger element
+		var targetModal = $(this).data('bs-target');
 	
-	/*$("#uploadSubmit").click(function() {
-		setTimeout(function() {
-			window.location.href="welcome.cfm";
-		},1500);
-	});*/
-	
-	$(document).on('click','.printContact', function(event) {
-		let id= $(this).parent().parent().attr('id');
-		let i = $(this).parent().parent().children().first().html();
-		let rowSelected = obj[i-1];
-
-		$("#title1").val(rowSelected.title);
-		let title = $('#title1 option:selected').text();
-		$("#gender1").val(rowSelected.gender);
-		let gender = $('#gender1 option:selected').text();
-
-		let encodedTitle = encodeURIComponent(title);
-		let encodedGender = encodeURIComponent(gender);
-
-		 window.open(`output.cfm?id=${rowSelected.log_id}`);
-
+		if (targetModal === '#modal1') {
+			// Custom functionality for modal 1
+			console.log('Modal 1 opened');
+			$('#modal1 .modal-body').text('Custom content for Modal 1');
+		} else if (targetModal === '#modal2') {
+			// Custom functionality for modal 2
+			console.log('Modal 2 opened');
+			$('#modal2 .modal-body').text('Different content for Modal 2');
+		} else if (targetModal === '#modal3') {
+			// Custom functionality for modal 3
+			console.log('Modal 3 opened');
+			$('#modal3 .modal-body').text('Another custom content for Modal 3');
+		}
 	});
-	$("#downloadButton").click(function(event) {
-		// Hide the closest form when the link is clicked
-		$(this).closest("form").hide();
-		
-		// Set isVisited to true
-		isVisited = true;
 
-		// Open the link in a new tab
-		//window.open($(this).attr("href"), "_blank");
-	});
 });
