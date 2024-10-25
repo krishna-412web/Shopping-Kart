@@ -55,8 +55,9 @@
                         <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer"> 
                 );
             </cfquery>
-            <cfset local.message="Subcategory inserted successfully">
-            <cfreturn local.message>
+        </cfif>
+        <cfset local.message="Subcategory inserted successfully">
+        <cfreturn local.message>
     </cffunction>
 
     <cffunction  name="updateProduct">
@@ -73,9 +74,49 @@
                         <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer"> 
                 );
             </cfquery>
+        </cfif>
             <cfset local.message="Product inserted successfully">
             <cfreturn local.message>
     </cffunction>
 
-    <cffunction name="listCategory"
+    <cffunction name="listCategory">
+        <cfquery name="getCategories">
+            SELECT
+                categoryid,categoryname,status
+            FROM
+                category
+            WHERE
+                status = 1;
+        </cfquery>
+    </cffunction>
+    <cffunction name="listSubCategory">
+        <cfquery name="getSubCategories">
+            SELECT
+                s.subcategoryid,
+                s.categoryid,
+                s.subcategoryname,
+                s.status
+            FROM
+                subcategory s,category c
+            WHERE
+                s.status = 1
+                AND
+                s.categoryid = c.categoryid;
+        </cfquery>
+    </cffunction>
+    <cffunction name="listProducts">
+        <cfquery name="getProducts">
+            SELECT
+                s.subcategoryid,
+                s.categoryid,
+                s.subcategoryname,
+                s.status
+            FROM
+                product p,subcategory s
+            WHERE
+                p.status = 1
+                AND
+                p.categoryid = s.categoryid;
+        </cfquery>  
+    </cffunction>
 </cfcomponent>

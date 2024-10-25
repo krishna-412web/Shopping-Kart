@@ -205,7 +205,7 @@ $(document).ready(() => {
 				$("#subCategoryHeading").text("CREATE SUBCATEGORY");
 				$("#subCategorySubmit").text("Add Subcategory");
 						//$('#addDiv').show();	
-				   } 
+				} 
 			/*if (buttonClass.includes('edit')) {
 							   $('.content-div:visible').hide();
 				let i = $(this).parent().parent().children().first().html();
