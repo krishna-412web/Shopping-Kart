@@ -1,11 +1,15 @@
-<cfif structKeyExists(form,"adminSubmit")>
-	<cfset obj = createObject('component','..Components.shoppingkart')>
-	<cfset session.result = application.obj.accessAdmin(data = form)>
-	<cfif session.result.value EQ 1>
-			<cflocation url="dashboard.cfm" addToken="no">
-	<cfelse>
-		<cfset errorMessage="*unauthorized user">
+<cfif NOT (structKeyExists(session,"result") AND session.result.value EQ 1)>
+	<cfif structKeyExists(form,"adminSubmit")>
+		<cfset obj = createObject('component', 'Components.shoppingkart')>
+		<cfset session.result = obj.accessAdmin(data = form)>
+		<cfif session.result.value EQ 1>
+				<cflocation url="dashboard.cfm" addToken="no">
+		<cfelse>
+			<cfset errorMessage="*unauthorized user">
+		</cfif>
 	</cfif>
+<cfelse>
+	<cflocation  url="dashboard.cfm" addToken="no">
 </cfif>
 <cfoutput>
 <!DOCTYPE html>

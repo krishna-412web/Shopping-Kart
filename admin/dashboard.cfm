@@ -1,3 +1,14 @@
+<cfif NOT (structKeyExists(session,"result") AND session.result.value EQ 1)>
+	<cflocation url="index.cfm" addToken="no">	
+</cfif>
+<cfif structKeyExists(url,"logout")>
+	<cfset structClear(session)>
+	<cflocation url="index.cfm" addToken="no">
+</cfif>
+<cfset obj = createObject('component', 'Components.shoppingkart')>
+<cfif structKeyExists(form,"categorySubmit")>
+	<cfset message = obj.updateCategory(data = form)>
+</cfif>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,7 +27,7 @@
   				<div class="container-fluid row">
   						<h1 class="navbar-brand text-center col-10 m-0">Shopping Kart-Admin Dashboard</h1>
 						<form class="col-1" action="" method="POST">
-							<a href="./welcome.cfm?logout=1" name="submit" class="btn btn-light btn-block">Logout</a>
+							<a href="./dashboard.cfm?logout=1" name="submit" class="btn btn-light btn-bloc  k">Logout</a>
 						</form>
   				</div>
 			</nav>
