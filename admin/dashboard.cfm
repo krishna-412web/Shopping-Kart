@@ -133,7 +133,7 @@
 					<div id="addCategory" class="content-div">
 						<div class="container-fluid">
 							<form id="CategoryForm" class="needs-validation" action="" method="post" enctype="multipart/form-data">
-									<h3 class="text-center border-bottom border-primary" id="heading">ADD/EDIT CATEGORY</h3>
+									<h3 class="text-center border-bottom border-primary" id="categoryHeading">ADD/EDIT CATEGORY</h3>
 									<h5 class="text-decoration-underline text-primary text-start">Category Details</h5>
 									<div class="form-floating mt-1">
 										<input class="form-control" type="text" id="categoryName" name="categoryName" placeholder="" required>
@@ -159,7 +159,7 @@
 					<div id="addSubCategory" class="content-div">
 						<div class="container-fluid">
 							<form id="subCategoryForm" class="needs-validation" action="" method="post" enctype="multipart/form-data">
-									<h3 class="text-center border-bottom border-primary" id="heading">ADD/EDIT SUBCATEGORY</h3>
+									<h3 class="text-center border-bottom border-primary" id="subCategoryHeading">ADD/EDIT SUBCATEGORY</h3>
 									<h5 class="text-decoration-underline text-primary text-start">Subcategory Details</h5>
 									<div class="form-floating">
 										<select id="categorySelect" name="categorySelect" class="form-select" placeholder="" required>
@@ -192,7 +192,7 @@
 					<div id="addDiv" class="content-div">
 						<div class="container-fluid">
 							<form id="productForm" class="needs-validation" action="" method="post" enctype="multipart/form-data">
-									<h3 class="text-center border-bottom border-primary" id="heading">ADD/EDIT PRODUCTS</h3>
+									<h3 class="text-center border-bottom border-primary" id="productHeading">ADD/EDIT PRODUCTS</h3>
 									<h5 class="text-decoration-underline text-primary text-start mt-1">Product Details</h5>
 									<div class="form-floating mt-1">
 										<select id="productCategory" name="productCategory" class="form-select" placeholder="" required>
