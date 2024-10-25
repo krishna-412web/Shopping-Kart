@@ -133,7 +133,7 @@
 					<div id="addCategory" class="content-div">
 						<div class="container-fluid">
 							<form id="CategoryForm" class="needs-validation" action="" method="post" enctype="multipart/form-data">
-									<h3 class="text-center border-bottom border-primary" id="heading">ADD/EDIT CATEGORY</h3>
+									<h3 class="text-center border-bottom border-primary" id="heading">ADD/EDI CATEGORY</h3>
 									<h5 class="text-decoration-underline text-primary text-start">Category Details</h5>
 									<div class="form-floating mt-1">
 										<input class="form-control" type="text" id="categoryName" name="categoryName" placeholder="" required>
