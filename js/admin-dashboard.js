@@ -144,10 +144,10 @@ $(document).ready(() => {
 		if (targetModal === '#CategoryModal') {
 			if (buttonClass.includes('add')) {
 				$("#CategoryForm")[0].reset();
-				$("#CategoryForm").attr('class','add');
-				$("#heading").text("CREATE CATEGORY");
+				//$("#CategoryForm").attr('class','add');
+				$("#categoryHeading").text("CREATE CATEGORY");
 				$("#categorySubmit").text("Add Category");
-						$('#addDiv').show();
+						//$('#addDiv').show();
 	
 			} 
 			/*if (buttonClass.includes('edit')) {
@@ -194,22 +194,19 @@ $(document).ready(() => {
 				$("#submit1").text("Edit Contact");
 					
 						$('#addDiv').show();
-			} 
+			} */
 			// Custom functionality for modal 1
 			console.log('Modal 1 opened');
 		} else if (targetModal === '#subCategoryModal') {
 			// Custom functionality for modal 2
 			if (buttonClass.includes('add')) {
-				$('.content-div:visible').hide();
-				$("#myForm1")[0].reset();
-				$("#myForm1").attr('class','add');
-				$("#profile").prop('required',true);
-				$("#heading").text("CREATE CONTACT");
-				$("#submit1").text("Add Contact");
-						$('#addDiv').show();
-	
+				$("#subCategoryForm")[0].reset();
+				//$("#myForm1").attr('class','add');
+				$("#subCategoryHeading").text("CREATE SUBCATEGORY");
+				$("#subCategorySubmit").text("Add Subcategory");
+						//$('#addDiv').show();	
 				   } 
-			if (buttonClass.includes('edit')) {
+			/*if (buttonClass.includes('edit')) {
 							   $('.content-div:visible').hide();
 				let i = $(this).parent().parent().children().first().html();
 				let j = $(this).parent().parent().attr('id');
@@ -259,13 +256,11 @@ $(document).ready(() => {
 		} else if (targetModal === '#productModal') {
 			// Custom functionality for modal 3
 			if (buttonClass.includes('add')) {
-				$('.content-div:visible').hide();
-				$("#myForm1")[0].reset();
-				$("#myForm1").attr('class','add');
-				$("#profile").prop('required',true);
-				$("#heading").text("CREATE CONTACT");
-				$("#submit1").text("Add Contact");
-						$('#addDiv').show();
+				$("#productForm")[0].reset();
+				//$("#myForm1").attr('class','add');
+				$("#productHeading").text("CREATE PRODUCT");
+				$("#productSubmit").text("Add Product");
+						//$('#addDiv').show();
 	
 				   } 
 			/*if (buttonClass.includes('edit')) {
