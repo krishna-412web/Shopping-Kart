@@ -192,7 +192,7 @@
 					<div id="addDiv" class="content-div">
 						<div class="container-fluid">
 							<form id="productForm" class="needs-validation" action="" method="post" enctype="multipart/form-data">
-									<h3 class="text-center border-bottom border-primary" id="productHeading">ADD/EDI PRODUCTS</h3>
+									<h3 class="text-center border-bottom border-primary" id="productHeading">ADD/EDIT PRODUCTS</h3>
 									<h5 class="text-decoration-underline text-primary text-start mt-1">Product Details</h5>
 									<div class="form-floating mt-1">
 										<select id="productCategory" name="productCategory" class="form-select" placeholder="" required>
