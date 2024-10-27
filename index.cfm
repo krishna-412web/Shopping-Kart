@@ -1,1 +1,1 @@
-<cfoutput>This is a mple file</cfoutput>
+<cfoutput>This is a sample file</cfoutput>
