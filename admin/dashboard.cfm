@@ -6,10 +6,19 @@
 	<cflocation url="index.cfm" addToken="no">
 </cfif>
 <cfset obj = createObject('component', 'Components.shoppingkart')>
+
+<cfif structKeyExists(form, "deleteSubmit")>
+	<cfset obj.deleteItems(
+						deleteid = form.deleteid,
+						section = form.section
+						)>
+</cfif>
+
 <cfif structKeyExists(form,"categorySubmit")>
+	<cfset categoryid = structKeyExists(form, "categoryId")? form.categoryId: 0>
 	<cfset message = obj.updateCategory(
 										categoryName = form.categoryName,
-										categoryid = form.categoryId
+										categoryid = categoryId
 										)>
 <cfelseif structKeyExists(form,"subCategorySubmit")>
 	<cfset message = obj.updateSubCategory(data = form)>
@@ -36,6 +45,7 @@
 											price = form.price,
 											productid = productid)>
 </cfif>
+
 <cfset categories = obj.listCategory()>
 <cfdump var="#form#">
 <!DOCTYPE html>
@@ -146,9 +156,9 @@
         				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
       				</div>
            			<div class="modal-body">
-					<form action="" method="post">
+					<form action="" method="post" id="delForm">
 						<div class="row">
-							<h5 class="text-dark">Do you wish to delete the contact?</h5>
+							<h5 class="text-dark">Do you wish to delete the item?</h5>
 						</div>
 						<input type="hidden" id="delInp" name="logId" />
 						<div class="row">

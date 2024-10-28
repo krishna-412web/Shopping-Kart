@@ -30,7 +30,7 @@ $(document).ready(() => {
 					row += `\n<td>${i+1}</td>\n`+
 						`<td class="menu">${categories[i].categoryname}</td>\n`;
 					row +=  `<td><button type="button" class="btn btn-info btn-sm w-100 edit" data-bs-toggle="modal" data-bs-target="#CategoryModal">Edit</button></td>\n+
-					<td><button type="button" class="btn btn-danger btn-sm w-100 delete">Delete</button></td>\n`;
+					<td><button type="button" class="btn btn-danger btn-sm w-100 delete category" data-bs-toggle="modal" data-bs-target="#delModal">Delete</button></td>\n`;
 					tabContent+= `<tr id="${categories[i].categoryid}">`+row+`</tr>\n`;
 					row="";							
 				}
@@ -64,7 +64,7 @@ $(document).ready(() => {
 					row += `\n<td>${i+1}</td>\n`+
 						`<td class="menu">${subcategories[i].subcategoryname}</td>\n`;
 					row +=  `<td><button type="button" class="btn btn-info btn-sm w-100 edit" data-bs-toggle="modal" data-bs-target="#subCategoryModal">Edit</button></td>\n+
-					<td><button type="button" class="btn btn-danger btn-sm w-100 delete">Delete</button></td>\n`;
+					<td><button type="button" class="btn btn-danger btn-sm w-100 delete sub" data-bs-toggle="modal" data-bs-target="#delModal">Delete</button></td>\n`;
 					tabContent+= `<tr id="${subcategories[i].subcategoryid}">`+row+`</tr>\n`;
 					row="";							
 				}
@@ -98,7 +98,7 @@ $(document).ready(() => {
 					row += `\n<td>${i+1}</td>\n`+
 						`<td class="menu">${products[i].productname}</td>\n`;
 					row +=  `<td><button type="button" class="btn btn-info btn-sm w-100 edit" data-bs-toggle="modal" data-bs-target="#productModal">Edit</button></td>\n+
-					<td><button type="button" class="btn btn-danger btn-sm w-100 delete">Delete</button></td>\n`;
+					<td><button type="button" class="btn btn-danger btn-sm w-100 delete product" data-bs-toggle="modal" data-bs-target="#delModal">Delete</button></td>\n`;
 					tabContent+= `<tr id="${products[i].productid}">`+row+`</tr>\n`;
 					row="";							
 				}
@@ -108,97 +108,6 @@ $(document).ready(() => {
 		
 	});
 		
-
-	/*$(document).on('click', '[data-bs-toggle="modal"]', function() {
-		console.log(obj);
-		var button = $(this);
-		if($("#logId").length>0){
-			$("#logId").remove();
-		}
-		var buttonClass = button.attr('class'); 
-		if (buttonClass.includes('add')) {
-			$('.content-div:visible').hide();
-			$("#myForm1")[0].reset();
-			$("#myForm1").attr('class','add');
-			$("#profile").prop('required',true);
-			$("#heading").text("CREATE CONTACT");
-			$("#submit1").text("Add Contact");
-            		$('#addDiv').show();
-
-       		} 
-		if (buttonClass.includes('edit')) {
-                       	$('.content-div:visible').hide();
-			let i = $(this).parent().parent().children().first().html();
-			let j = $(this).parent().parent().attr('id');
-			let rowSelected = obj[i-1];
-			prevHobbieList='';
-			$("#myForm1").attr('class','edit');
-			$("#heading").text("EDIT CONTACT");
-			$("#title").val(rowSelected.title);
-			$("#firstName").val(rowSelected.firstname);
-			$("#lastName").val(rowSelected.lastname);
-			$("#gender").val(rowSelected.gender);
-			let date = new Date(rowSelected.dob);
-			date.setDate(date.getDate() + 1);
-			let formatdate = date.toISOString().split('T')[0];
-			$("#dob").val(formatdate);
-			$("#profile").prop('required',false);
-			$("#houseName").val(rowSelected.house_flat);
-			$("#street").val(rowSelected.street);
-			$("#city").val(rowSelected.city);
-			$("#state").val(rowSelected.state);
-			$("#pincode").val(rowSelected.pincode);
-			$("#email").val(rowSelected.email);
-			$("#phone").val(rowSelected.phone);
-			prevHobbieList = rowSelected.hobbieid;
-			let field3 = $('<input>').attr('type', 'hidden').attr('name', 'logId').attr('id','logId');
-			$("#myForm1").append(field3);
-			$("#logId").val(j);
-
-			
-			$("#hobbies option").each(function() {
- 				$(this).prop('selected', false);          	
-           	 	});
-
-			$("#hobbies option").each(function() {
-                		var optionText = $(this).attr('value');
-				if(optionText != ''){
-		        		if (rowSelected.hobbieid.includes(optionText)) {
-                	    			$(this).prop('selected', true);          
-					}
-				}	
-           	 	});
-			$("#submit1").text("Edit Contact");
-				
-            		$('#addDiv').show();
-        } 	
-		
-	});
-
-		
-	$("#myForm1").submit(function(event){
-		var class1 = $(this).attr('class');
-		var field1;
-		var field2;
-		var field3; 	
-		if(class1 == "add")
-		{
-			//$(this).addClass("was-validated");
-			field1 = $('<input>').attr('type', 'hidden').attr('name', 'operation').val('add');
-			$(this).append(field1);
-		}
-		if(class1 == "edit"){
-			field1 = $('<input>').attr('type', 'hidden').attr('name', 'operation').val('edit');
-			field2 = $('<input>').attr('type', 'hidden').attr('name', 'prevHobbieList').val(prevHobbieList);
-			$(this).append(field1);
-			$(this).append(field2);	
-		}
-		
-	});
-	$(document).on('click','.delete', function(event) {
-		let row = $(this).parent().parent().attr('id');
-		$("#delInp").attr('value',row);
-	});*/
 	$(document).on('click', '[data-bs-toggle="modal"]', function() {
 		// Get the target modal's ID from the trigger element
 		var targetModal = $(this).data('bs-target');
@@ -386,54 +295,41 @@ $(document).ready(() => {
 					  console.error("Error fetching subcategories:", error);
 					}
 				});
-				/*			   $('.content-div:visible').hide();
-				let i = $(this).parent().parent().children().first().html();
-				let j = $(this).parent().parent().attr('id');
-				let rowSelected = obj[i-1];
-				prevHobbieList='';
-				$("#myForm1").attr('class','edit');
-				$("#heading").text("EDIT CONTACT");
-				$("#title").val(rowSelected.title);
-				$("#firstName").val(rowSelected.firstname);
-				$("#lastName").val(rowSelected.lastname);
-				$("#gender").val(rowSelected.gender);
-				let date = new Date(rowSelected.dob);
-				date.setDate(date.getDate() + 1);
-				let formatdate = date.toISOString().split('T')[0];
-				$("#dob").val(formatdate);
-				$("#profile").prop('required',false);
-				$("#houseName").val(rowSelected.house_flat);
-				$("#street").val(rowSelected.street);
-				$("#city").val(rowSelected.city);
-				$("#state").val(rowSelected.state);
-				$("#pincode").val(rowSelected.pincode);
-				$("#email").val(rowSelected.email);
-				$("#phone").val(rowSelected.phone);
-				prevHobbieList = rowSelected.hobbieid;
-				let field3 = $('<input>').attr('type', 'hidden').attr('name', 'logId').attr('id','logId');
-				$("#myForm1").append(field3);
-				$("#logId").val(j);
-	
-				
-				$("#hobbies option").each(function() {
-					 $(this).prop('selected', false);          	
-						});
-	
-				$("#hobbies option").each(function() {
-							var optionText = $(this).attr('value');
-					if(optionText != ''){
-							if (rowSelected.hobbieid.includes(optionText)) {
-										$(this).prop('selected', true);          
-						}
-					}	
-						});
-				$("#submit1").text("Edit Contact");
-					
-						$('#addDiv').show();
-				}*/ 
 			console.log('Modal 3 opened');
 			}
+		}else if(targetModal === "#delModal"){
+			$("#delForm")[0].reset();
+			$('#delForm input[type="hidden"]').remove();
+			if (buttonClass.includes('category')) {
+				let j = $(this).parent().parent().attr('id');
+				let field3 = $('<input>').attr('type', 'hidden').attr('name', 'deleteid').attr('id','deleteid');
+				let field4 = $('<input>').attr('type', 'hidden').attr('name', 'section').attr('id','section');
+				$("#delForm").append(field3);
+				$("#delForm").append(field4);
+				$("#deleteid").val(j);
+				$("#section").val("category");
+			}
+			if (buttonClass.includes('sub')) {
+				let j = $(this).parent().parent().attr('id');
+				let field3 = $('<input>').attr('type', 'hidden').attr('name', 'deleteid').attr('id','deleteid');
+				let field4 = $('<input>').attr('type', 'hidden').attr('name', 'section').attr('id','section');
+				$("#delForm").append(field3);
+				$("#delForm").append(field4);
+				$("#deleteid").val(j);
+				$("#section").val("subcategory");
+			}
+			if (buttonClass.includes('product')) {
+				let j = $(this).parent().parent().attr('id');
+				let field3 = $('<input>').attr('type', 'hidden').attr('name', 'deleteid').attr('id','deleteid');
+				let field4 = $('<input>').attr('type', 'hidden').attr('name', 'section').attr('id','section');
+				$("#delForm").append(field3);
+				$("#delForm").append(field4);
+				$("#deleteid").val(j);
+				$("#section").val("product");
+			}
+			
 		}
+
 	});
 
 });

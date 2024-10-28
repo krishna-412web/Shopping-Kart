@@ -29,7 +29,7 @@
     <cffunction  name="updateCategory">
         <cfargument name="categoryName" type="string">
         <cfargument name="categoryid" type="numeric">
-        <cfif NOT structKeyExists(arguments,"categoryid")>
+        <cfif arguments.categoryid EQ 0>
             <cfquery name="insertCategory">
                 INSERT INTO
                     categories(categoryname,status,createdat,createdby)
@@ -197,5 +197,71 @@
             ;
         </cfquery> 
         <cfreturn local.getProducts> 
+    </cffunction>
+    <cffunction name="deleteItems">
+        <cfargument name="deleteid" type="numeric">
+        <cfargument name="section" type="string">
+        <cfif arguments.section EQ "category">
+            <cfquery name="local.softDeleteCategory">
+                UPDATE categories
+                SET
+                    status = 0,
+                    deletedat = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
+                    deletedby = <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer">
+                WHERE
+                    categoryid = <cfqueryparam value="#arguments.deleteid#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfquery name="local.softDeleteSubCategories">
+                UPDATE subcategory
+                SET
+                    status = 0,
+                    deletedat = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
+                    deletedby = <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer">
+                WHERE
+                    categoryid = <cfqueryparam value="#arguments.deleteid#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfquery name="local.softDeleteProducts">
+                UPDATE products
+                SET
+                    status = 0,
+                    deletedat = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
+                    deletedby = <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer">
+                WHERE
+                    subcategoryid IN (
+                        SELECT subcategoryid
+                        FROM subcategory
+                        WHERE categoryid = <cfqueryparam value="#arguments.deleteid#" cfsqltype="cf_sql_integer">
+                    )
+            </cfquery> 
+        <cfelseif arguments.section EQ "subcategory">
+            <cfquery name="local.softDeleteSubCategories">
+                UPDATE subcategory
+                SET
+                    status = 0,
+                    deletedat = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
+                    deletedby = <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer">
+                WHERE
+                    subcategoryid = <cfqueryparam value="#arguments.deleteid#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfquery name="local.softDeleteProducts">
+                UPDATE products
+                SET
+                    status = 0,
+                    deletedat = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
+                    deletedby = <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer">
+                WHERE
+                    subcategoryid = <cfqueryparam value="#arguments.deleteid#" cfsqltype="cf_sql_integer">
+            </cfquery>
+        <cfelseif arguments.section EQ "product">
+            <cfquery name="local.softDeleteProducts">
+                UPDATE products
+                SET
+                    status = 0,
+                    deletedat = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
+                    deletedby = <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer">
+                WHERE
+                    productid = <cfqueryparam value="#arguments.deleteid#" cfsqltype="cf_sql_integer">
+            </cfquery>
+        </cfif>
     </cffunction>
 </cfcomponent>
