@@ -130,6 +130,7 @@ $(document).ready(() => {
 			if (buttonClass.includes('edit')) {
 				$("#CategoryForm")[0].reset();
 				$('#CategoryForm input[type="hidden"]').remove();
+				$("#categoryHeading").text("EDIT CATEGORY");
 				let j = $(this).parent().parent().attr('id');
 				$.ajax({
 					url: "../components/shoppingkart.cfc?method=listCategory",
@@ -174,6 +175,7 @@ $(document).ready(() => {
 					success: function(data) {
 					  const obj = JSON.parse(data);
 					  var subcategories1 = obj.RESULTSET;
+					  $("#subCategoryHeading").text("EDIT SUBCATEGORY");
 					  $("#subcategorySubmit").text("Edit Subcategory");
 					  $("#subCategoryName").val(subcategories1[0].subcategoryname);
 					  let field3 = $('<input>').attr('type', 'hidden').attr('name', 'subcategoryid').attr('id','subCategoryId');
@@ -185,6 +187,7 @@ $(document).ready(() => {
 					  console.error("Error fetching subcategories:", error);
 					}
 				});
+
 
 			console.log('Modal 2 opened');
 			}
