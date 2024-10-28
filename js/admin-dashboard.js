@@ -1,48 +1,115 @@
 $(document).ready(() => {
 	
 	var obj;
+	var categories;
+	var subcategories;
+	var products;
 	var prevHobbieList;
 	var logId="";
-	/*$.ajax({
-		url: './components/database.cfc?method=selectdata',
+	$.ajax({
+		url: '../components/shoppingkart.cfc?method=listCategory',
 		type: 'GET',
 		success: function(data) 
 		{	
 			obj= JSON.parse(data);
-			console.log(obj);
+			var categories = obj.RESULTSET;
+			//console.log(categories);
 			let tab="";
 			let tabContent="";
 			if (obj.DATA == '') 
 			{
-				alert('Add pages');
+				alert('Add Categories');
 			} 
 			else 
 			{
 				tabContent="";
 				let row = ""
 				let j = 0;
-				for(let i=0;i< obj.length;i++)
+				for(let i=0;i< categories.length;i++)
 				{	
 					row += `\n<td>${i+1}</td>\n`+
-						`<td class="menu"><img style="height:40px;width:40px;padding:0;margin:0 auto;" src="${obj[i].profile}" class="img-fluid" alt="pic"/></td>\n`+
-						`<td class="menu">${obj[i].firstname+" "+obj[i].lastname}</td>\n`+
-						`<td class="menu">${obj[i].email}</td>\n`+
-						`<td class="menu">${obj[i].phone}</td>\n`;
-					row +=  `<td>\n<button type="button" class=" btn btn-sm btn-success view no-print" data-bs-toggle="modal" data-bs-target="#myModal">View</button></td>\n`+
-						`<td><button type="button" class=" btn btn-sm btn-success edit no-print" data-bs-toggle="modal" data-bs-target="#myModal">Edit</button></td>`+
-						`<td><button type="submit" class=" btn btn-sm btn-success delete no-print" name="delete" data-bs-toggle="modal" data-bs-target="#delModal">Delete</button></td>`+
-						`<td><button type="button" class=" btn btn-sm btn-success edit no-print printContact">Print</button></td>`;
-					tabContent+= `<tr id="${obj[i].log_id}">`+row+`</tr>\n`;
+						`<td class="menu">${categories[i].categoryname}</td>\n`;
+					row +=  `<td><button type="button" class="btn btn-info btn-sm w-100 edit" data-bs-toggle="modal" data-bs-target="#CategoryModal">Edit</button></td>\n+
+					<td><button type="button" class="btn btn-danger btn-sm w-100 delete">Delete</button></td>\n`;
+					tabContent+= `<tr id="${categories[i].categoryid}">`+row+`</tr>\n`;
 					row="";							
 				}
-				$("#pageDisplay").html(tabContent);
+				$("#categoryDisplay").html(tabContent);
+			}
+		}
+		
+	});
+
+	$.ajax({
+		url: '../components/shoppingkart.cfc?method=listSubCategory',
+		type: 'GET',
+		success: function(data) 
+		{	
+			obj= JSON.parse(data);
+			var subcategories = obj.RESULTSET;
+			console.log(subcategories);
+			let tab="";
+			let tabContent="";
+			if (obj.DATA == '') 
+			{
+				alert('Add subcategories');
+			} 
+			else 
+			{
+				tabContent="";
+				let row = ""
+				let j = 0;
+				for(let i=0;i< subcategories.length;i++)
+				{	
+					row += `\n<td>${i+1}</td>\n`+
+						`<td class="menu">${subcategories[i].subcategoryname}</td>\n`;
+					row +=  `<td><button type="button" class="btn btn-info btn-sm w-100 edit" data-bs-toggle="modal" data-bs-target="#subCategoryModal">Edit</button></td>\n+
+					<td><button type="button" class="btn btn-danger btn-sm w-100 delete">Delete</button></td>\n`;
+					tabContent+= `<tr id="${subcategories[i].subcategoryid}">`+row+`</tr>\n`;
+					row="";							
+				}
+				$("#subCategoryDisplay").html(tabContent);
+			}
+		}
+		
+	});
+
+	$.ajax({
+		url: '../components/shoppingkart.cfc?method=listProducts',
+		type: 'GET',
+		success: function(data) 
+		{	
+			obj= JSON.parse(data);
+			var products = obj.RESULTSET;
+			console.log(products);
+			let tab="";
+			let tabContent="";
+			if (obj.DATA == '') 
+			{
+				alert('Add subcategories');
+			} 
+			else 
+			{
+				tabContent="";
+				let row = ""
+				let j = 0;
+				for(let i=0;i< products.length;i++)
+				{	
+					row += `\n<td>${i+1}</td>\n`+
+						`<td class="menu">${products[i].productname}</td>\n`;
+					row +=  `<td><button type="button" class="btn btn-info btn-sm w-100 edit" data-bs-toggle="modal" data-bs-target="#productModal">Edit</button></td>\n+
+					<td><button type="button" class="btn btn-danger btn-sm w-100 delete">Delete</button></td>\n`;
+					tabContent+= `<tr id="${products[i].productid}">`+row+`</tr>\n`;
+					row="";							
+				}
+				$("#productDisplay").html(tabContent);
 			}
 		}
 		
 	});
 		
 
-	$(document).on('click', '[data-bs-toggle="modal"]', function() {
+	/*$(document).on('click', '[data-bs-toggle="modal"]', function() {
 		console.log(obj);
 		var button = $(this);
 		if($("#logId").length>0){
@@ -153,7 +220,7 @@ $(document).ready(() => {
 			/*if (buttonClass.includes('edit')) {
 				let i = $(this).parent().parent().children().first().html();
 				let j = $(this).parent().parent().attr('id');
-				let rowSelected = obj[i-1];
+				let rowSelected = categories[i-1];
 				prevHobbieList='';
 				$("#myForm1").attr('class','edit');
 				$("#heading").text("EDIT CONTACT");
@@ -260,9 +327,43 @@ $(document).ready(() => {
 				//$("#myForm1").attr('class','add');
 				$("#productHeading").text("CREATE PRODUCT");
 				$("#productSubmit").text("Add Product");
+				$("#productCategory").on("change", function() {
+					const selectedValue = $(this).val(); // Get the selected value
+					if (selectedValue) {
+					  $.ajax({
+						url: "../components/shoppingkart.cfc?method=listSubCategory",
+						type: "GET",
+						data: { 
+						  "categoryid": selectedValue // Set selected category ID in the headers
+						},
+						success: function(data) {
+						  const obj = JSON.parse(data);
+						  var subcategories1 = obj.RESULTSET;
+						  let tabContent = `<option value="" selected></option>`;
+				  
+						if (subcategories1.length != 0) {
+							subcategories1.forEach((subcat, index) => {
+							  tabContent += `<option value="${subcat.subcategoryid}">${subcat.subcategoryname}</option>\n`;
+							});
+							$("#productSubCategory").html(tabContent);
+						  }
+						else {
+							$("#productSubCategory").html(`<option value="" selected></option>`);
+						}
+						},
+						error: function(xhr, status, error) {
+						  console.error("Error fetching subcategories:", error);
+						}
+					  });
+					} else {
+					  // If no valid category is selected, clear the subcategory display
+					  $("#productSubCategory").html(`<option value="" selected></option>`);
+					}
+				  });
+
 						//$('#addDiv').show();
 	
-				   } 
+			} 
 			/*if (buttonClass.includes('edit')) {
 							   $('.content-div:visible').hide();
 				let i = $(this).parent().parent().children().first().html();

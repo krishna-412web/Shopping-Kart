@@ -7,8 +7,32 @@
 </cfif>
 <cfset obj = createObject('component', 'Components.shoppingkart')>
 <cfif structKeyExists(form,"categorySubmit")>
-	<cfset message = obj.updateCategory(data = form)>
+	<cfset message = obj.updateCategory(categoryName = form.categoryName)>
+<cfelseif structKeyExists(form,"subCategorySubmit")>
+	<cfset message = obj.updateSubCategory(data = form)>
+<cfelseif structKeyExists(form,"productSubmit")>
+	<cfif structKeyExists(form,"productpicture") AND len(trim(form.productpicture)) GT 0>
+			<cfset uploadDir = expandPath('./images/')>        
+			<cfif not directoryExists(uploadDir)>
+      			<cfdirectory action="create" directory="#uploadDir#">
+			</cfif>
+			<cffile action="upload"
+        			filefield="productpicture"
+        			destination="#uploadDir#"
+        			nameConflict="makeunique">
+			<cfset uploadedFileName = cffile.serverFile>
+			<cfset imgPath="./images/#uploadedFileName#">
+	<cfelseif structKeyExists(form,"logId")>
+			<cfset imgPath="">
+	</cfif>
+	<cfset message = obj.updateProduct( subcategoryid = form.productsubcategory,
+											productname   = form.productname,
+											productdesc = form.productdesc,
+											productimage = imgPath,
+											price = form.price)>
 </cfif>
+<cfset categories = obj.listCategory()>
+<cfdump var="#form#">
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -52,7 +76,7 @@
 							<tr>
 								<td>1</td>
 								<td>Anand Vishnu</td>
-								<td><button type="button" class="btn btn-info btn-sm w-100 edit">Edit</button></td>
+								<td><button type="button" class="btn btn-info btn-sm w-100 edit" data-bs-toggle="modal" data-bs-target="#CategoryModal">Edit</button></td>
                                 <td><button type="button" class="btn btn-danger btn-sm w-100 delete">Delete</button></td>
 							</tr>
 						</tbody>
@@ -175,7 +199,11 @@
 									<div class="form-floating">
 										<select id="categorySelect" name="categorySelect" class="form-select" placeholder="" required>
 												<option value="" selected></option>
-												<option value="1">Electronics</option>
+												<cfoutput>
+													<cfloop array="#categories.RESULTSET#" index="row">
+														<option value="#row.categoryid#">#row.categoryname#</option>
+													</cfloop>
+												</cfoutput>
 										</select>
 										<label for="categorySelect" class="text-dark fw-bold form-label">Category</label>
 									</div>
@@ -208,7 +236,11 @@
 									<div class="form-floating mt-1">
 										<select id="productCategory" name="productCategory" class="form-select" placeholder="" required>
 												<option value="" selected></option>
-												<option value="1">Electronics</option>
+												<cfoutput>
+													<cfloop array="#categories.RESULTSET#" index="row">
+														<option value="#row.categoryid#">#row.categoryname#</option>
+													</cfloop>
+												</cfoutput>
 										</select>
 										<label for="productCategory" class="text-dark fw-bold form-label">Category</label>
 									</div>
