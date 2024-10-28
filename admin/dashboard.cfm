@@ -7,7 +7,10 @@
 </cfif>
 <cfset obj = createObject('component', 'Components.shoppingkart')>
 <cfif structKeyExists(form,"categorySubmit")>
-	<cfset message = obj.updateCategory(categoryName = form.categoryName)>
+	<cfset message = obj.updateCategory(
+										categoryName = form.categoryName,
+										categoryid = form.categoryId
+										)>
 <cfelseif structKeyExists(form,"subCategorySubmit")>
 	<cfset message = obj.updateSubCategory(data = form)>
 <cfelseif structKeyExists(form,"productSubmit")>
@@ -22,14 +25,16 @@
         			nameConflict="makeunique">
 			<cfset uploadedFileName = cffile.serverFile>
 			<cfset imgPath="./images/#uploadedFileName#">
-	<cfelseif structKeyExists(form,"logId")>
+	<cfelseif structKeyExists(form,"productid")>
 			<cfset imgPath="">
 	</cfif>
+	<cfset productid = structKeyExists(form, "productid")? form.productid: 0>
 	<cfset message = obj.updateProduct( subcategoryid = form.productsubcategory,
 											productname   = form.productname,
 											productdesc = form.productdesc,
 											productimage = imgPath,
-											price = form.price)>
+											price = form.price,
+											productid = productid)>
 </cfif>
 <cfset categories = obj.listCategory()>
 <cfdump var="#form#">

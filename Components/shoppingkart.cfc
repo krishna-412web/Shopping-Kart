@@ -40,9 +40,20 @@
                 );
             </cfquery>
             <cfset local.message="category inserted successfully">
-            <cfreturn local.message>
-        </cfif>
+        <cfelse>
+            <cfquery name="updateCategory">
+                UPDATE categories
+                SET
+                    categoryname = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">,
+                    updatedat = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
+                    updatedby = <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer">
+                WHERE
+                    categoryid = <cfqueryparam value="#arguments.categoryid#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfset local.message="category updated successfully">
 
+        </cfif>
+        <cfreturn local.message>
     </cffunction>
 
     <cffunction  name="updateSubCategory">
@@ -58,8 +69,20 @@
                         <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer"> 
                 );
             </cfquery>
+            <cfset local.message="Subcategory inserted successfully">
+        <cfelse>
+            <cfquery name="updateSubCategory">
+                UPDATE subcategory
+                SET
+                    categoryid = <cfqueryparam value="#arguments.data.categorySelect#" cfsqltype="cf_sql_integer">,
+                    subcategoryname = <cfqueryparam value="#arguments.data.subCategoryName#" cfsqltype="cf_sql_varchar">,
+                    updatedat = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
+                    updatedby = <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer">
+                WHERE
+                    subcategoryid = <cfqueryparam value="#arguments.data.subCategoryId#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfset local.message="Subcategory updated successfully">
         </cfif>
-        <cfset local.message="Subcategory inserted successfully">
         <cfreturn local.message>
     </cffunction>
 
@@ -68,37 +91,64 @@
         <cfargument name="productname" type="string">
         <cfargument name="productdesc" type="string">
         <cfargument name="productimage" type="string">
+        <cfargument name="price" type="numeric">
         <cfargument name="productid" type="numeric" required="false">
-        <cfif NOT structKeyExists(arguments,"productid")>
+        <cfif arguments.productid EQ 0>
             <cfquery name="insertProduct">
                 INSERT INTO
-                    products(subcategoryid,productname,productdesc,productimage,status,createdat,createdby)
+                    products(subcategoryid,productname,productdesc,productimage,price,status,createdat,createdby)
                 VALUES(<cfqueryparam value="#arguments.subcategoryid#" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#arguments.productname#" cfsqltype="cf_sql_varchar">,
                         <cfqueryparam value="#arguments.productdesc#" cfsqltype="cf_sql_varchar">,
                         <cfqueryparam value="#arguments.productimage#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.price#" cfsqltype="cf_sql_decimal">,
                         <cfqueryparam value="1" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
                         <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer"> 
                 );
             </cfquery>
-        </cfif>
             <cfset local.message="Product inserted successfully">
+        <cfelse>
+            <cfquery name="updateProduct">
+                UPDATE products
+                SET
+                    subcategoryid = <cfqueryparam value="#arguments.subcategoryid#" cfsqltype="cf_sql_integer">,
+                    productname = <cfqueryparam value="#arguments.productname#" cfsqltype="cf_sql_varchar">,
+                    productdesc = <cfqueryparam value="#arguments.productdesc#" cfsqltype="cf_sql_varchar">,
+                    price = <cfqueryparam value="#arguments.price#" cfsqltype="cf_sql_decimal">,
+                    <cfif arguments.productimage NEQ "">
+                        productimage = <cfqueryparam value="#arguments.productimage#" cfsqltype="cf_sql_varchar">,
+                    </cfif>
+                    updatedat = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
+                    updatedby = <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer">
+                WHERE
+                    productid = <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">
+            </cfquery>
+            <cfset local.message="Product updated successfully">
+        </cfif>
+
             <cfreturn local.message>
     </cffunction>
 
     <cffunction name="listCategory" access="remote" returnFormat="JSON">
+        <cfargument name="categoryid" type="numeric" required="false">
         <cfquery name="local.getCategories" returnType="struct">
             SELECT
                 categoryid,categoryname,status
             FROM
                 categories
             WHERE
-                status = 1;
+                status = 1
+            <cfif structKeyExists(arguments,"categoryid")>
+            AND
+                categoryid=<cfqueryparam value="#arguments.categoryid#" cfsqltype="cf_sql_integer">
+            </cfif>
+            ;
         </cfquery>
         <cfreturn local.getCategories>
     </cffunction>
     <cffunction name="listSubCategory" access="remote" returnFormat="JSON">
+        <cfargument name="subcategoryid" type="numeric" required="false">
         <cfargument name="categoryid" type="numeric" required="false">
         <cfquery name="local.getSubCategories" returnType="struct">
             SELECT
@@ -114,23 +164,37 @@
                 AND
                 s.categoryid = <cfqueryparam value="#arguments.categoryid#" cfsqltype="cf_sql_integer">
             </cfif>
+            <cfif structKeyExists(arguments,"subcategoryid")>
+                AND
+                s.subcategoryid = <cfqueryparam value="#arguments.subcategoryid#" cfsqltype="cf_sql_integer">
+            </cfif>
             ;
         </cfquery>
         <cfreturn local.getSubCategories>
     </cffunction>
     <cffunction name="listProducts" access="remote" returnFormat="JSON">
+        <cfargument name="productid" type="numeric" required="false">
         <cfquery name="local.getProducts" returnType="struct">
             SELECT
                 p.productid,
                 p.subcategoryid,
+                s.categoryid,
                 p.productname,
                 p.productdesc,
                 p.productimage,
                 p.price
             FROM
                 products p
+            INNER JOIN
+                subcategory s
+            ON
+                p.subcategoryid = s.subcategoryid
             WHERE
                 p.status = 1
+            <cfif structKeyExists(arguments, "productid")>
+                AND p.productid = <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">
+            </cfif>
+            ;
         </cfquery> 
         <cfreturn local.getProducts> 
     </cffunction>
