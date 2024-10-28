@@ -30,7 +30,7 @@
         <cfargument name="categoryName" type="string">
         <cfargument name="categoryid" type="numeric">
         <cfif arguments.categoryid EQ 0>
-            <cfquery name="insertCategory">
+            <cfquery name="local.insertCategory">
                 INSERT INTO
                     categories(categoryname,status,createdat,createdby)
                 VALUES(<cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">,
@@ -41,7 +41,7 @@
             </cfquery>
             <cfset local.message="category inserted successfully">
         <cfelse>
-            <cfquery name="updateCategory">
+            <cfquery name="local.updateCategory">
                 UPDATE categories
                 SET
                     categoryname = <cfqueryparam value="#arguments.categoryName#" cfsqltype="cf_sql_varchar">,
@@ -61,7 +61,7 @@
         <cfargument name="subCategoryName" type="string">
         <cfargument name="subcategoryid" type="numeric" required="false">
         <cfif arguments.subcategoryid EQ 0>
-            <cfquery name="insertSubCategory">
+            <cfquery name="local.insertSubCategory">
                 INSERT INTO
                     subcategory(categoryid,subcategoryname,status,createdat,createdby)
                 VALUES(<cfqueryparam value="#arguments.categorySelect#" cfsqltype="cf_sql_integer">,
@@ -73,7 +73,7 @@
             </cfquery>
             <cfset local.message="Subcategory inserted successfully">
         <cfelse>
-            <cfquery name="updateSubCategory">
+            <cfquery name="local.updateSubCategory">
                 UPDATE subcategory
                 SET
                     categoryid = <cfqueryparam value="#arguments.categorySelect#" cfsqltype="cf_sql_integer">,
@@ -96,7 +96,7 @@
         <cfargument name="price" type="numeric">
         <cfargument name="productid" type="numeric" required="false">
         <cfif arguments.productid EQ 0>
-            <cfquery name="insertProduct">
+            <cfquery name="local.insertProduct">
                 INSERT INTO
                     products(subcategoryid,productname,productdesc,productimage,price,status,createdat,createdby)
                 VALUES(<cfqueryparam value="#arguments.subcategoryid#" cfsqltype="cf_sql_integer">,
@@ -111,7 +111,7 @@
             </cfquery>
             <cfset local.message="Product inserted successfully">
         <cfelse>
-            <cfquery name="updateProduct">
+            <cfquery name="local.updateProduct">
                 UPDATE products
                 SET
                     subcategoryid = <cfqueryparam value="#arguments.subcategoryid#" cfsqltype="cf_sql_integer">,
