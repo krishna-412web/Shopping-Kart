@@ -57,13 +57,15 @@
     </cffunction>
 
     <cffunction  name="updateSubCategory">
-        <cfargument name="data" type="struct">
-        <cfif NOT structKeyExists(arguments.data,"subcategoryid")>
+        <cfargument name="categorySelect" type="numeric">
+        <cfargument name="subCategoryName" type="string">
+        <cfargument name="subcategoryid" type="numeric" required="false">
+        <cfif arguments.subcategoryid EQ 0>
             <cfquery name="insertSubCategory">
                 INSERT INTO
                     subcategory(categoryid,subcategoryname,status,createdat,createdby)
-                VALUES(<cfqueryparam value="#arguments.data.categorySelect#" cfsqltype="cf_sql_integer">,
-                        <cfqueryparam value="#arguments.data.subCategoryName#" cfsqltype="cf_sql_varchar">,
+                VALUES(<cfqueryparam value="#arguments.categorySelect#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#arguments.subCategoryName#" cfsqltype="cf_sql_varchar">,
                         <cfqueryparam value="1" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
                         <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer"> 
@@ -74,12 +76,12 @@
             <cfquery name="updateSubCategory">
                 UPDATE subcategory
                 SET
-                    categoryid = <cfqueryparam value="#arguments.data.categorySelect#" cfsqltype="cf_sql_integer">,
-                    subcategoryname = <cfqueryparam value="#arguments.data.subCategoryName#" cfsqltype="cf_sql_varchar">,
+                    categoryid = <cfqueryparam value="#arguments.categorySelect#" cfsqltype="cf_sql_integer">,
+                    subcategoryname = <cfqueryparam value="#arguments.subCategoryName#" cfsqltype="cf_sql_varchar">,
                     updatedat = <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
                     updatedby = <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer">
                 WHERE
-                    subcategoryid = <cfqueryparam value="#arguments.data.subCategoryId#" cfsqltype="cf_sql_integer">
+                    subcategoryid = <cfqueryparam value="#arguments.subcategoryid#" cfsqltype="cf_sql_integer">
             </cfquery>
             <cfset local.message="Subcategory updated successfully">
         </cfif>

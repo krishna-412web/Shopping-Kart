@@ -21,7 +21,10 @@
 										categoryid = categoryId
 										)>
 <cfelseif structKeyExists(form,"subCategorySubmit")>
-	<cfset message = obj.updateSubCategory(data = form)>
+	<cfset subcategoryid = structKeyExists(form, "subCategoryId")? form.subCategoryId: 0>
+	<cfset message = obj.updateSubCategory(	categorySelect = form.categorySelect,
+											subCategoryName = form.subCategoryName,
+											subcategoryid = subcategoryid)>
 <cfelseif structKeyExists(form,"productSubmit")>
 	<cfif structKeyExists(form,"productpicture") AND len(trim(form.productpicture)) GT 0>
 			<cfset uploadDir = expandPath('./images/')>        
@@ -47,7 +50,6 @@
 </cfif>
 
 <cfset categories = obj.listCategory()>
-<cfdump var="#form#">
 <!DOCTYPE html>
 <html lang="en">
 <head>
