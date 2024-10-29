@@ -240,12 +240,17 @@
             SELECT
                 p.productid,
                 p.subcategoryid,
+                s.categoryid,
                 p.productname,
                 p.productdesc,
                 p.productimage,
                 p.price
             FROM
                 products p
+            INNER JOIN
+                subcategory s
+            ON
+                p.subcategoryid = s.subcategoryid
             WHERE
                 p.status = 1
             <cfif structKeyExists(local, "productid")>
@@ -258,6 +263,8 @@
             <cfset local.row.productid = local.encryptedText>
             <cfset local.encryptedText= encrypt(toString(local.row.subcategoryid),variables.key,"AES","Hex")>
             <cfset local.row.subcategoryid = local.encryptedText>
+            <cfset local.encryptedText= encrypt(toString(local.row.categoryid),variables.key,"AES","Hex")>
+            <cfset local.row.categoryid = local.encryptedText>
         </cfloop>
         <cfreturn local.getProducts> 
     </cffunction>

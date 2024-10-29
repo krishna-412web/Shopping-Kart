@@ -145,6 +145,39 @@ $(document).ready(() => {
                 $("#productHeading").text("CREATE PRODUCT");
                 $("#productSubmit").text("Add Product");
                 $("#productPicture").attr("required", true);
+				$("#productCategory").on("change", function() {
+				const selectedValue = $(this).val(); // Get the selected value
+				if (selectedValue) {
+					$.ajax({
+					url: "../components/shoppingkart.cfc?method=listSubCategory",
+					type: "GET",
+					data: { 
+						"categoryid": selectedValue // Set selected category ID in the headers
+					},
+					success: function(data) {
+						const obj = JSON.parse(data);
+						var subcategories1 = obj.RESULTSET;
+						let tabContent = `<option value="" selected></option>`;
+				
+					if (subcategories1.length != 0) {
+						subcategories1.forEach((subcat, index) => {
+							tabContent += `<option value="${subcat.subcategoryid}">${subcat.subcategoryname}</option>\n`;
+						});
+						$("#productSubCategory").html(tabContent);
+						}
+					else {
+						$("#productSubCategory").html(`<option value="" selected></option>`);
+					}
+					},
+					error: function(xhr, status, error) {
+						console.error("Error fetching subcategories:", error);
+					}
+					});
+				} else {
+					// If no valid category is selected, clear the subcategory display
+					$("#productSubCategory").html(`<option value="" selected></option>`);
+				}
+				});
             } else if (buttonClass.includes('edit')) {
                 $("#productForm")[0].reset();
                 $('#productForm input[type="hidden"]').remove();
@@ -159,7 +192,7 @@ $(document).ready(() => {
                         let products1 = obj.RESULTSET;
                         $("#productSubmit").text("Edit Product");
 						$("#productHeading").text("EDIT PRODUCT");
-                        $("#productCategory").val(products1[0].subcategoryid);
+                        $("#productCategory").val(products1[0].categoryid);
                         $("#productName").val(products1[0].productname);
                         $("#productDesc").val(products1[0].productdesc);
                         $("#price").val(products1[0].price);
@@ -170,6 +203,39 @@ $(document).ready(() => {
                         console.error("Error fetching product:", error);
                     }
                 });
+				$("#productCategory").on("change", function() {
+					const selectedValue = $(this).val(); // Get the selected value
+					if (selectedValue) {
+					  $.ajax({
+						url: "../components/shoppingkart.cfc?method=listSubCategory",
+						type: "GET",
+						data: { 
+						  "categoryid": selectedValue // Set selected category ID in the headers
+						},
+						success: function(data) {
+						  const obj = JSON.parse(data);
+						  var subcategories1 = obj.RESULTSET;
+						  let tabContent = `<option value="" selected></option>`;
+				  
+						if (subcategories1.length != 0) {
+							subcategories1.forEach((subcat, index) => {
+							  tabContent += `<option value="${subcat.subcategoryid}">${subcat.subcategoryname}</option>\n`;
+							});
+							$("#productSubCategory").html(tabContent);
+						  }
+						else {
+							$("#productSubCategory").html(`<option value="" selected></option>`);
+						}
+						},
+						error: function(xhr, status, error) {
+						  console.error("Error fetching subcategories:", error);
+						}
+					  });
+					} else {
+					  // If no valid category is selected, clear the subcategory display
+					  $("#productSubCategory").html(`<option value="" selected></option>`);
+					}
+				  });
             }
         } else if (targetModal === "#delModal") {
             $("#delForm")[0].reset();
@@ -186,4 +252,8 @@ $(document).ready(() => {
             }
         }
     });
+	$('#productModal').on('hidden.bs.modal', function () {
+		// Refresh the page when the productModal is closed
+		location.reload();
+	});
 });

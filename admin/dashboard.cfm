@@ -208,6 +208,17 @@
 							<form id="productForm" class="needs-validation" action="" method="post" enctype="multipart/form-data">
 									<h3 class="text-center border-bottom border-primary" id="productHeading">ADD/EDIT PRODUCTS</h3>
 									<h5 class="text-decoration-underline text-primary text-start mt-1">Product Details</h5>
+									<div class="form-floating">
+										<select id="productCategory" name="productCategory" class="form-select" placeholder="" required>
+												<option value="" selected></option>
+												<cfoutput>
+													<cfloop array="#categories.RESULTSET#" index="row">
+														<option value="#row.categoryid#">#row.categoryname#</option>
+													</cfloop>
+												</cfoutput>
+										</select>
+										<label for="productCategory" class="text-dark fw-bold form-label">Category</label>
+									</div>
 									<div class="form-floating mt-1">
 										<select id="productSubCategory" name="productSubCategory" class="form-select" placeholder="" required>
 												<option value="" selected></option>
