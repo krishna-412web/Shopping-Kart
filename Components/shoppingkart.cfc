@@ -1,5 +1,11 @@
 <cfcomponent>
-
+    <cfset variables.key="baiYIM2yvVW258BNOmovjQ==">
+    <!---<cfset local.encryptedText= encrypt(toString(local.i.log_id),variables.key,"AES","Hex")>--->
+    <cffunction name="decryptData">
+		<cfargument name="encryptedText" type="string">
+		<cfset local.decryptedText= decrypt(encryptedText,variables.key,"AES","Hex")>
+		<cfreturn local.decryptedText/>
+	</cffunction>
     <cffunction name="accessAdmin">
 		<cfargument name="data" type="struct">
 		<cfquery name="local.check" datasource="shoppingcart" result="r">
@@ -133,7 +139,10 @@
     </cffunction>
 
     <cffunction name="listCategory" access="remote" returnFormat="JSON">
-        <cfargument name="categoryid" type="numeric" required="false">
+        <cfargument name="categoryid" type="string" required="false">
+        <cfif structKeyExists(arguments, "categoryid")>
+            <cfset local.categoryid = Val(decryptData(arguments.categoryid))>
+        </cfif>
         <cfquery name="local.getCategories" returnType="struct">
             SELECT
                 categoryid,categoryname,status
@@ -141,17 +150,27 @@
                 categories
             WHERE
                 status = 1
-            <cfif structKeyExists(arguments,"categoryid")>
+            <cfif structKeyExists(local,"categoryid")>
             AND
-                categoryid=<cfqueryparam value="#arguments.categoryid#" cfsqltype="cf_sql_integer">
+                categoryid=<cfqueryparam value="#local.categoryid#" cfsqltype="cf_sql_integer">
             </cfif>
             ;
         </cfquery>
+        <cfloop array="#local.getCategories.RESULTSET#" index="local.row">
+            <cfset local.encryptedText= encrypt(toString(local.row.categoryid),variables.key,"AES","Hex")>
+            <cfset local.row.categoryid = local.encryptedText>
+        </cfloop>
         <cfreturn local.getCategories>
     </cffunction>
     <cffunction name="listSubCategory" access="remote" returnFormat="JSON">
-        <cfargument name="subcategoryid" type="numeric" required="false">
-        <cfargument name="categoryid" type="numeric" required="false">
+        <cfargument name="subcategoryid" type="string" required="false">
+        <cfargument name="categoryid" type="string" required="false">
+        <cfif structKeyExists(arguments, "subcategoryid")>
+            <cfset local.subcategoryid = Val(decryptData(arguments.subcategoryid))>
+        </cfif>
+        <cfif structKeyExists(arguments, "categoryid")>
+            <cfset local.categoryid = Val(decryptData(arguments.categoryid))>
+        </cfif>
         <cfquery name="local.getSubCategories" returnType="struct">
             SELECT
                 s.subcategoryid,
@@ -162,42 +181,52 @@
                 subcategory s
             WHERE
                 s.status = 1
-            <cfif structKeyExists(arguments,"categoryid")>
+            <cfif structKeyExists(local,"categoryid")>
                 AND
-                s.categoryid = <cfqueryparam value="#arguments.categoryid#" cfsqltype="cf_sql_integer">
+                s.categoryid = <cfqueryparam value="#local.categoryid#" cfsqltype="cf_sql_integer">
             </cfif>
-            <cfif structKeyExists(arguments,"subcategoryid")>
+            <cfif structKeyExists(local,"subcategoryid")>
                 AND
-                s.subcategoryid = <cfqueryparam value="#arguments.subcategoryid#" cfsqltype="cf_sql_integer">
+                s.subcategoryid = <cfqueryparam value="#local.subcategoryid#" cfsqltype="cf_sql_integer">
             </cfif>
             ;
         </cfquery>
+        <cfloop array="#local.getSubCategories.RESULTSET#" index="local.row">
+            <cfset local.encryptedText= encrypt(toString(local.row.subcategoryid),variables.key,"AES","Hex")>
+            <cfset local.row.subcategoryid = local.encryptedText>
+            <cfset local.encryptedText= encrypt(toString(local.row.categoryid),variables.key,"AES","Hex")>
+            <cfset local.row.categoryid = local.encryptedText>
+        </cfloop>
         <cfreturn local.getSubCategories>
     </cffunction>
     <cffunction name="listProducts" access="remote" returnFormat="JSON">
-        <cfargument name="productid" type="numeric" required="false">
+        <cfargument name="productid" type="string" required="false">
+        <cfif structKeyExists(arguments, "productid")>
+            <cfset local.productid = Val(decryptData(arguments.productid))>
+        </cfif>
         <cfquery name="local.getProducts" returnType="struct">
             SELECT
                 p.productid,
                 p.subcategoryid,
-                s.categoryid,
                 p.productname,
                 p.productdesc,
                 p.productimage,
                 p.price
             FROM
                 products p
-            INNER JOIN
-                subcategory s
-            ON
-                p.subcategoryid = s.subcategoryid
             WHERE
                 p.status = 1
-            <cfif structKeyExists(arguments, "productid")>
-                AND p.productid = <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">
+            <cfif structKeyExists(local, "productid")>
+                AND p.productid = <cfqueryparam value="#local.productid#" cfsqltype="cf_sql_integer">
             </cfif>
             ;
         </cfquery> 
+        <cfloop array="#local.getProducts.RESULTSET#" index="local.row">
+            <cfset local.encryptedText= encrypt(toString(local.row.productid),variables.key,"AES","Hex")>
+            <cfset local.row.productid = local.encryptedText>
+            <cfset local.encryptedText= encrypt(toString(local.row.subcategoryid),variables.key,"AES","Hex")>
+            <cfset local.row.subcategoryid = local.encryptedText>
+        </cfloop>
         <cfreturn local.getProducts> 
     </cffunction>
     <cffunction name="deleteItems">

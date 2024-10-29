@@ -8,21 +8,23 @@
 <cfset obj = createObject('component', 'Components.shoppingkart')>
 
 <cfif structKeyExists(form, "deleteSubmit")>
+	<cfset deleteid = Val(obj.decryptData(form.deleteid))>
 	<cfset obj.deleteItems(
-						deleteid = form.deleteid,
+						deleteid = deleteid,
 						section = form.section
 						)>
 </cfif>
 
 <cfif structKeyExists(form,"categorySubmit")>
-	<cfset categoryid = structKeyExists(form, "categoryId")? form.categoryId: 0>
+	<cfset categoryid = structKeyExists(form, "categoryId")? Val(obj.decryptData(form.categoryId)) : 0>
 	<cfset message = obj.updateCategory(
 										categoryName = form.categoryName,
 										categoryid = categoryId
 										)>
 <cfelseif structKeyExists(form,"subCategorySubmit")>
-	<cfset subcategoryid = structKeyExists(form, "subCategoryId")? form.subCategoryId: 0>
-	<cfset message = obj.updateSubCategory(	categorySelect = form.categorySelect,
+	<cfset subcategoryid = structKeyExists(form, "subCategoryId")? Val(obj.decryptData(form.subCategoryId)): 0>
+	<cfset categorySelect = structKeyExists(form, "categorySelect")? Val(obj.decryptData(form.categorySelect)): 0>
+	<cfset message = obj.updateSubCategory(	categorySelect = categorySelect,
 											subCategoryName = form.subCategoryName,
 											subcategoryid = subcategoryid)>
 <cfelseif structKeyExists(form,"productSubmit")>
@@ -40,8 +42,9 @@
 	<cfelseif structKeyExists(form,"productid")>
 			<cfset imgPath="">
 	</cfif>
-	<cfset productid = structKeyExists(form, "productid")? form.productid: 0>
-	<cfset message = obj.updateProduct( subcategoryid = form.productsubcategory,
+	<cfset productid = structKeyExists(form, "productid")? Val(obj.decryptData(form.productid)): 0>
+	<cfset productsubcategory = structKeyExists(form, "productsubcategory")? Val(obj.decryptData(form.productsubcategory)): 0>
+	<cfset message = obj.updateProduct( subcategoryid = productsubcategory,
 											productname   = form.productname,
 											productdesc = form.productdesc,
 											productimage = imgPath,

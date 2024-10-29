@@ -1,5 +1,6 @@
 <cfinclude template="admin.cfm">
 <cfset categories = obj.listCategory()>
+<cfset subcategories = obj.listSubCategory()>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -201,21 +202,13 @@
 									<h3 class="text-center border-bottom border-primary" id="productHeading">ADD/EDIT PRODUCTS</h3>
 									<h5 class="text-decoration-underline text-primary text-start mt-1">Product Details</h5>
 									<div class="form-floating mt-1">
-										<select id="productCategory" name="productCategory" class="form-select" placeholder="" required>
+										<select id="productSubCategory" name="productSubCategory" class="form-select" placeholder="" required>
 												<option value="" selected></option>
 												<cfoutput>
-													<cfloop array="#categories.RESULTSET#" index="row">
-														<option value="#row.categoryid#">#row.categoryname#</option>
+													<cfloop array="#subcategories.RESULTSET#" index="row">
+														<option value="#row.subcategoryid#">#row.subcategoryname#</option>
 													</cfloop>
 												</cfoutput>
-										</select>
-										<label for="productCategory" class="text-dark fw-bold form-label">Category</label>
-									</div>
-
-									<div class="form-floating mt-1">
-										<select id="productSubCategory" name="productSubCategory" class="form-select" placeholder="" required>
-													<option value="" selected></option>
-													<option value="1">Mobile Phones</option>
 										</select>
 										<label for="productCategory" class="text-dark fw-bold form-label">Subcategory</label>
 									</div>
