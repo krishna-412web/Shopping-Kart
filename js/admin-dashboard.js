@@ -158,6 +158,7 @@ $(document).ready(() => {
                         const obj = JSON.parse(data);
                         let products1 = obj.RESULTSET;
                         $("#productSubmit").text("Edit Product");
+						$("#productHeading").text("EDIT PRODUCT");
                         $("#productCategory").val(products1[0].subcategoryid);
                         $("#productName").val(products1[0].productname);
                         $("#productDesc").val(products1[0].productdesc);

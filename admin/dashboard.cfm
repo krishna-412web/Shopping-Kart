@@ -23,6 +23,13 @@
 						</form>
   				</div>
 			</nav>
+			<cfif structKeyExists(variables,"result")>
+				<div class="card">
+					<div class="card-body p-1 row">
+						<cfoutput><p class="col-8">#variables.result.message#</p></cfoutput>
+					</div>
+				</div>
+			</cfif>
 		</div>
 		<div class="container-fluid mt-1">
 			<div class="row">
