@@ -133,7 +133,7 @@
                 </cfoutput>
             </cfloop>
           </ul>
-          <a class="nav-item" href="homepage.cfm">SHOPPING CART - HOME PAGE</a>
+          <a class="nav-item" href="homepage.cfm">SHOPPING CART - PRODUCT PAGE</a>
           <a class="nav-item" href="#">Cart</a>
           <a class="nav-item" href="#">Login/Signup</a>
     </div>
@@ -151,49 +151,13 @@
     </div>
   </cfif>
 
-  <!-- Banner Section -->
-  <div class="banner">
-    <div class="container text-center">
-    </div>
-  </div>
-
   <section>
 
     <div class="product-section">
-        <h1>Products</h1>
+        <h1>PRODUCT</h1>
         <div class="product-grid">
         <cfif structKeyExists(url,"sub")>
             <cfset products = obj.listProducts(subcategoryid = url.sub)>
-              <cfloop array="#products.RESULTSET#" index="item">
-                <cfoutput>
-                    <a href="homepage.cfm?pro=#item.productid#">
-                      <div class="product-card">
-                        <img class="img-fluid" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
-                        <div class="product-info">
-                            <div class="product-name">#item.productname#</div>
-                            <div class="product-price">#item.price#</div>
-                        </div>
-                      </div>
-                    </a>
-                </cfoutput>
-              </cfloop>
-          <cfelseif structKeyExists(url,"cat")>
-            <cfset products = obj.listProducts(categoryid = url.cat)>
-              <cfloop array="#products.RESULTSET#" index="item">
-                <cfoutput>
-                    <a href="homepage.cfm?pro=#item.productid#">
-                      <div class="product-card">
-                        <img class="img-fluid" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
-                        <div class="product-info">
-                            <div class="product-name">#item.productname#</div>
-                            <div class="product-price">#item.price#</div>
-                        </div>
-                      </div>
-                    </a>
-                </cfoutput>
-              </cfloop>
-          <cfelse>
-            <cfset products = obj.listProducts(limit = 5)>
               <cfloop array="#products.RESULTSET#" index="item">
                 <cfoutput>
                     <a href="homepage.cfm?pro=#item.productid#">
