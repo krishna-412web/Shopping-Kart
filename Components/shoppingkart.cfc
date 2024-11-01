@@ -233,8 +233,15 @@
     </cffunction>
     <cffunction name="listProducts" access="remote" returnFormat="JSON">
         <cfargument name="productid" type="string" required="false">
+        <cfargument name="subcategoryid" type="string" required="false">
+        <cfargument name="categoryid" type="string" required="false">
+        <cfargument  name="limit" type="numeric" required="false">
         <cfif structKeyExists(arguments, "productid")>
             <cfset local.productid = Val(decryptData(arguments.productid))>
+        <cfelseif structKeyExists(arguments, "categoryid")>
+            <cfset local.categoryid = Val(decryptData(arguments.categoryid))>
+        <cfelseif structKeyExists(arguments, "subcategoryid")>
+            <cfset local.subcategoryid = Val(decryptData(arguments.subcategoryid))>
         </cfif>
         <cfquery name="local.getProducts" returnType="struct">
             SELECT
@@ -255,6 +262,22 @@
                 p.status = 1
             <cfif structKeyExists(local, "productid")>
                 AND p.productid = <cfqueryparam value="#local.productid#" cfsqltype="cf_sql_integer">
+            </cfif>
+            <cfif structKeyExists(local, "subcategoryid")>
+                AND p.subcategoryid = <cfqueryparam value="#local.subcategoryid#" cfsqltype="cf_sql_integer">
+            </cfif>
+            <cfif structKeyExists(local, "categoryid")>
+                AND p.subcategoryid IN (
+                    SELECT
+                        subcategoryid
+                    FROM
+                        subcategory
+                    WHERE
+                        categoryid = <cfqueryparam value="#local.categoryid#" cfsqltype="cf_sql_integer">)
+            </cfif>
+            <cfif structKeyExists(arguments,"limit")>
+                ORDER BY rand()
+                LIMIT <cfqueryparam value="#arguments.limit#" cfsqltype="cf_sql_integer">
             </cfif>
             ;
         </cfquery> 

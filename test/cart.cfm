@@ -3,147 +3,119 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Shopping Cart - Product Page</title>
-    <style>
-        /* Reset some default styling */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+    <title>Flipkart Page Recreation</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+<style>
+    /* Custom styling for the header */
+    .navbar {
+        background-color: #2874f0;
+    }
+    .navbar-brand {
+        color: white;
+        font-weight: bold;
+        display: flex;
+        align-items: center;
+    }
+    .navbar-brand img {
+        width: 24px;
+        height: 24px;
+        margin-right: 8px;
+    }
+    .search-bar {
+        width: 60%;
+    }
+    .search-input {
+        width: 100%;
+        padding: 8px;
+        border: none;
+        border-radius: 4px;
+    }
+    .search-input:focus {
+        outline: none;
+    }
+    .login-btn {
+        background-color: white;
+        color: #2874f0;
+        border: none;
+        padding: 6px 16px;
+        font-weight: bold;
+    }
 
-        body {
-            font-family: Arial, sans-serif;
-        }
-
-        /* Navbar styling */
-        .navbar {
-            background-color: #5c83f6;
-            color: white;
-            padding: 1em;
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-        }
-
-        .navbar a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-        }
-
-        /* Cart container styling */
-        .cart-container {
-            background: linear-gradient(to right, #c9f4db, #a2bbc9);
-            border-radius: 15px;
-            width: 80%;
-            margin: 2em auto;
-            padding: 1em;
-            text-align: center;
-        }
-
-        /* Cart title */
-        .cart-title {
-            font-size: 2em;
-            color: #5c83f6;
-            margin-bottom: 1em;
-        }
-
-        /* Cart table styling */
-        .cart-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 0 auto;
-        }
-
-        .cart-table th, .cart-table td {
-            border: 1px solid black;
-            padding: 1em;
-            text-align: center;
-        }
-
-        .cart-table th {
-            color: #5c83f6;
-            font-weight: bold;
-        }
-
-        /* Checkout button styling */
-        .checkout-button {
-            background-color: #5c83f6;
-            color: white;
-            padding: 0.8em 1.5em;
-            border: none;
-            border-radius: 25px;
-            font-weight: bold;
-            font-size: 1em;
-            cursor: pointer;
-            margin-top: 1em;
-            transition: background-color 0.3s ease;
-        }
-
-        .checkout-button:hover {
-            background-color: #4a6dd6;
-        }
-
-        /* Total price bar styling */
-        .total-price-bar {
-            background-color: #5c83f6;
-            color: white;
-            font-weight: bold;
-            font-size: 1.2em;
-            padding: 1em;
-            border-radius: 10px;
-            margin-top: 1em;
-        }
-    </style>
+    /* Middle portion styling */
+    .content-container {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 60vh;
+    }
+    .cart-message-box {
+        text-align: center;
+        max-width: 400px;
+        background-color: #f7f7f7; /* Add a light gray background color */
+        padding: 20px; /* Add padding for spacing */
+        border-radius: 8px; /* Optional: add rounded corners */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional: add a subtle shadow */
+    }
+    .cart-message-box img {
+        width: 100px;
+        height: auto;
+        margin-bottom: 16px;
+    }
+    .cart-message-title {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin-bottom: 8px;
+    }
+    .cart-login-btn {
+        background-color: #ff5722;
+        color: white;
+        font-weight: bold;
+        padding: 10px 24px;
+        border: none;
+        border-radius: 4px;
+    }
+    .cart-login-btn:hover {
+        background-color: #e64a19;
+    }
+</style>
 </head>
 <body>
-    <!-- Navbar -->
-    <div class="navbar">
-        <a href="#">Search</a>
-        <a href="#">Menu</a>
-        <span>SHOPPING CART - PRODUCT PAGE</span>
-        <a href="#">Cart</a>
-        <a href="#">Login/Signup</a>
-    </div>
 
-    <!-- Cart Container -->
-    <div class="cart-container">
-        <div class="cart-title">CART</div>
+<!-- Navbar Section -->
+<nav class="navbar p-2">
+    <div class="container-fluid">
+        <!-- Logo and Brand Name -->
+        <a class="navbar-brand" href="#">Shoppingcart</a>
+
+        <!-- Search Bar -->
+        <form class="d-flex search-bar">
+            <input class="form-control me-2 search-input" type="search" placeholder="Search for products, brands and more" aria-label="Search">
+            <button class="btn btn-outline-light" type="submit">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                    <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.098zm-5.525-9.39a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11z"/>
+                </svg>
+            </button>
+        </form>
+
+        <!-- Login Button -->
+        <button class="btn login-btn">Login</button>
+    </div>
+</nav>
+
+<!-- Middle Section -->
+<div class="content-container">
+    <div class="cart-message-box">
+        <!-- Message Title -->
+        <div class="cart-message-title">Missing Cart items?</div>
         
-        <!-- Cart Table -->
-        <table class="cart-table">
-            <thead>
-                <tr>
-                    <th>ITEM</th>
-                    <th>QUANTITY</th>
-                    <th>PRICE</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Product 1</td>
-                    <td>1</td>
-                    <td>$499</td>
-                </tr>
-                <tr>
-                    <td>Product 2</td>
-                    <td>2</td>
-                    <td>$599</td>
-                </tr>
-                <tr>
-                    <td>Product 3</td>
-                    <td>1</td>
-                    <td>$699</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <!-- Total Price and Checkout Button -->
-        <div class="total-price-bar">
-            TOTAL PRICE: $2990
-        </div>
-        <button class="checkout-button">CHECKOUT</button>
+        <!-- Message Text -->
+        <p>Login to see the items you added previously</p>
+        
+        <!-- Login Button -->
+        <button class="cart-login-btn">Login</button>
     </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

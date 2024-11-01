@@ -1,3 +1,8 @@
+<cftry>
+  <cfset obj = createObject('component', 'Components.shoppingkart')>
+<cfcatch type="exception">
+</cfcatch>
+</cftry>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,28 +10,33 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart Home Page</title>
   <!-- Bootstrap CSS -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
   <style>
     /* Additional custom styles */
     .navbar-main {
       background-color: #5a67d8;
     }
 
+    .navbar {
+            background-color: #5c83f6;
+            color: white;
+            padding: 1em;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
     .navbar-main .navbar-text, .navbar-main .nav-link {
       color: white;
     }
 
-    .category-menu {
-      background-color: #718096;
-    }
-
-    .category-menu a {
-      color: white;
-      font-size: 14px;
-    }
-
     .banner {
-      background: url('https://via.placeholder.com/1600x400/007bff/fff?text=Shopping+Kart') no-repeat center center;
+      background: url('../images/banner.png') no-repeat center center;
       background-size: cover;
       height: 200px;
       color: white;
@@ -37,16 +47,70 @@
       font-weight: bold;
     }
 
-    .product-item {
-      background-color: #f7fafc;
-      width: 150px;
-      height: 150px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      color: #4a5568;
-      font-size: 18px;
+    .category-menu {
+            background-color: #a2bbc9;
+            padding: 0.5em;
+            display: flex;
+            justify-content: space-around;
+        }
+
+    .category-menu a {
+        color: white;
+        text-decoration: none;
+        font-weight: bold;
+        padding: 0.5em;
+    }
+
+    /* Product section styling */
+    .product-section {
+        text-align: center;
+        padding: 2em 0;
+    }
+
+    .product-grid {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1em;
+        padding: 1em;
+    }
+
+    /* Product card styling */
+    .product-card {
+        width: 200px;
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        overflow: hidden;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        transition: transform 0.3s;
+    }
+
+    .product-card:hover {
+        transform: scale(1.05);
+    }
+
+    .product-card img {
+        width: 100%;
+        height: auto;
+    }
+
+    .product-info {
+        padding: 1em;
+    }
+
+    .product-name {
+        font-size: 1.1em;
+        font-weight: bold;
+        margin: 0.5em 0;
+        color: #333;
+    }
+
+    .product-price {
+        font-size: 1em;
+        color: #5c83f6;
+        margin: 0.5em 0;
     }
   </style>
 </head>
@@ -55,44 +119,37 @@
   <!-- Main Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-main">
     <div class="container">
-      <!-- Brand text in the center -->
-      <span class="navbar-text mx-auto">SHOPPING CART-HOME PAGE</span>
-      
-      <!-- Navigation links -->
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Search</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Menu</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Cart</a>
-        </li>
-      </ul>
-      <ul class="navbar-nav ms-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="#">Login</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">Signup</a>
-        </li>
-      </ul>
+          <a class="nav-item" href="#">Search</a>
+          <a class="nav-item dropdown-toggle" href="" role="button" data-bs-toggle="dropdown">
+              Menu
+          </a>
+          <ul class="dropdown-menu">
+            <cfset categories = obj.listCategory()>
+            <cfloop array="#categories.RESULTSET#" item="item">
+                <cfoutput>
+                    <li>
+                        <a id="#item.categoryid#" class="dropdown-item text-dark" href="homepage.cfm?cat=#item.categoryid#">#item.categoryname#</a>
+                    </li>
+                </cfoutput>
+            </cfloop>
+          </ul>
+          <a class="nav-item" href="homepage.cfm">SHOPPING CART - HOME PAGE</a>
+          <a class="nav-item" href="#">Cart</a>
+          <a class="nav-item" href="#">Login/Signup</a>
     </div>
   </nav>
 
   <!-- Category Menu -->
-  <div class="category-menu py-2">
-    <div class="container d-flex justify-content-between">
-      <a href="#" class="text-white">category1</a>
-      <a href="#" class="text-white">category2</a>
-      <a href="#" class="text-white">category3</a>
-      <a href="#" class="text-white">category4</a>
-      <a href="#" class="text-white">category5</a>
-      <a href="#" class="text-white">category6</a>
-      <a href="#" class="text-white">category7</a>
+  <cfif structKeyExists(url,"cat") OR structKeyExists(url,"sub")>
+    <cfset subcategories = obj.listSubCategory(categoryid = url.cat)>
+    <div class="category-menu">
+      <div class="container d-flex justify-content-between">
+        <cfloop array="#subcategories.RESULTSET#" index="item">
+          <cfoutput><a id="#item.subcategoryid#" class="dropdown-item text-white" href='homepage.cfm?cat=#item.categoryid#&sub=#item.subcategoryid#'>#item.subcategoryname#</a></cfoutput>
+        </cfloop>
+      </div>
     </div>
-  </div>
+  </cfif>
 
   <!-- Banner Section -->
   <div class="banner">
@@ -100,25 +157,63 @@
     </div>
   </div>
 
-  <!-- Products Section -->
-  <section class="py-5">
-    <div class="container text-center">
-      <h2 class="mb-4">Our Products</h2>
-      <div class="row g-4">
-        <div class="col-md-4 d-flex justify-content-center">
-          <div class="product-item">Item 1</div>
+  <section>
+
+    <div class="product-section">
+        <h1>Products</h1>
+        <div class="product-grid">
+        <cfif structKeyExists(url,"sub")>
+            <cfset products = obj.listProducts(subcategoryid = url.sub)>
+              <cfloop array="#products.RESULTSET#" index="item">
+                <cfoutput>
+                    <a href="homepage.cfm?pro=#item.productid#">
+                      <div class="product-card">
+                        <img src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
+                        <div class="product-info">
+                            <div class="product-name">#item.productname#</div>
+                            <div class="product-price">#item.price#</div>
+                        </div>
+                      </div>
+                    </a>
+                </cfoutput>
+              </cfloop>
+          <cfelseif structKeyExists(url,"cat")>
+            <cfset products = obj.listProducts(categoryid = url.cat)>
+              <cfloop array="#products.RESULTSET#" index="item">
+                <cfoutput>
+                    <a href="homepage.cfm?pro=#item.productid#">
+                      <div class="product-card">
+                        <img src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
+                        <div class="product-info">
+                            <div class="product-name">#item.productname#</div>
+                            <div class="product-price">#item.price#</div>
+                        </div>
+                      </div>
+                    </a>
+                </cfoutput>
+              </cfloop>
+          <cfelse>
+            <cfset products = obj.listProducts(limit = 5)>
+              <cfloop array="#products.RESULTSET#" index="item">
+                <cfoutput>
+                    <a href="homepage.cfm?pro=#item.productid#">
+                      <div class="product-card">
+                        <img src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
+                        <div class="product-info">
+                            <div class="product-name">#item.productname#</div>
+                            <div class="product-price">#item.price#</div>
+                        </div>
+                      </div>
+                    </a>
+                </cfoutput>
+              </cfloop>
+          </cfif>
         </div>
-        <div class="col-md-4 d-flex justify-content-center">
-          <div class="product-item">Item 2</div>
-        </div>
-        <div class="col-md-4 d-flex justify-content-center">
-          <div class="product-item">Item 3</div>
-        </div>
-      </div>
-    </div>
+
   </section>
 
+
   <!-- Bootstrap JS Bundle -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
