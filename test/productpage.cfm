@@ -136,7 +136,7 @@
             <cfloop array="#categories.RESULTSET#" item="item">
                 <cfoutput>
                     <li>
-                        <a id="#item.categoryid#" class="dropdown-item text-dark" href="productpage.cfm?cat=#item.categoryid#">#item.categoryname#</a>
+                        <a id="#item.categoryid#" class="dropdown-item text-dark" href="#cgi.HTTP_URL#&cat=#item.categoryid#">#item.categoryname#</a>
                     </li>
                 </cfoutput>
             </cfloop>

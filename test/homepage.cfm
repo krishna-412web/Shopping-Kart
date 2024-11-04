@@ -119,7 +119,7 @@
   <!-- Main Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-main">
     <div class="container">
-          <a class="nav-item" href="#">Search</a>
+          <a class="nav-item" href="homepage.cfm?search=true">Search</a>
           <a class="nav-item dropdown-toggle" href="" role="button" data-bs-toggle="dropdown">
               Menu
           </a>
@@ -143,6 +143,23 @@
     </div>
   </nav>
 
+  <cfif structKeyExists(url, "search")>
+    <nav class="navbar">
+      <div class="container-fluid row">
+        <div class="d-flex flex-row justify-content-between align-items-center">
+            <div class="d-flex justify-content-center w-100">
+              <input class="form-control me-2 search-input" name="searchString" id="searchString" type="search" placeholder="Search for products, brands and more" aria-label="Search">
+              <button class="btn btn-outline-light" id="searchSubmit" name="searchSubmit" type="submit">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                      <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.098zm-5.525-9.39a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11z"/>
+                  </svg>
+              </button>
+            </div>
+        </div>
+      </div>
+    </nav>
+  </cfif>
+
   <!-- Category Menu -->
   <cfif structKeyExists(url,"cat") OR structKeyExists(url,"sub")>
     <cfset subcategories = obj.listSubCategory(categoryid = url.cat)>
@@ -162,15 +179,33 @@
   </div>
 
   <section>
-
+    <!---<cfdump var="#cgi#">
+    <cfset last=ListLast(cgi.HTTP_URL,"?")>
+    <cfset key = ListGetAt(last, 1, "=")>
+    <cfset value = ListGetAt(last, 2, "=")>
+    <cfdump var="#URL#">--->
+    <cfset variables.url = cgi.HTTP_URL>
+    <cfset variables.url = REReplace(variables.url, "[&?]order=[^&]*", "", "all")>
+    <cfset variables.url = variables.url & (find('?', variables.url) ? '&' : '?')>
+    <div class="sort-links d-flex justify-content-start my-2">
+      <cfoutput>
+        <a href="#variables.url#order=desc" class="btn btn-outline-primary me-2">Price: High to Low</a>
+        <a href="#variables.url#order=asc" class="btn btn-outline-primary">Price: Low to High</a>
+      </cfoutput>
+    </div>
     <div class="product-section">
         <h1>Products</h1>
         <div class="product-grid">
         <cfif structKeyExists(url,"sub")>
-            <cfset products = obj.listProducts(subcategoryid = url.sub)>
+            <cfif structKeyExists(url, 'order')>
+              <cfset products = obj.listProducts(subcategoryid = url.sub,order = url.order)>
+            <cfelse>
+              <cfset products = obj.listProducts(subcategoryid = url.sub)>
+            </cfif>
+            
               <cfloop array="#products.RESULTSET#" index="item">
                 <cfoutput>
-                    <a href="homepage.cfm?pro=#item.productid#">
+                    <a href="productpage.cfm?pro=#item.productid#">
                       <div class="product-card">
                         <img class="img-fluid" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
                         <div class="product-info">
@@ -185,7 +220,24 @@
             <cfset products = obj.listProducts(categoryid = url.cat)>
               <cfloop array="#products.RESULTSET#" index="item">
                 <cfoutput>
-                    <a href="homepage.cfm?pro=#item.productid#">
+                    <a href="productpage.cfm?pro=#item.productid#">
+                      <div class="product-card">
+                        <img class="img-fluid" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
+                        <div class="product-info">
+                            <div class="product-name">#item.productname#</div>
+                            <div class="product-price">#item.price#</div>
+                        </div>
+                      </div>
+                    </a>
+                </cfoutput>
+              </cfloop>
+          <cfelseif structKeyExists(url, "search") AND 
+                    structKeyExists(url, "string") AND 
+                    len(trim(url.string)) GT 0>
+              <cfset products1 = obj.listProducts(search = url.string)>
+              <cfloop array="#products1.RESULTSET#" index="item">
+                <cfoutput>
+                    <a href="productpage.cfm?pro=#item.productid#">
                       <div class="product-card">
                         <img class="img-fluid" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
                         <div class="product-info">
@@ -218,6 +270,8 @@
 
 
   <!-- Bootstrap JS Bundle -->
+  <script src="../js/jQuery.js"></script>
+  <script src="../js/search.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

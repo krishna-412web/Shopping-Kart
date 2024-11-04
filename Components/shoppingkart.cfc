@@ -261,7 +261,9 @@
         <cfargument name="productid" type="string" required="false">
         <cfargument name="subcategoryid" type="string" required="false">
         <cfargument name="categoryid" type="string" required="false">
+        <cfargument  name="search" type="string" required="false">
         <cfargument  name="limit" type="numeric" required="false">
+        <cfargument name="order" type="string" required="false">
         <cfif structKeyExists(arguments, "productid")>
             <cfset local.productid = Val(decryptData(arguments.productid))>
         <cfelseif structKeyExists(arguments, "categoryid")>
@@ -286,6 +288,9 @@
                 p.subcategoryid = s.subcategoryid
             WHERE
                 p.status = 1
+             <cfif structKeyExists(arguments, "search")>
+                AND p.productname LIKE <cfqueryparam value="%#arguments.search#%" cfsqltype="cf_sql_varchar">
+            </cfif>           
             <cfif structKeyExists(local, "productid")>
                 AND p.productid = <cfqueryparam value="#local.productid#" cfsqltype="cf_sql_integer">
             </cfif>
@@ -304,6 +309,11 @@
             <cfif structKeyExists(arguments,"limit")>
                 ORDER BY rand()
                 LIMIT <cfqueryparam value="#arguments.limit#" cfsqltype="cf_sql_integer">
+            </cfif>
+            <cfif structKeyExists(arguments,"order") AND arguments.order EQ "asc">
+                ORDER BY p.price ASC
+            <cfelseif structKeyExists(arguments,"order") AND arguments.order EQ "desc">
+                ORDER BY p.price DESC
             </cfif>
             ;
         </cfquery> 
