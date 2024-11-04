@@ -1,5 +1,13 @@
 <cftry>
   <cfset obj = createObject('component', 'Components.shoppingkart')>
+  <cfif structKeyExists(url, "pro") AND structKeyExists(url, "add") AND url.add EQ 1
+    AND structKeyExists(session,"user") AND session.user.value EQ 1>
+    <!---update cart --->
+    <cfset productid = structKeyExists(url,"pro")? Val(obj.decryptData(url.pro)) : 0>
+    <cfset obj.insertCart(productid = productid,
+                          userid = session.user.userid)>
+    <cflocation url="productpage.cfm?pro=#url.pro#" addToken="no">
+  </cfif>
 <cfcatch type="exception">
 </cfcatch>
 </cftry>
@@ -8,7 +16,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Shopping Cart Home Page</title>
+  <title>Shopping Cart- Product Page</title>
   <!-- Bootstrap CSS -->
   <link href="../css/bootstrap.min.css" rel="stylesheet">
   <style>
@@ -128,14 +136,14 @@
             <cfloop array="#categories.RESULTSET#" item="item">
                 <cfoutput>
                     <li>
-                        <a id="#item.categoryid#" class="dropdown-item text-dark" href="homepage.cfm?cat=#item.categoryid#">#item.categoryname#</a>
+                        <a id="#item.categoryid#" class="dropdown-item text-dark" href="productpage.cfm?cat=#item.categoryid#">#item.categoryname#</a>
                     </li>
                 </cfoutput>
             </cfloop>
           </ul>
-          <a class="nav-item" href="homepage.cfm">SHOPPING CART - PRODUCT PAGE</a>
-          <a class="nav-item" href="#">Cart</a>
-          <a class="nav-item" href="#">Login/Signup</a>
+          <a class="nav-item" href="homepage.cfm">SHOPPING CART</a>
+          <a class="nav-item" href="cart.cfm">Cart</a>
+          <a class="nav-item" href="userlogin.cfm">Login/Signup</a>
     </div>
   </nav>
 
@@ -156,19 +164,35 @@
     <div class="product-section">
         <h1>PRODUCT</h1>
         <div class="product-grid">
-        <cfif structKeyExists(url,"sub")>
-            <cfset products = obj.listProducts(subcategoryid = url.sub)>
+        <cfif structKeyExists(url,"pro")>
+            <cfset products = obj.listProducts(productid = url.pro)>
               <cfloop array="#products.RESULTSET#" index="item">
                 <cfoutput>
-                    <a href="homepage.cfm?pro=#item.productid#">
-                      <div class="product-card">
-                        <img class="img-fluid" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
-                        <div class="product-info">
-                            <div class="product-name">#item.productname#</div>
-                            <div class="product-price">#item.price#</div>
-                        </div>
+                  <div class="container mt-5">
+                      <div class="row">
+                          <!-- Product Image Section -->
+                          <div class="col-md-6">
+                              <img src="../admin/images/#ListLast(item.productimage,"/")#" class="img-fluid rounded shadow-sm" alt="Product Image">
+                          </div>
+                          
+                          <!-- Product Information Section -->
+                          <div class="col-md-6">
+                              <!-- Product Name -->
+                              <h1 class="display-5 font-weight-bold text-primary">#item.productname#</h1>
+                              
+                              <!-- Product Price -->
+                              <h3 class="text-success font-weight-bold">#item.price#</h3>
+                              
+                              <!-- Product Description -->
+                              <p class="text-muted mt-3">
+                                  #item.productdesc#
+                              </p>
+                              
+                              <!-- Call-to-Action Button -->
+                              <a href="" class="btn btn-primary btn-lg mt-4" id="addCart">Add to Cart</a>
+                          </div>
                       </div>
-                    </a>
+                  </div>
                 </cfoutput>
               </cfloop>
           </cfif>
@@ -178,6 +202,8 @@
 
 
   <!-- Bootstrap JS Bundle -->
+  <script src="../js/jQuery.js"></script>
+  <script src="../js/cart.js"></script>
   <script src="../js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

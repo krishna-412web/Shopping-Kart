@@ -32,6 +32,32 @@
 		<cfreturn local.result>
     </cffunction>
     
+    <cffunction name="accessUser">
+		<cfargument name="data" type="struct">
+        <cfset local.user = structnew()>
+		<cfquery name="local.check" datasource="shoppingcart" result="r">
+			SELECT 
+				userid,username,email,password
+			FROM 
+				users 
+			WHERE 
+				username= <cfqueryparam value="#arguments.data.userName#" cfsqltype="varchar">;
+		</cfquery>
+		<cfif r.RECORDCOUNT GT 0>
+			<cfif arguments.data.passWord EQ local.check.password>
+				<cfset local.user.value = 1 >
+				<cfset local.user.userid=local.check.userid>
+				<cfset local.user.username=local.check.username>
+				<cfset local.user.useremail=local.check.email>
+			<cfelse>
+				<cfset local.user.value = 0 >
+			</cfif>	
+		<cfelse> 
+			<cfset local.user.value = 0>
+		</cfif>
+		<cfreturn local.user>
+    </cffunction>
+
     <cffunction  name="updateCategory">
         <cfargument name="categoryName" type="string">
         <cfargument name="categoryid" type="numeric">
@@ -373,4 +399,110 @@
         </cftry>
         <cfreturn local.updateReturn>
     </cffunction>
+
+    <cffunction name="insertCart" access="public" returntype="void">
+        <cfargument name="productid" type="numeric" required="true">
+        <cfargument name="mode" type="string" required="false">
+        <cfargument name="userid" type="numeric" required="true">
+
+        <!--- Check if the item is already in the cart and active --->
+        <cfquery name="existingItem">
+            SELECT cartid 
+            FROM shoppingcart 
+            WHERE productid = <cfqueryparam value='#arguments.productid#' cfsqltype='cf_sql_integer'> 
+              AND status = 1
+              AND userid = <cfqueryparam value='#arguments.userid#' cfsqltype='cf_sql_integer'>
+              ;
+        </cfquery>
+
+        <!--- If item exists, update the quantity --->
+        <cfif existingItem.recordCount EQ 0>
+            <cfquery>
+                INSERT INTO shoppingcart (productid, quantity, userid,status) 
+                VALUES (<cfqueryparam value='#arguments.productid#' cfsqltype='cf_sql_integer'>, 
+                        1,
+                        <cfqueryparam value="#arguments.userid#" cfsqltype='cf_sql_integer'>,  
+                        1) 
+            </cfquery>
+        </cfif>
+    </cffunction>
+
+    <cffunction name="listCart">
+        <cfquery name="local.getCart">
+            SELECT 
+                s.cartid,
+                s.productid,
+                s.quantity,
+                p.productname,
+                p.productdesc,
+                p.price
+            FROM 
+                shoppingcart s
+            INNER JOIN
+                products p
+            WHERE
+                s.productid = p.productid
+            AND
+                s.status = 1
+            AND 
+                s.userid = <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">;
+            ;        
+        </cfquery>
+        <cfreturn local.getCart/>
+    </cffunction>
+
+    <cffunction name="updateCart" access="remote" returnFormat="JSON">
+        <cfargument  name="cartid" type="numeric">
+        <cfargument name="mode" type="numeric">
+        <cfif arguments.mode EQ 1>
+            <cfquery name="updateQuantity">
+                UPDATE
+                    shoppingcart
+                SET
+                    quantity = quantity+1
+                WHERE
+                    cartid = <cfqueryparam value="#arguments.cartid#" cfsqltype="cf_sql_integer">;
+            </cfquery>
+        <cfelseif arguments.mode EQ 0>
+            <cfquery name="updateQuantity">
+                UPDATE
+                    shoppingcart
+                SET
+                    quantity = quantity-1
+                WHERE
+                    cartid = <cfqueryparam value="#arguments.cartid#" cfsqltype="cf_sql_integer">;
+            </cfquery>        
+        </cfif>
+        <cfreturn 1>
+    </cffunction>
+
+    <cffunction name="deleteCart" access="remote" returnFormat="JSON">
+        <cfargument  name="cartid" type="numeric">
+        <cfquery name="local.deleteItem">
+            UPDATE
+                shoppingcart
+            SET
+                status = 0
+            WHERE
+                cartid = <cfqueryparam value="#arguments.cartid#" cfsqltype="cf_sql_integer">;
+        </cfquery>
+        <cfreturn 1>
+    </cffunction>
+
+    <cffunction  name="getPrice" access="remote" returnFormat="JSON">
+        <cfquery name="getTotalPrice">
+            SELECT 
+                SUM(sc.quantity * p.price) AS totalprice
+            FROM 
+                shoppingcart sc
+            INNER JOIN 
+                products p ON sc.productid = p.productid
+            WHERE
+                sc.status = 1
+            AND 
+                sc.userid = 1;
+        </cfquery>
+        <cfreturn getTotalPrice.totalprice/>
+    </cffunction>
+
 </cfcomponent>

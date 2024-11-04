@@ -134,8 +134,12 @@
             </cfloop>
           </ul>
           <a class="nav-item" href="homepage.cfm">SHOPPING CART - HOME PAGE</a>
-          <a class="nav-item" href="#">Cart</a>
-          <a class="nav-item" href="#">Login/Signup</a>
+          <a class="nav-item" href="cart.cfm">Cart</a>
+          <cfif structKeyExists(session,"user") AND session.user.value EQ 1>
+            <a class="nav-item" href="userlogin.cfm"><cfoutput>#session.user.username#</cfoutput></a>
+          <cfelse>
+            <a class="nav-item" href="userlogin.cfm">Login/Signup</a>
+          </cfif>
     </div>
   </nav>
 
@@ -196,7 +200,7 @@
             <cfset products = obj.listProducts(limit = 5)>
               <cfloop array="#products.RESULTSET#" index="item">
                 <cfoutput>
-                    <a href="homepage.cfm?pro=#item.productid#">
+                    <a href="productpage.cfm?pro=#item.productid#">
                       <div class="product-card">
                         <img class="img-fluid" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
                         <div class="product-info">
