@@ -202,7 +202,6 @@
             <cfelse>
               <cfset products = obj.listProducts(subcategoryid = url.sub)>
             </cfif>
-            
               <cfloop array="#products.RESULTSET#" index="item">
                 <cfoutput>
                     <a href="productpage.cfm?pro=#item.productid#">
@@ -217,7 +216,11 @@
                 </cfoutput>
               </cfloop>
           <cfelseif structKeyExists(url,"cat")>
-            <cfset products = obj.listProducts(categoryid = url.cat)>
+            <cfif structKeyExists(url, 'order')>
+              <cfset products = obj.listProducts(categoryid = url.cat,order = url.order)>
+            <cfelse>
+              <cfset products = obj.listProducts(categoryid = url.cat)>
+            </cfif>
               <cfloop array="#products.RESULTSET#" index="item">
                 <cfoutput>
                     <a href="productpage.cfm?pro=#item.productid#">
@@ -234,7 +237,11 @@
           <cfelseif structKeyExists(url, "search") AND 
                     structKeyExists(url, "string") AND 
                     len(trim(url.string)) GT 0>
+            <cfif structKeyExists(url, 'order')>
+              <cfset products1 = obj.listProducts(search = url.string,order = url.order)>
+            <cfelse>
               <cfset products1 = obj.listProducts(search = url.string)>
+            </cfif>
               <cfloop array="#products1.RESULTSET#" index="item">
                 <cfoutput>
                     <a href="productpage.cfm?pro=#item.productid#">
