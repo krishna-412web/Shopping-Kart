@@ -37,23 +37,31 @@
         <cfset local.user = structnew()>
 		<cfquery name="local.check" datasource="shoppingcart" result="r">
 			SELECT 
-				userid,username,email,password
+				userid,username,name,email,password,userimage,address
 			FROM 
 				users 
 			WHERE 
-				username= <cfqueryparam value="#arguments.data.userName#" cfsqltype="varchar">;
+				username= <cfqueryparam value="#arguments.data.userName#" cfsqltype="varchar">
+            AND
+                status=1
+            ;
 		</cfquery>
 		<cfif r.RECORDCOUNT GT 0>
 			<cfif arguments.data.passWord EQ local.check.password>
-				<cfset local.user.value = 1 >
-				<cfset local.user.userid=local.check.userid>
-				<cfset local.user.username=local.check.username>
-				<cfset local.user.useremail=local.check.email>
+				<cfset local.user = {
+                                    "value" : 1,
+                                    "userid" : local.check.userid,
+                                    "username" : local.check.username,
+                                    "useremail" : local.check.email,
+                                    "userimage" : local.check.userimage,
+                                    "name" : local.check.name,
+                                    "address" : local.check.address
+                                    }>
 			<cfelse>
-				<cfset local.user.value = 0 >
+				<cfset local.user["value"] = 0 >
 			</cfif>	
 		<cfelse> 
-			<cfset local.user.value = 0>
+			<cfset local.user["value"] = 0>
 		</cfif>
 		<cfreturn local.user>
     </cffunction>
@@ -515,4 +523,73 @@
         <cfreturn getTotalPrice.totalprice/>
     </cffunction>
 
+    <cffunction name="listAddress">
+        <cfargument name="addressid" required="false" type="numeric">
+        <cfargument name="userid" required="false" type="numeric">
+        <cfquery name="local.getAddress" returnType="struct">
+            SELECT
+                addressid,
+                name,
+                phoneno,
+                housename,
+                street,
+                city,
+                state,
+                pincode
+            FROM
+                shippingaddress
+            WHERE
+                status = 1
+            <cfif structKeyExists(arguments, "addressid")>
+            AND
+                addressid= <cfqueryparam value="#arguments.addressid#" cfsqltype="cf_sql_integer">
+            </cfif>
+            <cfif structKeyExists(arguments, "userid")>
+            AND
+                addressid= <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
+            </cfif>
+            ;
+        </cfquery>
+        <cfreturn local.getAddress/>
+    </cffunction>
+    <cffunction name="setaddress">
+        <cfargument name="addressid" required="false" type="numeric">
+        <cfargument name="userid" required="false" type="numeric">
+        <cfquery name="setaddress">
+            UPDATE
+                users
+            SET
+                address = <cfqueryparam value="#arguments.addressid#" cfsqltype="cf_sql_integer">
+            WHERE
+                userid = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">;
+        </cfquery>
+    </cffunction>
+    <cffunction name="updateAddress">
+        <cfargument name="addressid" required="false" type="numeric">
+        <cfargument name="name" required="false" type="string">
+        <cfargument name="phoneno" required="false" type="numeric">
+        <cfargument name="housename" required="false" type="string">
+        <cfargument name="street" required="false" type="string">
+        <cfargument name="city" required="false" type="string">
+        <cfargument name="pincode" required="false" type="string">
+        <cfif structKeyExists(arguments,"addressid")>
+            <!---UPDATE--->
+        <cfelse>
+            <!---CREATE--->
+        </cfif>
+    </cffunction>
+    <cffunction  name="addOrder">
+        <cfargument name="cartid" required="false" type="numeric">
+        <cfargument name="productid" required="false" type="numeric">
+        <!---createorder--->
+        <!---Check wether cart/product--->
+        <!---add items to orderitems according to the data--->
+        <!--- only after successfull payment ad order--->
+    </cffunction>
+    <cffunction  name="makePayment">
+        <!--- check card details arguments can be struct or variables--->
+        <!--- check through hardcoded backend validation--->
+        <!--- return after successful --->
+    </cffunction>
+    
 </cfcomponent>
