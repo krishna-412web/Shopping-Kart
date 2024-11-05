@@ -99,7 +99,7 @@
         </form>--->
         <!-- Login Button -->
         <cfif structKeyExists(session, "user")>
-            <cfoutput><a class="btn btn-info w-25">#session.user.username#</a></cfoutput>            
+            <cfoutput><a class="btn btn-info w-25" href="userpage.cfm">#session.user.username#</a></cfoutput>            
         <cfelse>
             <a href="userlogin.cfm" class="btn w-25 login-btn">Login</a>
         </cfif>
