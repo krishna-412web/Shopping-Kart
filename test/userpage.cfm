@@ -2,12 +2,30 @@
     <cfset structDelete(session, "user")>
     <cflocation  url="homepage.cfm" addToken="no">
 </cfif>
-<cfif structKeyExists(url, "select") 
-        AND structKeyExists(url, "id")
-        AND len(trim(url.id)) GT 0>
-        <!---Add the code here--->
-</cfif>
 <cfset obj = createObject('component', 'Components.shoppingkart')>
+<cfif structKeyExists(session,"user") AND session.user.value EQ 1 >
+    <cfif structKeyExists(url, "select") 
+            AND structKeyExists(url, "id")
+            AND len(trim(url.id)) GT 0>
+            <cfset obj.setaddress(addressid = Val(url.id),
+                                userid = session.user.userid )>
+            <cfset session.user.address = Val(url.id)>
+            <cflocation  url="userpage.cfm" addToken="no">
+    </cfif>
+    <cfif structKeyExists(form,"saveaddress")>
+        <cfset addressid = structKeyExists(form, "addressid")?form.addressid : 0>
+        <cfset userid = structKeyExists(form, "addressid")? 0: session.user.userid>
+        <cfset obj.updateAddress(addressid = addressid,
+                                    userid = userid,
+                                    name = form.name,
+                                    phoneno = form.phone,
+                                    housename = form.houseName,
+                                    street = form.street,
+                                    city = form.city,
+                                    state = form.state,
+                                    pincode = form.pincode)>
+    </cfif>
+</cfif>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -88,7 +106,7 @@
                                     <cfset address1 = obj.listAddress(userid = session.user.userid)>
                                     <cfif address1.recordCount NEQ 0>
                                         <cfoutput>
-                                            <cfloop array="#address.RESULTSET#" index="item">
+                                            <cfloop array="#address1.RESULTSET#" index="item">
                                                 <div class="card">
                                                     <div class="card-body">
                                                         <h6 class="card-title">#item.name#|#item.phoneno#</h6>
@@ -98,7 +116,7 @@
                                                             #item.state#,#item.pincode#
                                                         </p>
                                                         <a class="btn btn-primary" href="/test/userpage.cfm?select=1&id=#item.addressid#">Select</a>
-                                                        <a class="btn btn-info" href="/test/userpage.cfm?edit=1&id=#item.addressid#">Edit</a>
+                                                        <button class="btn btn-info edit" id="#item.addressid#" data-bs-toggle="modal" data-bs-target="#chr(35)#addAddress">Edit</button>
                                                     </div>
                                                 </div>
                                             </cfloop>
@@ -110,9 +128,55 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button class="btn btn-success" id="#addAddress">Add New Address</button>
+                        <button class="btn btn-success add" id="add" data-bs-toggle="modal" data-bs-target="#addAddress">Add New Address</button>
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal fade" id="addAddress" tabindex="-1" aria-labelledby="addAddressLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addressHeading">Add/Edit Address</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div> 
+                    <form id="addressForm" action="" method="POST">
+                        <div class="modal-body">
+                            <div class="mb-3">
+                                <label for="name" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="phone" class="form-label">Phone Number</label>
+                                <input type="tel" class="form-control" id="phone" name="phone" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="houseName" class="form-label">House Name</label>
+                                <input type="text" class="form-control" id="houseName" name="houseName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="street" class="form-label">Street</label>
+                                <input type="text" class="form-control" id="street" name="street" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="city" class="form-label">City</label>
+                                <input type="text" class="form-control" id="city" name="city" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="state" class="form-label">State</label>
+                                <input type="text" class="form-control" id="state" name="state" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="pincode" class="form-label">Pincode</label>
+                                <input type="text" class="form-control" id="pincode" name="pincode" required>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary" name="saveaddress">Save</button>
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
@@ -134,5 +198,8 @@
     <!-- Bootstrap JS (for components that require JavaScript) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>
+    <script src="../js/jQuery.js"></script>
+    <script src="../js/address.js"></script>
+    
 </body>
 </html>

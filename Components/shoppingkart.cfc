@@ -523,7 +523,7 @@
         <cfreturn getTotalPrice.totalprice/>
     </cffunction>
 
-    <cffunction name="listAddress">
+    <cffunction name="listAddress" access="remote" returnFormat="JSON">
         <cfargument name="addressid" required="false" type="numeric">
         <cfargument name="userid" required="false" type="numeric">
         <cfquery name="local.getAddress" returnType="struct">
@@ -546,7 +546,7 @@
             </cfif>
             <cfif structKeyExists(arguments, "userid")>
             AND
-                addressid= <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
+                userid= <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">
             </cfif>
             ;
         </cfquery>
@@ -555,7 +555,7 @@
     <cffunction name="setaddress">
         <cfargument name="addressid" required="false" type="numeric">
         <cfargument name="userid" required="false" type="numeric">
-        <cfquery name="setaddress">
+        <cfquery name="local.set" result="r">
             UPDATE
                 users
             SET
@@ -572,10 +572,46 @@
         <cfargument name="street" required="false" type="string">
         <cfargument name="city" required="false" type="string">
         <cfargument name="pincode" required="false" type="string">
-        <cfif structKeyExists(arguments,"addressid")>
-            <!---UPDATE--->
+        <cfargument name="userid" required="false" type="numeric">
+        <cfif arguments.addressid NEQ 0 AND arguments.userid EQ 0>
+            <cfquery name="updateadd">
+                UPDATE
+                    shippingaddress
+                SET
+                    name = <cfqueryparam value="#arguments.name#" cfsqltype="cf_sql_varchar">,
+                    phoneno = <cfqueryparam value="#arguments.phoneno#" cfsqltype="cf_sql_decimal">,
+                    housename =<cfqueryparam value="#arguments.housename#" cfsqltype="cf_sql_varchar">,
+                    street =<cfqueryparam value="#arguments.street#" cfsqltype="cf_sql_varchar">,
+                    city =<cfqueryparam value="#arguments.city#" cfsqltype="cf_sql_varchar">,
+                    state =<cfqueryparam value="#arguments.state#" cfsqltype="cf_sql_varchar">,
+                    pincode =<cfqueryparam value="#arguments.pincode#" cfsqltype="cf_sql_varchar">
+                WHERE
+                    addressid = <cfqueryparam value="#arguments.addressid#" cfsqltype="cf_sql_integer">
+            </cfquery>
         <cfelse>
-            <!---CREATE--->
+            <cfquery name="insertadd">
+                INSERT INTO
+                    shippingaddress(userid,
+                                    name,
+                                    phoneno,
+                                    housename,
+                                    street,
+                                    city,
+                                    state,
+                                    pincode,
+                                    status)
+                    VALUES
+                        (<cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#arguments.name#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.phoneno#" cfsqltype="cf_sql_decimal">,
+                            <cfqueryparam value="#arguments.housename#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.street#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.city#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.state#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#arguments.pincode#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="1" cfsqltype="cf_sql_integer">
+                        );
+            </cfquery>
         </cfif>
     </cffunction>
     <cffunction  name="addOrder">
