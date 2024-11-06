@@ -1,8 +1,23 @@
 <cfset obj = createObject('component', 'Components.shoppingkart')>
 <cfif structKeyExists(session,"user") AND session.user.value EQ 1 >
     <cftry>
+        <cfif structKeyExists(url, "select") 
+            AND structKeyExists(url, "id")
+            AND len(trim(url.id)) GT 0>
+            <cfset obj.setaddress(addressid = Val(url.id),
+                                userid = session.user.userid )>
+            <cfset session.user.address = Val(url.id)>
+            <cfif structKeyExists(url,"pro")>
+                <cflocation  url="paymentpage.cfm?pro=#url.pro#" addToken="no">
+            <cfelseif structKeyExists(url,"cart")>
+                <cflocation  url="paymentpage.cfm?cart=1" addToken="no">
+            </cfif>
+        </cfif>
         <cfif structKeyExists(url, "pro") AND len(trim(url.pro))>
                 <cfset variables.product = obj.listProducts(productid = url.pro)>
+        </cfif>
+        <cfif structKeyExists(url, "cart") AND len(trim(url.cart))>
+                <cfset variables.cart = obj.listCart(userid = session.user.userid)>
         </cfif>
         <cfif structKeyExists(form,"saveaddress")>
             <cfset addressid = structKeyExists(form, "addressid")?form.addressid : 0>
@@ -71,7 +86,7 @@
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between">
                                                 <h6 class="card-title fw-bold">#product.RESULTSET[1].productname#</h6>
-                                                <h6 class="card-title text-danger fw-bold">#product.RESULTSET[1].price#</h6>
+                                                <h6 class="card-title text-danger fw-bold" id="productprice">#product.RESULTSET[1].price#</h6>
                                             </div>
                                             <div class="row align-items-center">
                                                 <h6 class="card-text small col-3 text-center">Quantity</h6>
@@ -81,9 +96,30 @@
                                             </div>
                                         </div>
                                     </cfoutput>
+                                    <div class="text-center mt-4">
+                                        <p class="fw-bold">SELECTED ADDRESS</p>
+                                        <cfset address = obj.listAddress(addressid = session.user.address)>
+                                        <cfif address.recordCount>
+                                            <cfset selectedAddress = address.RESULTSET[1]>
+                                            <cfoutput> <!--- Get the first address --->
+                                                <div class="address-info text-center">
+                                                    <p>
+                                                        <strong>#selectedAddress.name#</strong> | <strong>#selectedAddress.phoneno#</strong>
+                                                    </p>
+                                                    <p>
+                                                        #selectedAddress.housename#, #selectedAddress.street#, #selectedAddress.city#, #selectedAddress.state#, #selectedAddress.pincode#
+                                                    </p>
+                                                </div>
+                                            </cfoutput>
+                                        <cfelse>
+                                            <p>No addresses found.</p>
+                                        </cfif>
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addressModal"> SELECT</button>
+                                    </div>
                                 </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-end">
+                        <div class="card-footer d-flex justify-content-around">
+                            <cfoutput><h4 class="card-text fw-bold" id="finalprice">Final Price:#product.RESULTSET[1].price#</h4></cfoutput>
                             <cfif StructKeyExists(CGI, "HTTP_REFERER") AND 
                                 len(trim(CGI.HTTP_REFERER)) NEQ 0>
                                 <cfset previousPage = CGI.HTTP_REFERER>
@@ -98,13 +134,65 @@
                     </div>
                 </div>
             </div>
-            <div class="card h-100 mb-2 p-2">
-                <div class="card-body text-center">
-                    <h5 class="card-title">Final Price</h5>
-                    <h5 class="card-text fw-bold" id="price1">199.99</h5>
+        <cfelseif structKeyExists(variables, "cart")>
+            <div class="container my-5">
+                <div class="d-flex justify-content-center">
+                    <div class="card w-50"> 
+                        <div class="card-header bg-primary text-white">Order Details</div>
+                        <div class="card-body">
+                            <div class="d-flex flex-column justify-content-center">
+                                <div class="card h-100 mb-2 p-2">
+                                    <cfoutput query="variables.cart">
+                                        <div class="card-body">
+                                            <div class="d-flex justify-content-between">
+                                                <h6 class="card-title fw-bold">#variables.cart.productname#</h6>
+                                                <h6 class="card-title text-danger fw-bold" id="productprice">#variables.cart.price#</h6>
+                                            </div>
+                                            <div class="row align-items-center">
+                                                <h6 class="card-text small col-3 text-center">Quantity</h6>
+                                                <input class="col-2 text-center" name="quantity1" type="text" value="#variables.cart.quantity#" 
+                                                style="max-width: 60px;" disabled/>
+                                            </div>
+                                        </div>
+                                    </cfoutput>
+                                    <div class="text-center mt-4">
+                                        <p class="fw-bold">SELECTED ADDRESS</p>
+                                        <cfset address = obj.listAddress(addressid = session.user.address)>
+                                        <cfif address.recordCount>
+                                            <cfset selectedAddress = address.RESULTSET[1]>
+                                            <cfoutput> <!--- Get the first address --->
+                                                <div class="address-info text-center">
+                                                    <p>
+                                                        <strong>#selectedAddress.name#</strong> | <strong>#selectedAddress.phoneno#</strong>
+                                                    </p>
+                                                    <p>
+                                                        #selectedAddress.housename#, #selectedAddress.street#, #selectedAddress.city#, #selectedAddress.state#, #selectedAddress.pincode#
+                                                    </p>
+                                                </div>
+                                            </cfoutput>
+                                        <cfelse>
+                                            <p>No addresses found.</p>
+                                        </cfif>
+                                        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal"> SELECT</button>
+                                    </div>
+                                </div>
+                        </div>
+                        <div class="card-footer d-flex justify-content-around">
+                            <cfoutput><h4 class="card-text fw-bold" id="finalprice">Final Price:#obj.getPrice()#</h4></cfoutput>
+                            <cfif StructKeyExists(CGI, "HTTP_REFERER") AND 
+                                len(trim(CGI.HTTP_REFERER)) NEQ 0>
+                                <cfset previousPage = CGI.HTTP_REFERER>
+                            <cfelse>
+                                <cfset previousPage="/test/homepage.cfm" >
+                            </cfif>
+                            <cfoutput>
+                                <a href="#previouspage#" class="btn btn-sm btn-outline-secondary me-2">Cancel</a>
+                            </cfoutput>
+                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Place Order</button>
+                        </div>
+                    </div>
                 </div>
             </div>
-        <cfelseif structKeyExists(url, "cart")>
         </cfif>
         <div class="modal fade" id="paymentModal" tabindex="-1" aria-labelledby="paymentModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered">
@@ -114,37 +202,44 @@
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-                        <form id="paymentForm">
+                        <cfoutput>
+                        <form id="paymentform" name="paymentform" action="" method="POST">
                             <!-- Card Number -->
                             <div class="mb-3">
                                 <label for="cardNumber" class="form-label">Card Number</label>
-                                <input type="text" class="form-control" id="cardNumber" placeholder="1234 5678 9012 3456" required>
+                                <input type="text" class="form-control" id="cardNumber" name="cardnumber" placeholder="1234 5678 9012 3456" value="" required>
                             </div>
                             <!-- Expiration Date -->
                             <div class="mb-3">
                                 <label for="expiryDate" class="form-label">Expiration Date</label>
-                                <input type="text" class="form-control" id="expiryDate" placeholder="MM/YY" required>
+                                <input type="text" class="form-control" id="expiryDate" name="expirydate" placeholder="MM/YY" required>
                             </div>
                             <!-- CVV -->
                             <div class="mb-3">
                                 <label for="cvv" class="form-label">CVV</label>
-                                <input type="text" class="form-control" id="cvv" placeholder="123" required>
+                                <input type="text" class="form-control" id="cvv" name="cvv" placeholder="123" required>
                             </div>
                             <!-- Cardholder Name -->
                             <div class="mb-3">
                                 <label for="cardholderName" class="form-label">Cardholder Name</label>
-                                <input type="text" class="form-control" id="cardholderName" placeholder="John Doe" required>
+                                <input type="text" class="form-control" id="cardholderName" name="cardholdername" placeholder="John Doe" required>
                             </div>
+                                <cfif structKeyExists(variables,"product")>
+                                    <input class="form-control" type="hidden" name="productid" value="#product.RESULTSET[1].productid#">
+                                    <input class="form-control" type="hidden" id="productquantiy" name="productquantiy" value="1">
+                                </cfif>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                <cfif structKeyExists(variables,"cart")>
+                                    <button type="submit" id="paymentSubmit" name="paymentcart" class="btn btn-primary">Pay Now</button>
+                                <cfelseif structKeyExists(variables,"product")>
+                                    <button type="submit" id="paymentSubmit" name="paymentproduct" class="btn btn-primary">Pay Now</button>
+                                </cfif>
                         </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="button" class="btn btn-primary" onclick="processPayment()">Pay Now</button>
-                    </div>
+                        </cfoutput>
                 </div>
             </div>
         </div>
-        <div class="modal fade" id="addressModal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
+        <div class="modal fade" id="addmodal" tabindex="-1" aria-labelledby="addressModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-md">
                 <div class="modal-content">
                     <div class="modal-header">
@@ -254,6 +349,7 @@
     <script src="../js/bootstrap.min.js"></script>
     <script src="../js/jQuery.js"></script>
     <script src="../js/address.js"></script>
+    <script src="../js/productadd.js"></script>
     
 </body>
 </html>

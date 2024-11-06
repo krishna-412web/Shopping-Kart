@@ -161,7 +161,7 @@
             <div class="col-3 col-md-3 text-center"> <!-- Centered column -->
                 <cfset cartitems = obj.getPrice()>
                 <cfoutput><h3>Total Price: <span id="totalPrice">#cartitems#</span></h3></cfoutput> <!-- Placeholder for total price -->
-                <button class="btn btn-primary btn-lg" id="checkoutButton">Checkout</button>
+                <a class="btn btn-primary btn-lg" id="checkoutButton" href="paymentpage.cfm?cart=1">Checkout</a>
                 <button class="btn btn-secondary btn-lg" id="emptyCartButton">Empty Cart</button>
             </div>
         </div>
