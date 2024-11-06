@@ -617,15 +617,78 @@
     <cffunction  name="addOrder">
         <cfargument name="cartid" required="false" type="numeric">
         <cfargument name="productid" required="false" type="numeric">
+        <cfargument name="quantity" required="false" type="numeric">
+        <cfargument name="addressid" required="true" type="numeric">
+        <cfargument name="userid" required="true" type="numeric">
+        <cfargument name="amount" required="true" type="numeric">
+        <cfset local.orderid = createUUID()>
+        <cfquery name="createorder">
+            INSERT INTO
+                order(orderid,userid,orderdate,amount,addressid)
+            VALUES(
+                    <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
+                    <cfqueryparam value="#local.userid#" cfsqltype="cf_sql_integer">,
+                    <cfqueryparam value="#now#" cfsqltype="cf_sql_DATETIME">,
+                    <cfqueryparam value="#local.amount#" cfsqltype="cf_sql_integer">,
+                    <cfqueryparam value="#local.addressid#" cfsqltype="cf_sql_integer">
+                );
+        </cfquery>
+        <cfif structKeyExists(arguments,"cartid")>
+
+        <cfelseif structKeyExists(arguments,"productid") AND structKeyExists(arguments,"quantity")>
+            <cfquery name="getProduct">
+                SELECT
+                    productid,
+                    price
+                FROM
+                    products
+                WHERE
+                    productid = <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">
+                ;
+            </cfquery>
+            <cfquery name="createitems">
+                INSERT INTO
+                    orderitems(orderid,productid,quantity,totalprice)
+                VALUES
+                    (
+                        <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#arguments.quantity#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#arguments.quantity*getProduct.price#" cfsqltype="cf_sql_integer">
+                    );
+            </cfquery>
+        </cfif>
         <!---createorder--->
         <!---Check wether cart/product--->
         <!---add items to orderitems according to the data--->
         <!--- only after successfull payment ad order--->
     </cffunction>
     <cffunction  name="makePayment">
-        <!--- check card details arguments can be struct or variables--->
-        <!--- check through hardcoded backend validation--->
-        <!--- return after successful --->
+        <cfargument name="cardnumber" required="true" type="string">
+        <cfargument name="expirationdate" required="true" type="string">
+        <cfargument name="cvv" required="true" type="string">
+        <cfargument name="cardholdername" required="true" type="string">
+        <cfset local.result = {
+            "value" : 1,
+            "message" : []
+        }>
+        <cfif arguments.cardnumber EQ "5196080964602432">
+            <cfset local.result["value"]=0>
+            <cfset arrayAppend(local.result.message, "*incorrect card no")>
+        </cfif>
+        <cfif arguments.expirationdate EQ "06/27">
+            <cfset local.result["value"]=0>
+            <cfset arrayAppend(local.result.message, "*incorrect expiration date")>
+        </cfif>
+        <cfif arguments.cvv EQ "213">
+            <cfset local.result["value"]=0>
+            <cfset arrayAppend(local.result.message, "*incorrect cvv")>
+        </cfif>
+        <cfif arguments.cardholdername EQ "KRISHNA RENJITH">
+            <cfset local.result["value"]=0>
+            <cfset arrayAppend(local.result.message, "*incorrect holder name")>
+        </cfif>
+        <cfreturn local.result>
     </cffunction>
     
 </cfcomponent>

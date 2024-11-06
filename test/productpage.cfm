@@ -190,6 +190,7 @@
                               
                               <!-- Call-to-Action Button -->
                               <a href="" class="btn btn-primary btn-lg mt-4" id="addCart">Add to Cart</a>
+                              <a href="paymentpage.cfm?pro=#item.productid#" class="btn btn-info btn-lg mt-4" id="buyNow">Buy now</a>
                           </div>
                       </div>
                   </div>
