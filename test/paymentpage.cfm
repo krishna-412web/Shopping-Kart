@@ -31,6 +31,21 @@
                                         city = form.city,
                                         state = form.state,
                                         pincode = form.pincode)>
+        <cfelseif structKeyExists(form,"paymentproduct")>
+            <cfset result=obj.makepayment(cardnumber=form.cardnumber,
+                                    expirationdate=form.expirationdate,
+                                    cvv=form.cvv,
+                                    cardholdername=form.cardholdername)>
+            <cfif result.value EQ 1>
+
+            <cfelse>
+                <cflocation url="paymentfailed.cfm" addToken="no">
+            </cfif>
+        <cfelseif structKeyExists(form,"paymentcart")>
+            <cfset result=obj.makepayment(cardnumber=form.cardnumber,
+                        expirationdate=form.expirationdate,
+                        cvv=form.cvv,
+                        cardholdername=form.cardholdername)>
         </cfif>
     <cfcatch type="any">
         <cfset variables.message = "Unexpected Error">

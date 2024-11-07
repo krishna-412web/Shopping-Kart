@@ -615,27 +615,11 @@
         </cfif>
     </cffunction>
     <cffunction  name="addOrder">
-        <cfargument name="cartid" required="false" type="numeric">
         <cfargument name="productid" required="false" type="numeric">
         <cfargument name="quantity" required="false" type="numeric">
-        <cfargument name="addressid" required="true" type="numeric">
-        <cfargument name="userid" required="true" type="numeric">
         <cfargument name="amount" required="true" type="numeric">
         <cfset local.orderid = createUUID()>
-        <cfquery name="createorder">
-            INSERT INTO
-                order(orderid,userid,orderdate,amount,addressid)
-            VALUES(
-                    <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
-                    <cfqueryparam value="#local.userid#" cfsqltype="cf_sql_integer">,
-                    <cfqueryparam value="#now#" cfsqltype="cf_sql_DATETIME">,
-                    <cfqueryparam value="#local.amount#" cfsqltype="cf_sql_integer">,
-                    <cfqueryparam value="#local.addressid#" cfsqltype="cf_sql_integer">
-                );
-        </cfquery>
-        <cfif structKeyExists(arguments,"cartid")>
-
-        <cfelseif structKeyExists(arguments,"productid") AND structKeyExists(arguments,"quantity")>
+        <cfif structKeyExists(arguments,"productid") AND structKeyExists(arguments,"quantity")>
             <cfquery name="getProduct">
                 SELECT
                     productid,
@@ -645,6 +629,17 @@
                 WHERE
                     productid = <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">
                 ;
+            </cfquery>
+            <cfquery name="createorder">
+                INSERT INTO
+                    order(orderid,userid,orderdate,amount,addressid)
+                VALUES(
+                        <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#now()#" cfsqltype="cf_sql_DATETIME">,
+                        <cfqueryparam value="#arguments.quantity*getProduct.price#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">
+                    );
             </cfquery>
             <cfquery name="createitems">
                 INSERT INTO
@@ -657,11 +652,113 @@
                         <cfqueryparam value="#arguments.quantity*getProduct.price#" cfsqltype="cf_sql_integer">
                     );
             </cfquery>
+        <cfelse>
+            <cfset local.amount = getPrice()>
+            <cfquery name="createorder">
+                INSERT INTO
+                    order(orderid,userid,orderdate,amount,addressid)
+                VALUES(
+                        <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
+                        <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#now()#" cfsqltype="cf_sql_DATETIME">,
+                        <cfqueryparam value="#local.amount#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#session.user.addressid#" cfsqltype="cf_sql_integer">
+                    );
+            </cfquery>
+            <cfset local.cart = listCart()>
+
+            <cfquery name="createitems">
+                INSERT INTO
+                    orderitems(orderid,productid,quantity,totalprice)
+                VALUES
+                    <cfoutput query="local.cart">
+                        (
+                            <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
+                            <cfqueryparam value="#local.cart.productid#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#local.cart.quantity#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#local.cart.quantity*local.cart.price#" cfsqltype="cf_sql_decimal">
+                        )<cfif currentrow LT local.cart.recordcount>,</cfif>
+                    </cfoutput>
+                    ;
+            </cfquery>
         </cfif>
-        <!---createorder--->
-        <!---Check wether cart/product--->
-        <!---add items to orderitems according to the data--->
-        <!--- only after successfull payment ad order--->
+    </cffunction>
+    <cffunction name="listOrder">
+        <cfquery name="getorders">
+            SELECT
+                orderid,
+                orderdate,
+                amount,
+                addressid
+            FROM
+                orders
+            WHERE
+                userid=<cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">;
+        </cfquery>
+        <cfreturn getorders>
+    </cffunction>
+    <cffunction name="listOrderDetails">
+        <cfargument name="orderid" type="numeric">
+        <cfset local.result={
+            "orderdetails" : {},
+            "orderitems"    : []
+        }>
+        <cfquery name="local.getorderdetails">
+            SELECT
+                o.orderid,
+                o.orderdate,
+                o.amount,
+                o.addressid,
+                s.name,
+                s.phoneno,
+                s.housename,
+                s.street,
+                s.city,
+                s.state,
+                s.pincode
+            FROM
+                orders o
+            INNER JOIN
+                shippingaddress s
+            WHERE
+                o.addressid = s.addressid
+            AND
+                orderid=<cfqueryparam value="#arguments.orderid#" cfsqltype="cf_sql_integer">;
+        </cfquery>
+        <cfoutput query="local.getorderdetails">
+            <cfset local.result["orderdetails"]={
+                "orderid":local.getorderdetails.orderid,
+                "orderdate":local.getorderdetails.orderdate,
+                "amount":local.getorderdetails.amount,
+                "addressid":local.getorderdetails.addressid,
+                "name":local.getorderdetails.name,
+                "phoneno":local.getorderdetails.phoneno,
+                "housename":local.getorderdetails.housename,
+                "street":local.getorderdetails.street,
+                "city":local.getorderdetails.city,
+                "state":local.getorderdetails.state,
+                "pincode":local.getorderdetails.pincode
+
+            }>
+        </cfoutput>
+        <cfquery name="local.getorderitems" returnType="struct">
+            SELECT
+                o.itemid,
+                o.orderid,
+                o.productid,
+                o.quantity,
+                o.totalprice,
+                p.productname
+            FROM
+                orderitems o
+            INNER JOIN
+                products p
+            WHERE
+                o.productid=p.productid
+            AND
+                orderid=<cfqueryparam value="#arguments.orderid#" cfsqltype="cf_sql_integer">;
+        </cfquery>
+        <cfset local.result["orderitems"] = ArrayAppend(local.getorderitems.RESULTSET)>   
     </cffunction>
     <cffunction  name="makePayment">
         <cfargument name="cardnumber" required="true" type="string">
