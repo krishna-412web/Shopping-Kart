@@ -283,17 +283,23 @@
             SELECT
                 p.productid,
                 p.subcategoryid,
-                s.categoryid,
                 p.productname,
                 p.productdesc,
                 p.productimage,
-                p.price
+                p.price,
+                s.subcategoryname,
+                s.categoryid,
+                c.categoryname
             FROM
                 products p
             INNER JOIN
                 subcategory s
             ON
                 p.subcategoryid = s.subcategoryid
+            INNER JOIN
+                categories c
+            ON
+                s.categoryid = c.categoryid
             WHERE
                 p.status = 1
              <cfif structKeyExists(arguments, "search")>

@@ -162,10 +162,20 @@
   <section>
 
     <div class="product-section">
-        <h1>PRODUCT</h1>
-        <div class="product-grid">
         <cfif structKeyExists(url,"pro")>
-            <cfset products = obj.listProducts(productid = url.pro)>
+          <h1>PRODUCT</h1>
+          <cfset products = obj.listProducts(productid = url.pro)>
+          <cfoutput>
+            <nav aria-label="breadcrumb">
+              <ol class="breadcrumb ms-2">
+                <li class="breadcrumb-item"><a href="homepage.cfm?cat=#products.RESULTSET[1].categoryid#">#products.RESULTSET[1].categoryname#</a></li>
+                <li class="breadcrumb-item"><a href="homepage.cfm?cat=#products.RESULTSET[1].categoryid#&sub=#products.RESULTSET[1].subcategoryid#">#products.RESULTSET[1].subcategoryname#</a></li>
+                <li class="breadcrumb-item active" aria-current="page">#products.RESULTSET[1].productname#</li>
+              </ol>
+            </nav>
+          </cfoutput>
+  
+          <div class="product-grid">
               <cfloop array="#products.RESULTSET#" index="item">
                 <cfoutput>
                   <div class="container mt-5">
@@ -196,8 +206,9 @@
                   </div>
                 </cfoutput>
               </cfloop>
-          </cfif>
         </div>
+        </cfif>
+      </div>
 
   </section>
 
