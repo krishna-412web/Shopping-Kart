@@ -681,6 +681,7 @@
                     ;
             </cfquery>
         </cfif>
+        <cfreturn local.orderid>
     </cffunction>
     <cffunction name="listOrder">
         <cfquery name="getorders">

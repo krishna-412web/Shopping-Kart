@@ -40,11 +40,11 @@
                                     cardholdername=form.cardholdername)>
             <cfif result.value EQ 1>
                 <cfset productid = structKeyExists(form,"productid")?obj.decryptData(form.productid):0>
-                <cfset obj.addOrder(productid=productid,
+                <cfset orderid = obj.addOrder(productid=productid,
                                     quantity=form.productquantity)>
-                <cflocation url="userpage.cfm" addToken="no">
+                <cflocation url="paymentsuccess.cfm?orderid=#orderid#" addToken="no">
             <cfelse>
-                <cflocation url="homepage.cfm" addToken="no">
+                <cflocation url="paymentsuccess.cfm" addToken="no">
             </cfif>
         <cfelseif structKeyExists(form,"paymentcart")>
             <cfset result=obj.makepayment(cardnumber=form.cardnumber,
