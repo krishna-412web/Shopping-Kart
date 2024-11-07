@@ -1,3 +1,6 @@
+<cfif structKeyExists(url,"emptycart")>
+    
+</cfif>
 <!DOCTYPE html>
 <html lang="en">
 <head>

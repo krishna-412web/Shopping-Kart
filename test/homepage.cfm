@@ -205,7 +205,7 @@
               <cfloop array="#products.RESULTSET#" index="item">
                 <cfoutput>
                     <a href="productpage.cfm?pro=#item.productid#">
-                      <div class="product-card">
+                      <div class="product-card" >
                         <img class="img-fluid" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
                         <div class="product-info">
                             <div class="product-name">#item.productname#</div>
@@ -260,8 +260,8 @@
               <cfloop array="#products.RESULTSET#" index="item">
                 <cfoutput>
                     <a href="productpage.cfm?pro=#item.productid#">
-                      <div class="product-card">
-                        <img class="img-fluid" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
+                      <div class="product-card h-100">
+                        <img class="img-fluid" style="height: 135px;width:150px;" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
                         <div class="product-info">
                             <div class="product-name">#item.productname#</div>
                             <div class="product-price">#item.price#</div>

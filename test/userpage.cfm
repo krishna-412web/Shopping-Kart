@@ -86,7 +86,7 @@
                 </div>
 
                 <!-- Order Details Button -->
-                <button class="btn btn-success mt-3" >ORDER DETAILS</button>
+                <a class="btn btn-success mt-3" href="orderdetails.cfm">ORDER DETAILS</a>
                 <a class="btn btn-info mt-2" href="userpage.cfm?logout=1" >Logout</a>
             </div>
         </div>
