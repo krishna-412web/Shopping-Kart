@@ -109,7 +109,7 @@
                 <div class="d-flex justify-content-center gap-2">
                     <a href="homepage.cfm" class="btn btn-outline-primary btn-sm">Go to Homepage</a>
                     <cfoutput>
-                        <a href="orderdetails.cfm?orderid=#url.orderid#" class="btn btn-outline-success btn-sm">
+                        <a href="orderitems.cfm?orderid=#url.orderid#" class="btn btn-outline-success btn-sm">
                             Order Details
                         </a>
                     </cfoutput>

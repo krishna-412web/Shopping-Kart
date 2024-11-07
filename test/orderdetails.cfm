@@ -31,28 +31,75 @@
     </div>
   </nav>            
     <div class="container my-5">
-        <div class="d-flex justify-content-center">
-            <div class="card w-100"> 
-                <div class="card-header bg-primary text-white">Order Details</div>
-                <div class="card-body">
-                    <div class="d-flex flex-column justify-content-center">
-                        <div class="card h-100 mb-2 p-2">
-                            <cfif structKeyExists(variables,"orders")>
-                                <div class="card-body">
-                                    <cfoutput query="variables.orders">
-                                        <div class="row align-items-center">
-                                            <h6 class="card-text small col-3 text-center">#variables.orders.orderid#</h6>
-                                            <h6 class="card-text small col-3 text-center">#variables.orders.orderdate#</h6>
-                                            <h6 class="card-text small col-3 text-center">#variables.orders.amount#</h6>
-                                            <a class="btn btn-sm btn-info col-1" href="orderitems.cfm?orderid=#variables.orders.orderid#">List Items</a>
-                                        </div>
-                                    </cfoutput>
-                                </div>
-                            </cfif>
+        <div id="order-card" class="container m-2 card z-1 bg-light h-100 fw-bold">
+        <h1 class="card-header card-title text-white bg-primary">Order History</h1>
+        <div class="card-body d-grid gap-5 m-2">
+            <cfif structKeyExists(variables,"orders")>
+                <cfoutput query="variables.orders">
+                    <cfset items = obj.listOrderDetails(orderid=variables.orders.orderid)>
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-evenly bg-primary gap-5">
+                            <h5 class="flex-grow-1">
+                                <span class="text-white">Order No :</span>
+                                <span class="text-muted">#variables.orders.orderid#</span>
+                            </h5>
+                            <a class="btn btn-danger" href="invoice.cfm?orderid=#variables.orders.orderid#">pdf</a>
                         </div>
-                </div>
-            </div>
+                        <ul class="card-body list-group p-0">
+                            <cfloop array="#items.orderitems#" item="product">
+                                <li class="list-group-item d-flex justify-content-between">
+                                    <img src="../admin/images/#ListLast(product.productimage,"/")#" class="col-3 img-fluid" alt="Login" style="height: 135px;width:150px;">
+                                    <div class="col-7 d-flex flex-column">
+                                        <p class="card-text">
+                                            <span class="text-dark">Item :</span>
+                                            <span class="text-muted">#product.productname#</span>
+                                        </p>
+                                        <p class="card-text">
+                                            <span class="text-dark">Quantity :</span>
+                                            <span class="text-muted">#product.quantity#</span>
+                                        </p>
+                                        <p class="card-text">
+                                            <span class="text-dark">Total price :</span>
+                                            <span class="text-muted">
+                                                #chr(8377)#
+                                                #product.totalprice#
+                                            </span>
+                                        </p>
+                                    </div>
+                                </li>
+                            </cfloop>
+                        </ul>
+                        <div class="card-footer">
+                            <div class="d-flex justify-content-between">
+                                <p class="card-text">
+                                    <span class="text-dark">Date of Purchase :</span>
+                                    <span class="text-muted">#variables.orders.orderdate#</span>
+                                </p>
+                                <p class="card-text">
+                                    <span class="text-dark">Amount :</span>
+                                    <span class="text-muted">
+                                        #chr(8377)#
+                                        #variables.orders.amount#
+                                    </span>
+                                </p>
+                            </div>
+                            <p class="card-text d-flex gap-3">
+                                <span class="text-dark">Address :</span>
+                                <span class="col-10 text-muted">
+                                    #items.orderdetails.name# #items.orderdetails.phoneno#<br>
+                                    #items.orderdetails.housename#, #items.orderdetails.street#,
+                                    #items.orderdetails.city#, #items.orderdetails.state#,
+                                    PIN - #items.orderdetails.pincode#
+                                </span>
+                            </p>
+                        </div>
+                    </div>
+                </cfoutput>
+            <cfelse>
+                <!---Add div to make user to order--->
+            </cfif>
         </div>
+    </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
     <script src="../js/bootstrap.min.js"></script>   

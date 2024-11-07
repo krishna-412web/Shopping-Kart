@@ -52,11 +52,11 @@
                         cvv=form.cvv,
                         cardholdername=form.cardholdername)>
             <cfif result.value EQ 1>
-                <cfset obj.addOrder()>
+                <cfset orderid = obj.addOrder()>
                 <cfset obj.emptycart()>
-                <cflocation url="userpage.cfm" addToken="no">
+                <cflocation url="paymentsuccess.cfm?orderid=#orderid#" addToken="no">
             <cfelse>
-                <cflocation url="homepage.cfm" addToken="no">
+                <cflocation url="paymentsuccess.cfm" addToken="no">
             </cfif>
         </cfif>
 
@@ -199,7 +199,7 @@
                                         <cfelse>
                                             <p>No addresses found.</p>
                                         </cfif>
-                                        
+                                        <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addressModal"> SELECT</button>
                                     </div>
                                 </div>
                         </div>
@@ -214,7 +214,6 @@
                             <cfoutput>
                                 <a href="#previouspage#" class="btn btn-sm btn-outline-secondary me-2">Cancel</a>
                             </cfoutput>
-                            <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#fakeAdd"> SELECT</button>
                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Place Order</button>
                         </div>
                     </div>
@@ -247,7 +246,6 @@
                             <div class="d-flex flex-column">
                                 <!-- Example Address 1 -->
                                 <div>
-                                <p>sss</p>
                                     <cfset address1 = obj.listAddress(userid = session.user.userid)>
                                     <cfif address1.recordCount NEQ 0>
                                         <cfoutput>
@@ -260,7 +258,11 @@
                                                             #item.street#, #item.city#<br>
                                                             #item.state#,#item.pincode#
                                                         </p>
-                                                        <a class="btn btn-primary" href="/test/userpage.cfm?select=1&id=#item.addressid#">Select</a>
+                                                        <cfif structKeyExists(url,"pro")>
+                                                            <a class="btn btn-primary" href="paymentpage.cfm?pro=#url.pro#&select=1&id=#item.addressid#">Select</a>
+                                                        <cfelseif structKeyExists(url,"cart")>
+                                                            <a class="btn btn-primary" href="paymentpage.cfm?cart=1&select=1&id=#item.addressid#">Select</a>
+                                                        </cfif>
                                                         <button class="btn btn-info edit" id="#item.addressid#" data-bs-toggle="modal" data-bs-target="#chr(35)#addAddress">Edit</button>
                                                     </div>
                                                 </div>

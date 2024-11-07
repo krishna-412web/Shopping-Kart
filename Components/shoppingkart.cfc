@@ -747,7 +747,8 @@
                 o.productid,
                 o.quantity,
                 o.totalprice,
-                p.productname
+                p.productname,
+                p.productimage
             FROM
                 orderitems o
             INNER JOIN
