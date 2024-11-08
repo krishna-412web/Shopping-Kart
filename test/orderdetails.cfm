@@ -1,6 +1,10 @@
 <cfset obj = createObject('component', 'Components.shoppingkart')>
 <cfif structKeyExists(session,"user") AND session.user.value EQ 1 >
-    <cfset variables.orders = obj.listOrder()>
+    <cfif structKeyExists(form, "searchSubmit") AND len(trim(form.searchString)) GT 0>
+        <cfset variables.orders = obj.listOrder(search = form.searchString)>
+    <cfelse>
+        <cfset variables.orders = obj.listOrder()>
+    </cfif>
 <cfelse>
     <cflocation url="userlogin.cfm" addtoken="no">
 </cfif>
@@ -19,9 +23,9 @@
     <!-- Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-main">
     <div class="container">
-          <a class="nav-item" href="homepage.cfm?search=true">Search</a>
-          <a class="nav-item" href=""></a>
-          <a class="nav-item text-center" href="homepage.cfm">SHOPPING CART-ORDER PAGE</a>
+          <a class="nav-item" href="orderdetails.cfm?search=true">Search</a>
+          <a class="nav-item" href="homepage.cfm">home</a>
+          <a class="nav-item text-center" href="orderdetails.cfm">SHOPPING CART-ORDER PAGE</a>
           <a class="nav-item" href="cart.cfm">Cart</a>
           <cfif structKeyExists(session,"user") AND session.user.value EQ 1>
             <a class="nav-item" href="userpage.cfm"><cfoutput>#session.user.username#</cfoutput></a>
@@ -29,7 +33,25 @@
             <a class="nav-item" href="userlogin.cfm">Login/Signup</a>
           </cfif>
     </div>
-  </nav>            
+  </nav>
+    <cfif structKeyExists(url, "search")>
+        <nav class="navbar">
+            <div class="container-fluid row">
+            <div class="d-flex flex-row justify-content-between align-items-center">
+                <div class="d-flex justify-content-center w-100">
+                    <form class="d-flex justify-content-center w-100" action="" method="POST">
+                        <input class="form-control me-2 search-input" name="searchString" id="searchString" type="search" placeholder="Search for products, brands and more" aria-label="Search">
+                        <button class="btn btn-outline-light" id="searchSubmit" name="searchSubmit" type="submit">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
+                                <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.098zm-5.525-9.39a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11z"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+            </div>
+        </nav>
+    </cfif>            
     <div class="container my-5">
         <div id="order-card" class="container m-2 card z-1 bg-light h-100 fw-bold">
         <h1 class="card-header card-title text-white bg-primary">Order History</h1>

@@ -698,6 +698,7 @@
         <cfreturn local.orderid>
     </cffunction>
     <cffunction name="listOrder">
+        <cfargument name="search" required="false" type="string">
         <cfquery name="getorders">
             SELECT
                 orderid,
@@ -707,7 +708,12 @@
             FROM
                 orders
             WHERE
-                userid=<cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">;
+                userid=<cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">
+            <cfif structKeyExists(arguments,"search")>
+                AND
+                    orderid = <cfqueryparam value="#arguments.search#" cfsqltype="cf_sql_varchar">
+            </cfif>
+            ;
         </cfquery>
         <cfreturn getorders>
     </cffunction>
