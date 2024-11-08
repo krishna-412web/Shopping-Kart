@@ -40,7 +40,7 @@
             <div class="d-flex flex-row justify-content-between align-items-center">
                 <div class="d-flex justify-content-center w-100">
                     <form class="d-flex justify-content-center w-100" action="" method="POST">
-                        <input class="form-control me-2 search-input" name="searchString" id="searchString" type="search" placeholder="Search for products, brands and more" aria-label="Search">
+                        <input class="form-control me-2 search-input" name="searchString" id="searchString" type="search" placeholder="Search for order" aria-label="Search">
                         <button class="btn btn-outline-light" id="searchSubmit" name="searchSubmit" type="submit">
                             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-search" viewBox="0 0 16 16">
                                 <path d="M11.742 10.344a6.5 6.5 0 1 0-1.397 1.398h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.415l-3.85-3.85a1.007 1.007 0 0 0-.115-.098zm-5.525-9.39a5.5 5.5 0 1 1 0 11 5.5 5.5 0 0 1 0-11z"/>

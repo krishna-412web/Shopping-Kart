@@ -116,13 +116,13 @@
     <div class="content-container">
         <div class="cart-message-box">
             <!-- Message Title -->
-            <div class="cart-message-title">Missing Cart items?</div>
+            <div class="cart-message-title">Not a user?</div>
             
             <!-- Message Text -->
             <p>Login to see the items you added previously</p>
             
             <!-- Login Button -->
-            <button class="cart-login-btn">Login</button>
+            <a class="cart-login-btn" href="userlogin.cfm">Login</a>
         </div>
     </div>
 <cfelse>

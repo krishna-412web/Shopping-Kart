@@ -162,21 +162,39 @@
   <section>
 
     <div class="product-section">
-        <cfif structKeyExists(url,"pro")>
+        <cftry>
+          <cfif structKeyExists(url,"pro")>
+            <cfset variables.products = obj.listProducts(productid = url.pro)>
+          </cfif>
+        <cfcatch type="any">
+          <div class="content-container">
+              <div class="cart-message-box">
+                  <!-- Message Title -->
+                  <div class="cart-message-title">Oops,sonething went wrong</div>
+                  
+                  <!-- Message Text -->
+                  <p>product details are unavailable or corrupted</p>
+                  
+                  <!-- Login Button -->
+                  <a class="btn btn-outline-primary" href="homepage.cfm">Browse</a>
+              </div>
+       		</div>
+        </cfcatch>
+        </cftry>
+        <cfif structKeyExists(variables,"products")>
           <h1>PRODUCT</h1>
-          <cfset products = obj.listProducts(productid = url.pro)>
           <cfoutput>
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb ms-2">
-                <li class="breadcrumb-item"><a href="homepage.cfm?cat=#products.RESULTSET[1].categoryid#">#products.RESULTSET[1].categoryname#</a></li>
-                <li class="breadcrumb-item"><a href="homepage.cfm?cat=#products.RESULTSET[1].categoryid#&sub=#products.RESULTSET[1].subcategoryid#">#products.RESULTSET[1].subcategoryname#</a></li>
-                <li class="breadcrumb-item active" aria-current="page">#products.RESULTSET[1].productname#</li>
+                <li class="breadcrumb-item"><a href="homepage.cfm?cat=#variables.products.RESULTSET[1].categoryid#">#variables.products.RESULTSET[1].categoryname#</a></li>
+                <li class="breadcrumb-item"><a href="homepage.cfm?cat=#variables.products.RESULTSET[1].categoryid#&sub=#variables.products.RESULTSET[1].subcategoryid#">#variables.products.RESULTSET[1].subcategoryname#</a></li>
+                <li class="breadcrumb-item active" aria-current="page">#variables.products.RESULTSET[1].productname#</li>
               </ol>
             </nav>
           </cfoutput>
   
           <div class="product-grid">
-              <cfloop array="#products.RESULTSET#" index="item">
+              <cfloop array="#variables.products.RESULTSET#" index="item">
                 <cfoutput>
                   <div class="container mt-5">
                       <div class="row">
@@ -206,7 +224,7 @@
                   </div>
                 </cfoutput>
               </cfloop>
-        </div>
+          </div>
         </cfif>
       </div>
 
