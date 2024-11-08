@@ -24,15 +24,40 @@
         <cfif structKeyExists(form,"saveaddress")>
             <cfset addressid = structKeyExists(form, "addressid")?form.addressid : 0>
             <cfset userid = structKeyExists(form, "addressid")? 0: session.user.userid>
-            <cfset obj.updateAddress(addressid = addressid,
-                                        userid = userid,
-                                        name = form.name,
-                                        phoneno = form.phone,
-                                        housename = form.houseName,
-                                        street = form.street,
-                                        city = form.city,
-                                        state = form.state,
-                                        pincode = form.pincode)>
+            <!---Validate Address--->
+            <cfset variables.errors = arrayNew(1)>
+            <cfif len(trim(form.name)) EQ 0>
+                <cfset arrayAppend(variables.errors, "*Name required")>
+            </cfif>
+            <cfif len(trim(form.phone)) EQ 0>
+                <cfset arrayAppend(variables.errors, "*Phone required")>
+            </cfif>
+            <cfif len(trim(form.housename)) EQ 0>
+                <cfset arrayAppend(variables.errors, "*House required")>
+            </cfif>
+            <cfif len(trim(form.street)) EQ 0>
+                <cfset arrayAppend(variables.errors, "*Street required")>
+            </cfif>
+            <cfif len(trim(form.city)) EQ 0>
+                <cfset arrayAppend(variables.errors, "*City required")>
+            </cfif>
+            <cfif len(trim(form.state)) EQ 0>
+                <cfset arrayAppend(variables.errors, "*State required")>
+            </cfif>
+            <cfif len(trim(form.pincode)) EQ 0>
+                <cfset arrayAppend(variables.errors, "*Pincode required")>
+            </cfif>
+            <cfif Arraylen(variables.errors) EQ 0>
+                <cfset obj.updateAddress(addressid = addressid,
+                                            userid = userid,
+                                            name = form.name,
+                                            phoneno = form.phone,
+                                            housename = form.houseName,
+                                            street = form.street,
+                                            city = form.city,
+                                            state = form.state,
+                                            pincode = form.pincode)>
+            </cfif>
         <cfelseif structKeyExists(form,"paymentproduct")>
             <cfset result=obj.makepayment(cardnumber=form.cardnumber,
                                     expirationdate=form.expirydate,
@@ -75,7 +100,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script> --->
 </head>
 <body>
-    <!-- Navigation Bar -->
+    <!-- Navigation Bar -->  
   <nav class="navbar navbar-expand-lg navbar-main">
     <div class="container">
           <a class="nav-item" href="homepage.cfm?search=true">Search</a>
@@ -89,6 +114,14 @@
           </cfif>
     </div>
   </nav>
+  <cfif structKeyExists(variables,"errors") AND arrayLen(variables.errors) NEQ 0>
+        <div class="alert alert-danger alert-dismissible fade show text-center mt-5 z-3 fw-bold">
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+            <cfoutput>
+                #arrayToList(variables.errors)#
+            </cfoutput>
+        </div>
+  </cfif>
     <cfif structKeyExists(variables, "message")>
         <div class="container my-2">
             <div class="d-flex justify-content-center">
