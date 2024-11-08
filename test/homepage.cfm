@@ -184,21 +184,31 @@
     <cfset key = ListGetAt(last, 1, "=")>
     <cfset value = ListGetAt(last, 2, "=")>
     <cfdump var="#URL#">--->
-    <cfset variables.url = cgi.HTTP_URL>
-    <cfset variables.url = REReplace(variables.url, "[&?]order=[^&]*", "", "all")>
-    <cfset variables.url = variables.url & (find('?', variables.url) ? '&' : '?')>
-    <div class="sort-links d-flex justify-content-start my-2">
-      <cfoutput>
-        <a href="#variables.url#order=desc" class="btn btn-outline-primary me-2">Price: High to Low</a>
-        <a href="#variables.url#order=asc" class="btn btn-outline-primary">Price: Low to High</a>
-      </cfoutput>
+<cfset variables.url = cgi.HTTP_URL>
+<!--- Remove both 'order' and 'price' parameters from the URL --->
+<cfset variables.url = REReplace(variables.url, "[&?](order|price)=[^&]*", "", "all")>
+<!--- Check if there is already a query string, to append with '&' or start with '?' --->
+<cfset variables.url = variables.url & (find('?', variables.url) ? '&' : '?')>
+
+<div class="sort-links d-flex justify-content-start my-2">
+  <cfoutput>
+    <a href="#variables.url#order=desc" class="btn btn-outline-primary me-2">Price: High to Low</a>
+    <a href="#variables.url#order=asc" class="btn btn-outline-primary me-2">Price: Low to High</a>
+    <a href="#variables.url#price=above" class="btn btn-outline-primary me-2">Price above 20,000</a>
+    <a href="#variables.url#price=below" class="btn btn-outline-primary me-2">Price below 20,000</a>
+  </cfoutput>
+</div>
     </div>
     <div class="product-section">
         <h1>Products</h1>
         <div class="product-grid">
         <cfif structKeyExists(url,"sub")>
-            <cfif structKeyExists(url, 'order')>
+            <cfif structKeyExists(url, 'order') AND structKeyExists(url, 'price')>
+              <cfset products = obj.listProducts(subcategoryid = url.sub,order = url.order,price = url.price)>
+            <cfelseif structKeyExists(url, 'order')>
               <cfset products = obj.listProducts(subcategoryid = url.sub,order = url.order)>
+            <cfelseif structKeyExists(url, 'price')>
+              <cfset products = obj.listProducts(subcategoryid = url.sub,price = url.price)>
             <cfelse>
               <cfset products = obj.listProducts(subcategoryid = url.sub)>
             </cfif>
@@ -216,8 +226,12 @@
                 </cfoutput>
               </cfloop>
           <cfelseif structKeyExists(url,"cat")>
-            <cfif structKeyExists(url, 'order')>
+            <cfif structKeyExists(url, 'order') AND structKeyExists(url, 'price')>
+              <cfset products = obj.listProducts(categoryid = url.cat,order = url.order,price = url.price)>
+            <cfelseif structKeyExists(url, 'order')>
               <cfset products = obj.listProducts(categoryid = url.cat,order = url.order)>
+            <cfelseif structKeyExists(url, 'price')>
+              <cfset products = obj.listProducts(categoryid = url.cat,price = url.price)>
             <cfelse>
               <cfset products = obj.listProducts(categoryid = url.cat)>
             </cfif>
@@ -237,8 +251,12 @@
           <cfelseif structKeyExists(url, "search") AND 
                     structKeyExists(url, "string") AND 
                     len(trim(url.string)) GT 0>
-            <cfif structKeyExists(url, 'order')>
+            <cfif structKeyExists(url, 'order') AND structKeyExists(url, 'price')>
+              <cfset products1 = obj.listProducts(search = url.string,order = url.order,price = url.price)>
+            <cfelseif structKeyExists(url, 'order')>
               <cfset products1 = obj.listProducts(search = url.string,order = url.order)>
+            <cfelseif structKeyExists(url, 'price')>
+              <cfset products1 = obj.listProducts(search = url.string,price = url.price)>
             <cfelse>
               <cfset products1 = obj.listProducts(search = url.string)>
             </cfif>
