@@ -818,4 +818,42 @@
                 userid = <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">
         </cfquery>
     </cffunction>
+    <cffunction name="sendmail">
+        <cfargument name="orderid" type="string">
+        <cfset local.order = listOrderDetails(orderid = arguments.orderid)>
+        <cftry>
+            <cfoutput>
+                <cfmail to="#session.user.useremail#"
+                        from="noreply@shoppingkart.com"
+                        subject="Order Placed Successfully"
+                        type="html">
+                    <!---<cfdump var="#arguments.exception#">--->
+                    <html>
+                        <body>
+                            <h3>OrderId: #local.order.orderdetails.orderid#</h3>
+                            <h3>Orderdate: #local.order.orderdetails.orderdate#</h3>
+                            <h3>Amount: #local.order.orderdetails.amount#</h3>
+                            <h3>Shipping Address: <br>
+                                #local.order.orderdetails.name#|#local.order.orderdetails.phoneno#<br>
+                                #local.order.orderdetails.housename#<br>
+                                #local.order.orderdetails.street#, #local.order.orderdetails.city#<br>
+                                #local.order.orderdetails.state#,#local.order.orderdetails.pincode#
+                            </h3>
+                            <h3>Product Details<br>----------------------------</h3>
+                            <cfloop array="#local.order.orderitems#" index="item">
+                                <p>Product name: #item.productname#</p>
+                                <p>Product Quantity: #item.quantity#</p>
+                                <p>Total Price: #item.totalprice#</p>
+                                <h3>----------------------------</h3>
+                            </cfloop>
+                        </body>
+                    </html>
+                </cfmail>
+            </cfoutput>
+            <cfcatch type="any">
+                <!--- If there's an error in sending the email, log it to a file or take alternative action --->
+                <cflog file="Application" type="error" text="Failed to send error email: #cfcatch.message#">
+            </cfcatch>
+        </cftry>
+    </cffunction>
 </cfcomponent>

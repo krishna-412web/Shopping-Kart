@@ -1,5 +1,6 @@
 
 <cfset obj = createObject('component', 'Components.shoppingkart')>
+<!--- <cfdump var="#session.user#"> --->
 <!DOCTYPE html>
 <html lang="en">
 <head>

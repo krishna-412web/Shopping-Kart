@@ -1,3 +1,4 @@
+<cftry>
 <cfset obj = createObject('component', 'Components.shoppingkart')>
 <cfif structKeyExists(session,"user") AND session.user.value EQ 1 >
         <cfif structKeyExists(url, "select") 
@@ -67,6 +68,7 @@
                 <cfset productid = structKeyExists(form,"productid")?obj.decryptData(form.productid):0>
                 <cfset orderid = obj.addOrder(productid=productid,
                                     quantity=form.productquantity)>
+                <cfset obj.sendmail(orderid = orderid)>
                 <cflocation url="paymentsuccess.cfm?orderid=#orderid#" addToken="no">
             <cfelse>
                 <cflocation url="paymentsuccess.cfm" addToken="no">
@@ -78,6 +80,7 @@
                         cardholdername=form.cardholdername)>
             <cfif result.value EQ 1>
                 <cfset orderid = obj.addOrder()>
+                <cfset obj.sendmail(orderid = orderid)>
                 <cfset obj.emptycart()>
                 <cflocation url="paymentsuccess.cfm?orderid=#orderid#" addToken="no">
             <cfelse>
@@ -86,6 +89,10 @@
         </cfif>
 
 </cfif>
+<cfcatch type="any">
+    <cfdump var="#cfcatch#">
+</cfcatch>
+</cftry>
 <!DOCTYPE html>
 <html lang="en">
 <head>

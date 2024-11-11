@@ -1,6 +1,7 @@
 <cfset obj = createObject('component', 'Components.shoppingkart')>
 <cfif structKeyExists(session,"user") AND session.user.value EQ 1 AND structKeyExists(url, "orderid")>
     <cfset variables.details = obj.listOrderDetails(orderid=url.orderid)>
+    <!---<cfdump var="#variables.details#"> --->
     <cfif ArrayLen(variables.details.orderitems) EQ 0>
         <cflocation url="homepage.cfm" addtoken="no">
     </cfif>
