@@ -252,6 +252,18 @@ $(document).ready(() => {
             }
         }
     });
+    $("#insertimage").off('click').click(function () {
+        $('#imageAdd').append(
+            $('<input>').attr({
+              type: 'file',
+              name: 'images',
+              class: 'form-control text-info mt-1',
+              accept: 'image/*',
+              required: true
+            })
+        );
+    });
+
 	$('#productModal').on('hidden.bs.modal', function () {
 		// Refresh the page when the productModal is closed
 		location.reload();

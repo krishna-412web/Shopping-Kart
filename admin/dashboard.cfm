@@ -248,10 +248,16 @@
 
 									<div class="form-floating mt-1">
 										<input class="form-control" type="file" name="productPicture" id ="productPicture" accept="image/jpeg, image/png" required>
-										<label for="productPicture" class="form-label text-decoration-underline text-primary text-start">Product Picture</label>	
+										<label for="productPicture" class="form-label text-decoration-underline text-primary text-start">Product Thumbnail</label>	
+									</div>
+									
+									<button class="btn btn-outline-danger w-100 mt-1" type="button" name="insertimage" id="insertimage">Add Product Image</button>
+
+									<div id="imageAdd">
+										
 									</div>
 									<!---<span class="text-danger">#session.errorMessage#<br></span>--->
-									<button class="btn btn-primary w-100 mt-1" type="submit" name="productSubmit" id="productSubmit">Add Product</button>
+									<button class="btn btn-primary w-100 mt-2" type="submit" name="productSubmit" id="productSubmit">Add Product</button>
 							</form>
 						</div>
 					</div>
