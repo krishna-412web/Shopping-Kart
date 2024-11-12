@@ -29,22 +29,33 @@
 												subCategoryName = form.subCategoryName,
 												subcategoryid = subcategoryid)>
 	<cfelseif structKeyExists(form,"productSubmit")>
-		<cfif structKeyExists(form,"productpicture") AND len(trim(form.productpicture)) GT 0>
+		<cfif structKeyExists(form,"images") AND listlen(trim(form.images)) GT 0>
 				<cfset uploadDir = expandPath('./images/')>        
 				<cfif not directoryExists(uploadDir)>
 					<cfdirectory action="create" directory="#uploadDir#">
 				</cfif>
-				<cffile action="upload"
-						filefield="productpicture"
+				<cffile action="uploadall"
+						filefield="form.images"
 						destination="#uploadDir#"
 						nameConflict="makeunique">
+				<cfdump  var="#cffile#" abort>
 				<cfset uploadedFileName = cffile.serverFile>
 				<cfset imgPath="./images/#uploadedFileName#">
 		<cfelseif structKeyExists(form,"productid")>
 				<cfset imgPath="">
 		</cfif>
+		<cfif Len(Trim(form.images)) GT 0>
+			<cfloop list="#form.images#" item="item">
+			</cfloop>
+			<cfset variables.imgArray = ListtoArray(form.images)>
+		</cfif>
 		<cfset productid = structKeyExists(form, "productid")? Val(obj.decryptData(form.productid)): 0>
 		<cfset productsubcategory = structKeyExists(form, "productsubcategory")? Val(obj.decryptData(form.productsubcategory)): 0>
+		<cfif structKeyExists(variables, "imgArray") AND ArrayLen(variables.imgArray) GT 0>
+			<cfset imagearray = variables.imgArray>
+		<cfelse>
+			<cfset imagearray = arraynew(1)>
+		</cfif>
 		<cfset variables.result = obj.updateProduct( subcategoryid = productsubcategory,
 												productname   = form.productname,
 												productdesc = form.productdesc,
@@ -53,6 +64,7 @@
 												productid = productid)>
 	</cfif>
 <cfcatch>
+	<cfdump var="#cfcatch#">
 	<cfset variables.result = {
 		"status" : 0,
 		"message" : ''

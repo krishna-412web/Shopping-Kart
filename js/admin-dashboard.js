@@ -260,8 +260,7 @@ $(document).ready(() => {
             type: 'file',
             name: 'images',
             class: 'form-control text-info',
-            accept: 'image/*',
-            required: true
+            accept: 'image/*'
         });
 
         const removeButton = $('<button>').attr({
