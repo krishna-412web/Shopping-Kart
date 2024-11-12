@@ -3,38 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Confined Carousel</title>
+    <title>Centered Carousel</title>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         /* Define fixed dimensions for the carousel to prevent overflow */
         #carouselExample {
-            width: 350px; /* Adjust the width as needed */
-            height: 400px; /* Adjust the height as needed *//* Hide any overflow */
+            width: 250px; /* Adjust the width as needed */
+            height: 350px;
+            overflow: hidden; /* Adjust the height as needed */ /* Hide any overflow */
         }
-        /* Ensure carousel images fit within the defined area */
-        .carousel-inner img {
-            width: 80%;
-            height: 60%;
-            
-/* Ensures images fill the area without overflow */
-        }
+        
     </style>
 </head>
 <body>
 
-<div class="container d-flex flex-row justify-content-center align-items-center" style="height: 100vh;">
+<div class="container d-flex flex-row justify-content-center align-items-center" style="height: 85vh;">
     <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
         <!-- Carousel Items -->
         <div class="carousel-inner">
             <div class="carousel-item active">
-                <img src="../images/background.jpeg" alt="First Slide">
+                <img src="../admin/images/iphone2.jpg" alt="First Slide" class="d-block w-100" style="object-fit: contain;">
             </div>
             <div class="carousel-item">
-                <img src="../admin/images/naruto.jpeg" alt="Second Slide">
+                <img src="../admin/images/naruto.jpeg" alt="Second Slide" class="d-block w-100">
             </div>
             <div class="carousel-item">
-                <img src="../admin/images/iphone15.jpeg" alt="Third Slide">
+                <img src="../admin/images/iphone15.jpeg" alt="Third Slide" class="d-block w-100">
             </div>
         </div>
 

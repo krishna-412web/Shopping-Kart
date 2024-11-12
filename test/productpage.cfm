@@ -196,11 +196,36 @@
           <div class="product-grid">
               <cfloop array="#variables.products.RESULTSET#" index="item">
                 <cfoutput>
-                  <div class="container mt-5">
+                  <div class="container mt-3">
                       <div class="row">
                           <!-- Product Image Section -->
                           <div class="col-md-6">
-                              <img src="../admin/images/#ListLast(item.productimage,"/")#" class="img-fluid rounded shadow-sm" alt="Product Image">
+                              <div class="container d-flex flex-row justify-content-center align-items-center" style="height: 85vh;">
+                                <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
+                                    <!-- Carousel Items -->
+                                    <div class="carousel-inner">
+                                        <div class="carousel-item active">
+                                            <img src="../admin/images/iphone2.jpg" alt="First Slide" class="d-block w-100" style="object-fit: contain;">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="../admin/images/naruto.jpeg" alt="Second Slide" class="d-block w-100" style="object-fit: contain;">
+                                        </div>
+                                        <div class="carousel-item">
+                                            <img src="../admin/images/iphone15.jpeg" alt="Third Slide" class="d-block w-100" style="object-fit: contain;">
+                                        </div>
+                                    </div>
+
+                                    <!-- Controls -->
+                                    <button class="carousel-control-prev" type="button" data-bs-target="##carouselExample" data-bs-slide="prev">
+                                        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Previous</span>
+                                    </button>
+                                    <button class="carousel-control-next" type="button" data-bs-target="##carouselExample" data-bs-slide="next">
+                                        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                        <span class="visually-hidden">Next</span>
+                                    </button>
+                                </div>
+                              </div>
                           </div>
                           
                           <!-- Product Information Section -->
