@@ -170,7 +170,7 @@
           <div class="content-container">
               <div class="cart-message-box">
                   <!-- Message Title -->
-                  <div class="cart-message-title">Oops,sonething went </div>
+                  <div class="cart-message-title">Oops,sonething went wrong</div>
                   
                   <!-- Message Text -->
                   <p>product details are unavailable or corrupted</p>
