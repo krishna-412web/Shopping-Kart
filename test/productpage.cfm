@@ -200,10 +200,10 @@
                       <div class="row">
                           <!-- Product Image Section -->
                           <div class="col-md-6">
-                              <div class="container d-flex flex-row justify-content-center align-items-center" style="height: 85vh;">
+                              <div class="container d-flex flex-row justify-content-center align-items-center">
                                 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
                                     <!-- Carousel Items -->
-                                    <div class="carousel-inner">
+                                    <div class="carousel-inner" style="height:300px;width:300px;">
                                         <div class="carousel-item active">
                                             <img src="../admin/images/iphone2.jpg" alt="First Slide" class="d-block w-100" style="object-fit: contain;">
                                         </div>
