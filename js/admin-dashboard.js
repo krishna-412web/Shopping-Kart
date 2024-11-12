@@ -253,15 +253,33 @@ $(document).ready(() => {
         }
     });
     $("#insertimage").off('click').click(function () {
-        $('#imageAdd').append(
-            $('<input>').attr({
-              type: 'file',
-              name: 'images',
-              class: 'form-control text-info mt-1',
-              accept: 'image/*',
-              required: true
-            })
-        );
+        const fileInputDiv = $('<div>').addClass('file-input-container mt-2');
+    
+        // Create the file input
+        const fileInput = $('<input>').attr({
+            type: 'file',
+            name: 'images',
+            class: 'form-control text-info',
+            accept: 'image/*',
+            required: true
+        });
+
+        const removeButton = $('<button>').attr({
+            type: 'button',
+            name: 'removeimage',
+            class: 'btn btn-danger btn-sm removeimage'
+        }).text('Remove');
+    
+        // Append the file input and remove button to the div
+        fileInputDiv.append(fileInput).append(removeButton);
+    
+        // Append the div to #imageAdd
+        $('#imageAdd').append(fileInputDiv);
+    });
+
+    $("#imageAdd").on("click", ".removeimage", function () {
+        console.log(1);
+        $(this).parent().remove();
     });
 
 	$('#productModal').on('hidden.bs.modal', function () {
