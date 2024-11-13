@@ -1,6 +1,6 @@
 function removeImage(id) {
     $.ajax({
-        url: '/components/shopppingkart.cfc?method=deleteimage',
+        url: '/components/shoppingkart.cfc?method=deleteimage',
         type: 'GET',
         data: {
             "imageid": id
@@ -155,6 +155,7 @@ $(document).ready(() => {
                 $("#productForm")[0].reset();
                 $('#productForm input[type="hidden"]').remove();
                 $("#productHeading").text("CREATE PRODUCT");
+                $("#imageList").html('');
                 $("#productSubmit").text("Add Product");
                 $("#productPicture").attr("required", true);
 				$("#productCategory").on("change", function() {
@@ -194,6 +195,7 @@ $(document).ready(() => {
                 $("#productForm")[0].reset();
                 $('#productForm input[type="hidden"]').remove();
                 $("#productPicture").attr("required", false);
+                $("#imageList").html('');
                 let j = $(this).closest('tr').attr('id');
                 $.ajax({
                     url: "../components/shoppingkart.cfc?method=listProducts",
@@ -213,6 +215,38 @@ $(document).ready(() => {
                     },
                     error: function(xhr, status, error) {
                         console.error("Error fetching product:", error);
+                    }
+                });
+                $.ajax({
+                    url: '/components/shoppingkart.cfc?method=getimages',
+                    type: 'GET',
+                    data: {
+                        "productid": j  // The product ID passed as a parameter
+                    },
+                    success: function(response){
+                        var data = JSON.parse(response);
+                        var imageArray = data.imagearray;  
+                        $.each(imageArray, function(index, value) {
+                            $('#imageList').append(
+                                $('<li>').attr({
+                                    class: 'col-3 card',
+                                    id: `image-${value.imageid}`,  // Use 'imageid' for the <li> id
+                                }).append(
+                                    $('<img>').attr({
+                                        src: `/admin/images/${value.imagename}`,  // Update src to use '/images/' instead of '/uploads/'
+                                        class: 'img-thumbnail',
+                                        alt: 'viewImage',
+                                        width: 100
+                                    })
+                                ).append(
+                                    $('<button>').attr({
+                                        type: 'button',
+                                        class: 'btn btn-danger',
+                                        onclick: `removeImage(${value.imageid})`  // Use 'imageid' for the remove button
+                                    }).html('Remove')
+                                )
+                            );
+                        });
                     }
                 });
 				$("#productCategory").on("change", function() {
@@ -247,7 +281,7 @@ $(document).ready(() => {
 					  // If no valid category is selected, clear the subcategory display
 					  $("#productSubCategory").html(`<option value="" selected></option>`);
 					}
-				  });
+				});
             }
         } else if (targetModal === "#delModal") {
             $("#delForm")[0].reset();
@@ -295,6 +329,6 @@ $(document).ready(() => {
 
 	$('#productModal').on('hidden.bs.modal', function () {
 		// Refresh the page when the productModal is closed
-		location.reload();
+		window.location.href = 'dashboard.cfm';
 	});
 });

@@ -165,12 +165,13 @@
         <cftry>
           <cfif structKeyExists(url,"pro")>
             <cfset variables.products = obj.listProducts(productid = url.pro)>
+            <cfset variables.images = obj.getimages(productid = url.pro)>
           </cfif>
         <cfcatch type="any">
           <div class="content-container">
               <div class="cart-message-box">
                   <!-- Message Title -->
-                  <div class="cart-message-title">Oops,sonething went wrong</div>
+                  <div class="cart-message-title">Oops,something went wrong</div>
                   
                   <!-- Message Text -->
                   <p>product details are unavailable or corrupted</p>
@@ -205,14 +206,15 @@
                                     <!-- Carousel Items -->
                                     <div class="carousel-inner" style="height:300px;width:300px;">
                                         <div class="carousel-item active">
-                                            <img src="../admin/images/iphone2.jpg" alt="First Slide" class="d-block w-100" style="object-fit: contain;">
+                                            <img src="../admin/images/#ListLast(item.productimage,"/")#" alt="First Slide" class="d-block w-100" style="width:180px;height:300px;">
                                         </div>
-                                        <div class="carousel-item">
-                                            <img src="../admin/images/naruto.jpeg" alt="Second Slide" class="d-block w-100" style="object-fit: contain;">
-                                        </div>
-                                        <div class="carousel-item">
-                                            <img src="../admin/images/iphone15.jpeg" alt="Third Slide" class="d-block w-100" style="object-fit: contain;">
-                                        </div>
+                                        <cfif NOT structKeyExists(variables.images,"value")>
+                                          <cfloop array="#variables.images.imagelist#" index="imageitem">
+                                            <div class="carousel-item">
+                                                <img src="../admin/images/#imageitem#" alt="next slide" class="d-block w-100" style="width:180px;height:300px;">
+                                            </div>
+                                          </cfloop>
+                                        </cfif>
                                     </div>
 
                                     <!-- Controls -->

@@ -886,31 +886,42 @@
         </cftry>
     </cffunction>
     <cffunction  name="getimages" access="remote" returnFormat="JSON">
-        <cfargument name="productid" type="numeric">
-        <cfquery name="local.imageselect">
-            SELECT
-                imageid,
-                imagename
-            FROM
-                images
-            WHERE
-                status = 1
-            AND
-                productid = <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">
-        </cfquery>
-        <cfset local.imagelist = ValueList(local.imageselect)>
-        <cfset local.arrayimage = arraynew(1)>
-        <cfoutput query="local.imageselect">
-            <cfset local.row = {
-                "imageid" : local.imageselect.imageid,
-                "imagename" : local.imageselect.imagename
-            }>
-            <cfset arrayAppend(local.arrayimage,local.row)>
-        </cfoutput>
-        <cfset local.images = {
-            "imagelist" : local.imagelist,
-            "imagearray" : local.arrayimage
-        }>
+        <cfargument name="productid" type="string">
+        <cfif structKeyExists(arguments, "productid")>
+            <cfset local.productid = decryptData(arguments.productid)>
+        </cfif>
+        <cfif structKeyExists(local, "productid")>
+            <cfquery name="local.imageselect">
+                SELECT
+                    imageid,
+                    imagename
+                FROM
+                    images
+                WHERE
+                    status = 1
+                AND
+                    productid = <cfqueryparam value="#local.productid#" cfsqltype="cf_sql_varchar">
+            </cfquery>
+            <cfif local.imageselect.RECORDCOUNT GT 0>
+                    <cfset local.listimage = ValueArray(local.imageselect,"imagename") >
+                    <cfset local.arrayimage = arraynew(1)>
+                    <cfoutput query="local.imageselect">
+                        <cfset local.row = {
+                            "imageid" : local.imageselect.imageid,
+                            "imagename" : local.imageselect.imagename
+                        }>
+                        <cfset arrayAppend(local.arrayimage,local.row)>
+                    </cfoutput>
+                    <cfset local.images = {
+                        "imagelist" : local.listimage,
+                        "imagearray" : local.arrayimage
+                    }>     
+            <cfelse>
+                <cfset local.images = {
+                    "value": 0
+                }>
+            </cfif>
+        </cfif>
         <cfreturn local.images>
     </cffunction>
     <cffunction  name="deleteimage" access="remote" returnFormat="JSON">
