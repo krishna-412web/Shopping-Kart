@@ -898,6 +898,7 @@
             AND
                 productid = <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">
         </cfquery>
+        <cfset local.imagelist = ValueList(local.imageselect)>
         <cfset local.arrayimage = arraynew(1)>
         <cfoutput query="local.imageselect">
             <cfset local.row = {
@@ -906,6 +907,22 @@
             }>
             <cfset arrayAppend(local.arrayimage,local.row)>
         </cfoutput>
-        <cfreturn local.arrayimage>
+        <cfset local.images = {
+            "imagelist" : local.imagelist,
+            "imagearray" : local.arrayimage
+        }>
+        <cfreturn local.images>
+    </cffunction>
+    <cffunction  name="deleteimage" access="remote" returnFormat="JSON">
+        <cfargument name="imageid" type="numeric">
+        <cfquery name="local.imagedelete">
+            UPDATE
+                images
+            SET
+                status = 0
+            WHERE
+                imageid = <cfqueryparam value="#arguments.imageid#" cfsqltype="cf_sql_integer"> 
+        </cfquery>
+        <cfreturn 1>
     </cffunction>
 </cfcomponent>

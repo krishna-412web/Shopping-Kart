@@ -1,3 +1,15 @@
+function removeImage(id) {
+    $.ajax({
+        url: '/components/shopppingkart.cfc?method=deleteimage',
+        type: 'GET',
+        data: {
+            "imageid": id
+        },
+        success: function(data){
+          $(`#image-${id}`).remove();
+        }
+    });
+  }
 $(document).ready(() => {
     var obj;
     var categories;

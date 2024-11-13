@@ -250,6 +250,10 @@
 										<input class="form-control" type="file" name="productPicture" id ="productPicture" accept="image/jpeg, image/png" required>
 										<label for="productPicture" class="form-label text-decoration-underline text-primary text-start">Product Thumbnail</label>	
 									</div>
+
+									<div id="imageList" class="d-flex flex-wrap p-1 gap-1">
+										
+                                    </div>
 									
 									<button class="btn btn-outline-danger w-100 mt-1" type="button" name="insertimage" id="insertimage">Add Product Image</button>
 
