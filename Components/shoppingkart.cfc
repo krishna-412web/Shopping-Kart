@@ -885,4 +885,27 @@
             </cfcatch>
         </cftry>
     </cffunction>
+    <cffunction  name="getimages" access="remote" returnFormat="JSON">
+        <cfargument name="productid" type="numeric">
+        <cfquery name="local.imageselect">
+            SELECT
+                imageid,
+                imagename
+            FROM
+                images
+            WHERE
+                status = 1
+            AND
+                productid = <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">
+        </cfquery>
+        <cfset local.arrayimage = arraynew(1)>
+        <cfoutput query="local.imageselect">
+            <cfset local.row = {
+                "imageid" : local.imageselect.imageid,
+                "imagename" : local.imageselect.imagename
+            }>
+            <cfset arrayAppend(local.arrayimage,local.row)>
+        </cfoutput>
+        <cfreturn local.arrayimage>
+    </cffunction>
 </cfcomponent>
