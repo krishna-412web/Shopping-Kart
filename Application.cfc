@@ -14,14 +14,12 @@
                 <cfmail to="developer@shoppingkart.com"
                         from="noreply@shoppingkart.com"
                         subject="Application Error in ShoppingKart"
-                        type="text">
-                    <!---<cfdump var="#arguments.exception#">--->
-                    An error occurred in the ShoppingKart application.
-                    Error Message: #arguments.exception.message#
-                    Error Type: #arguments.exception.type#
-                    Error File: #arguments.exception.tagcontext[1].template#
-                    Error Line: #arguments.exception.tagcontext[1].line#
-                    Stack Trace: #arguments.exception.stackTrace#
+                        type="html">
+                    <html>
+                        <body>
+                            <cfdump var="#arguments.exception#">
+                        </body>
+                    </html>
                 </cfmail>
             </cfoutput>
             <cfcatch type="any">
