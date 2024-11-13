@@ -58,7 +58,7 @@
 					<cfset arrayAppend(variables.imgArray, item.SERVERFILE)>
 				</cfloop>
 			</cfif>
-			<cfdump var="#variables.imgArray#">
+			<!---<cfdump var="#variables.imgArray#"> --->
 		</cfif>
 		<cfset productid = structKeyExists(form, "productid")? Val(obj.decryptData(form.productid)): 0>
 		<cfset productsubcategory = structKeyExists(form, "productsubcategory")? Val(obj.decryptData(form.productsubcategory)): 0>
@@ -72,7 +72,8 @@
 												productdesc = form.productdesc,
 												productimage = imgPath,
 												price = form.price,
-												productid = productid)>
+												productid = productid,
+												imagearray = imagearray)>
 	</cfif>
 <cfcatch>
 	<cfdump var="#cfcatch#">

@@ -157,13 +157,14 @@
         <cfargument name="productimage" type="string">
         <cfargument name="price" type="numeric">
         <cfargument name="productid" type="numeric" required="false">
+        <cfargument name="imagearray" type="array" required="false">
         <cfset local.updateReturn ={
             "status" : 0,
             "message" : ''
         }>
         <cftry>
             <cfif arguments.productid EQ 0>
-                <cfquery name="local.insertProduct">
+                <cfquery name="local.insertProduct" result="local.insertrow">
                     INSERT INTO
                         products(subcategoryid,productname,productdesc,productimage,price,status,createdat,createdby)
                     VALUES(<cfqueryparam value="#arguments.subcategoryid#" cfsqltype="cf_sql_integer">,
@@ -176,6 +177,20 @@
                             <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer"> 
                     );
                 </cfquery>
+                <cfif structKeyExists(arguments, "imagearray") AND ArrayLen(arguments.imagearray) GT 0>
+                    <cfquery name="insertimages">
+                        INSERT INTO
+                            images(productid,imagename,status)
+                        VALUES
+                            <cfloop array="#arguments.imagearray#" index="i" item="local.item">
+                                (<cfqueryparam value="#local.insertrow.GENERATEDKEY#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#local.item#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="1" cfsqltype="cf_sql_integer">)
+                                <cfif i NEQ ArrayLen(arguments.imagearray)>,</cfif>
+                            </cfloop>
+                        ;
+                    </cfquery>
+                </cfif>
                 <cfset local.updateReturn["success"] = 1>
                 <cfset local.updateReturn["message"]="Product inserted successfully">
             <cfelse>
@@ -194,11 +209,25 @@
                     WHERE
                         productid = <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">
                 </cfquery>
+                <cfif structKeyExists(arguments, "imagearray") AND ArrayLen(arguments.imagearray) GT 0>
+                    <cfquery name="insertimages">
+                        INSERT INTO
+                            images(productid,imagename,status)
+                        VALUES
+                            <cfloop array="#arguments.imagearray#" index="i" item="local.item">
+                                (<cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#local.item#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="1" cfsqltype="cf_sql_integer">)
+                                <cfif i NEQ ArrayLen(arguments.imagearray)>,</cfif>
+                            </cfloop>
+                        ;
+                    </cfquery>
+                </cfif>
                 <cfset local.updateReturn["success"] = 1>
                 <cfset local.updateReturn["message"]="Product updated successfully">
             </cfif>
         <cfcatch>
-            <cfset local.updateReturn["message"] = "Unexpected Error">
+            <cfset local.updateReturn["message"] = cfcatch.message>
         </cfcatch>
         </cftry>
         <cfreturn local.updateReturn>
