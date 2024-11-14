@@ -152,7 +152,10 @@
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between">
                                                 <h6 class="card-title fw-bold">#product.RESULTSET[1].productname#</h6>
-                                                <h6 class="card-title text-danger fw-bold" id="productprice">#product.RESULTSET[1].price#</h6>
+                                                <div class="d-flex flex-column">
+                                                    <h6 class="card-title text-danger fw-bold" id="productprice">Price: <span id="price">#product.RESULTSET[1].price#</span></h6>
+                                                    <h6 class="card-title text-danger fw-bold" id="producttax">Tax: <span id="tax">#product.RESULTSET[1].tax#</span>%</h6>
+                                                </div>
                                             </div>
                                             <div class="row align-items-center">
                                                 <h6 class="card-text small col-3 text-center">Quantity</h6>
@@ -212,7 +215,10 @@
                                         <div class="card-body">
                                             <div class="d-flex justify-content-between">
                                                 <h6 class="card-title fw-bold">#variables.cart.productname#</h6>
-                                                <h6 class="card-title text-danger fw-bold" id="productprice">#variables.cart.price#</h6>
+                                                <div class="d-flex flex-column">
+                                                    <h6 class="card-title text-danger fw-bold" name="productprice">Price: #variables.cart.price#</h6>
+                                                    <h6 class="card-title text-danger fw-bold" name="producttax">Tax: #variables.cart.tax#%</h6>
+                                                </div>
                                             </div>
                                             <div class="row align-items-center">
                                                 <h6 class="card-text small col-3 text-center">Quantity</h6>
@@ -242,8 +248,11 @@
                                         <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addressModal"> SELECT</button>
                                     </div>
                                 </div>
+                                <div>
+                                    <cfoutput><h4 class="card-text text-danger fw-bold" id="finalamount" name="finalamount">Payable Amount:#obj.getAmount()#</h4></cfoutput>
+                                </div>
                         </div>
-                        <div class="card-footer d-flex justify-content-around">
+                        <div class="card-footer mt-1 d-flex justify-content-around">
                             <!--- <cfoutput><h4 class="card-text fw-bold" id="finalprice">Final Price:#obj.getPrice()#</h4></cfoutput> --->
                             <cfif StructKeyExists(CGI, "HTTP_REFERER") AND 
                                 len(trim(CGI.HTTP_REFERER)) NEQ 0>

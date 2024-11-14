@@ -59,8 +59,12 @@
                                                 <h6 class="card-text small col-4 text-center">Orderdate:</h6>
                                                 <h6 class="card-text small col-6 text-center">#variables.details.orderdetails.orderdate#</h6>
                                             </div>
+                                             <div class="row align-items-center">
+                                                <h6 class="card-text small col-4 text-center">Tax Deducted:</h6>
+                                                <h6 class="card-text small col-6 text-center">#variables.details.orderdetails.totaltax#</h6>
+                                            </div>                                           
                                             <div class="row align-items-center">
-                                                <h6 class="card-text small col-4 text-center">Amount:</h6>
+                                                <h6 class="card-text small col-4 text-center">Amount Paid:</h6>
                                                 <h6 class="card-text small col-6 text-center">#variables.details.orderdetails.amount#</h6>
                                             </div>
                                             <div class="row align-items-center my-2">
@@ -87,9 +91,10 @@
             <div class="card w-75"> 
                 <div class="card-header bg-primary text-white">
                     <div class="row align-items-center">
-                        <h6 class="card-text small col-4 text-center">ProductName</h6>
-                        <h6 class="card-text small col-4 text-center">Quantity</h6>
-                        <h6 class="card-text small col-4 text-center">Total Price</h6>
+                        <h6 class="card-text small col-3 text-center">ProductName</h6>
+                        <h6 class="card-text small col-3 text-center">Quantity</h6>
+                        <h6 class="card-text small col-3 text-center">Tax Deducted</h6>
+                        <h6 class="card-text small col-3 text-center">Total Price</h6>
                     </div> 
                 </div>
                 <div class="card-body">
@@ -100,9 +105,10 @@
                                     <cfoutput>
                                         <cfloop array="#variables.details.orderitems#" index="item">
                                             <div class="row align-items-center">
-                                                <h6 class="card-text small col-4 text-center">#item.productname#</h6>
-                                                <h6 class="card-text small col-4 text-center">#item.quantity#</h6>
-                                                <h6 class="card-text small col-4 text-center">#item.totalprice#</h6>
+                                                <h6 class="card-text small col-3 text-center">#item.productname#</h6>
+                                                <h6 class="card-text small col-3 text-center">#item.quantity#</h6>
+                                                <h6 class="card-text small col-3 text-center">#item.producttax#</h6>
+                                                <h6 class="card-text small col-3 text-center">#item.totalprice#</h6>
                                             </div>
                                         </cfloop>
                                     </cfoutput>

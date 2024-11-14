@@ -14,7 +14,8 @@
         <h1 style="text-align:center;">Order Invoice</h1>
 		<p>Order Id:#variables.details.orderdetails.orderid#</p>
         <p>Order Date:#variables.details.orderdetails.orderdate#</p>
-        <p>Order Date:#variables.details.orderdetails.amount#</p>
+        <p>Tax Deducted:#variables.details.orderdetails.totaltax#</p>
+        <p>Amount paid:#variables.details.orderdetails.amount#</p>
         <p>Payment mode:By card</p>
         <p>
             Shipping address:<br>
@@ -30,6 +31,7 @@
 				<tr>
 					<th>ProductName</th>
 					<th>Quantity</th>
+                    <th>Product Tax</th>
 					<th>Amount</th>
 				</tr>
 			</thead>
@@ -38,6 +40,7 @@
                     <tr class="row align-items-center">
                         <td>#item.productname#</td>
                         <td>#item.quantity#</td>
+                        <td>#item.producttax#</td>
                         <td>#item.totalprice#</td>
                     </tr>
                 </cfloop>

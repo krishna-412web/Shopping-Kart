@@ -571,6 +571,22 @@
         <cfreturn getTotalPrice.totalprice/>
     </cffunction>
 
+    <cffunction  name="getAmount" access="remote" returnFormat="JSON">
+        <cfquery name="getTotalPrice">
+            SELECT 
+                SUM((sc.quantity * p.price)+((sc.quantity * p.price*p.tax)/100)) AS totalamount
+            FROM 
+                shoppingcart sc
+            INNER JOIN 
+                products p ON sc.productid = p.productid
+            WHERE
+                sc.status = 1
+            AND 
+                sc.userid = 1;
+        </cfquery>
+        <cfreturn getTotalPrice.totalamount/>
+    </cffunction>
+
     <cffunction name="listAddress" access="remote" returnFormat="JSON">
         <cfargument name="addressid" required="false" type="numeric">
         <cfargument name="userid" required="false" type="numeric">
@@ -772,6 +788,7 @@
             SELECT
                 orderid,
                 orderdate,
+                totaltax,
                 amount,
                 addressid
             FROM
@@ -795,6 +812,7 @@
             SELECT
                 o.orderid,
                 o.orderdate,
+                o.totaltax,
                 o.amount,
                 o.addressid,
                 s.name,
@@ -817,6 +835,7 @@
             <cfset local.result["orderdetails"]={
                 "orderid":local.getorderdetails.orderid,
                 "orderdate":local.getorderdetails.orderdate,
+                "totaltax":local.getorderdetails.totaltax,
                 "amount":local.getorderdetails.amount,
                 "addressid":local.getorderdetails.addressid,
                 "name":local.getorderdetails.name,
@@ -835,6 +854,7 @@
                 o.orderid,
                 o.productid,
                 o.quantity,
+                o.producttax,
                 o.totalprice,
                 p.productname,
                 p.productimage
@@ -901,6 +921,7 @@
                         <body>
                             <h3>OrderId: #local.order.orderdetails.orderid#</h3>
                             <h3>Orderdate: #local.order.orderdetails.orderdate#</h3>
+                            <h3>Tax deducted: #local.order.orderdetails.totaltax#</h3>
                             <h3>Amount: #local.order.orderdetails.amount#</h3>
                             <h3>Shipping Address: <br>
                                 #local.order.orderdetails.name#|#local.order.orderdetails.phoneno#<br>
@@ -912,6 +933,7 @@
                             <cfloop array="#local.order.orderitems#" index="item">
                                 <p>Product name: #item.productname#</p>
                                 <p>Product Quantity: #item.quantity#</p>
+                                <p>Product Tax: #item.producttax#</p>
                                 <p>Total Price: #item.totalprice#</p>
                                 <h3>----------------------------</h3>
                             </cfloop>

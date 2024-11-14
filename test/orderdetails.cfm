@@ -63,7 +63,7 @@
                         <div class="card-header d-flex justify-content-evenly bg-primary gap-5">
                             <h5 class="flex-grow-1">
                                 <span class="text-white">Order No :</span>
-                                <span class="text-muted">#variables.orders.orderid#</span>
+                                <span class="text-white">#variables.orders.orderid#</span>
                             </h5>
                             <a class="btn btn-danger" href="invoice.cfm?orderid=#variables.orders.orderid#">pdf</a>
                         </div>
@@ -81,6 +81,13 @@
                                             <span class="text-muted">#product.quantity#</span>
                                         </p>
                                         <p class="card-text">
+                                            <span class="text-dark">Total product tax :</span>
+                                            <span class="text-muted">
+                                                #chr(8377)#
+                                                #product.producttax#
+                                            </span>
+                                        </p>
+                                        <p class="card-text">
                                             <span class="text-dark">Total price :</span>
                                             <span class="text-muted">
                                                 #chr(8377)#
@@ -95,11 +102,18 @@
                             <div class="d-flex justify-content-between">
                                 <p class="card-text">
                                     <span class="text-dark">Date of Purchase :</span>
-                                    <span class="text-muted">#variables.orders.orderdate#</span>
+                                    <span class="text-primary">#variables.orders.orderdate#</span>
                                 </p>
                                 <p class="card-text">
-                                    <span class="text-dark">Amount :</span>
-                                    <span class="text-muted">
+                                    <span class="text-dark">Tax Deducted:</span>
+                                    <span class="text-success">
+                                        #chr(8377)#
+                                        #variables.orders.totaltax#
+                                    </span>
+                                </p>
+                                <p class="card-text">
+                                    <span class="text-dark">Amount Paid:</span>
+                                    <span class="text-success">
                                         #chr(8377)#
                                         #variables.orders.amount#
                                     </span>
@@ -107,7 +121,7 @@
                             </div>
                             <p class="card-text d-flex gap-3">
                                 <span class="text-dark">Address :</span>
-                                <span class="col-10 text-muted">
+                                <span class="col-10 text-primary">
                                     #items.orderdetails.name# #items.orderdetails.phoneno#<br>
                                     #items.orderdetails.housename#, #items.orderdetails.street#,
                                     #items.orderdetails.city#, #items.orderdetails.state#,

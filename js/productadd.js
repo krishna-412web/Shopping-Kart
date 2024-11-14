@@ -6,16 +6,19 @@ $(document).ready(function(){
         if (actionType === "increase") {
             currentQuantity += 1;
             $("#quantity").val(currentQuantity);
-            let price = $("#productprice").text();
-            let totalprice = price*currentQuantity;
-            $("#finalprice").text(`Final price: ${totalprice}.00`);
+            let price = $("#price").text();
+            let tax = $("#tax").text();
+            console.log(tax);
+            let totalprice = (price*currentQuantity)+((price*currentQuantity*tax)/100);
+            $("#finalprice").text(`Final price: ${totalprice}`);
         } else if (actionType === "decrease") {
             if (currentQuantity > 1) { 
                 currentQuantity -= 1;
                 $("#quantity").val(currentQuantity);
-                let price = $("#productprice").text();
-                let totalprice = price*currentQuantity;
-                $("#finalprice").text(`Final price: ${totalprice}.00`);    
+                let price = $("#price").text();
+                let tax = $("#tax").text();
+                let totalprice = (price*currentQuantity)+((price*currentQuantity*tax)/100);
+                $("#finalprice").text(`Final price: ${totalprice}`);    
             }
         } 
     });
