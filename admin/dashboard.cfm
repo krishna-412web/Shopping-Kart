@@ -244,7 +244,12 @@
 									<div class="form-floating mt-1">
 										<input class="form-control" type="text" id="price" name="price" placeholder="" required>
 										<label for="price" class="form-label text-dark fw-bold">Price</label>
-									</div>	
+									</div>
+
+									<div class="form-floating mt-1">
+										<input class="form-control" type="number" id="taxrate" name="taxrate" placeholder="" required>
+										<label for="taxrate" class="form-label text-dark fw-bold">Taxrate</label>
+									</div>		
 
 									<div class="form-floating mt-1">
 										<input class="form-control" type="file" name="productPicture" id ="productPicture" accept="image/jpeg, image/png" required>
