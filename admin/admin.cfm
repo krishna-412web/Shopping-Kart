@@ -76,7 +76,7 @@
 												productid = productid,
 												imagearray = imagearray)>
 	</cfif>
-<cfcatch>
+<cfcatch type="any">
 	<cfdump var="#cfcatch#">
 	<cfset variables.result = {
 		"status" : 0,
