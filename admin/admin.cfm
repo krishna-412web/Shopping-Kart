@@ -71,6 +71,7 @@
 												productname   = form.productname,
 												productdesc = form.productdesc,
 												productimage = imgPath,
+												tax = form.taxrate,
 												price = form.price,
 												productid = productid,
 												imagearray = imagearray)>

@@ -210,6 +210,7 @@ $(document).ready(() => {
                         $("#productName").val(products1[0].productname);
                         $("#productDesc").val(products1[0].productdesc);
                         $("#price").val(products1[0].price);
+                        $("#taxrate").val(products1[0].tax);
                         $('<input>', { type: 'hidden', name: 'productid', id: 'productId' }).appendTo("#productForm").val(j);
                         $("#productSubCategory").val(products1[0].subcategoryid);
                     },

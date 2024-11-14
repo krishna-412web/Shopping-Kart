@@ -156,6 +156,7 @@
         <cfargument name="productdesc" type="string">
         <cfargument name="productimage" type="string">
         <cfargument name="price" type="numeric">
+        <cfargument  name="tax" type="numeric">
         <cfargument name="productid" type="numeric" required="false">
         <cfargument name="imagearray" type="array" required="false">
         <cfset local.updateReturn ={
@@ -166,12 +167,13 @@
             <cfif arguments.productid EQ 0>
                 <cfquery name="local.insertProduct" result="local.insertrow">
                     INSERT INTO
-                        products(subcategoryid,productname,productdesc,productimage,price,status,createdat,createdby)
+                        products(subcategoryid,productname,productdesc,productimage,price,tax,status,createdat,createdby)
                     VALUES(<cfqueryparam value="#arguments.subcategoryid#" cfsqltype="cf_sql_integer">,
                             <cfqueryparam value="#arguments.productname#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#arguments.productdesc#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#arguments.productimage#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#arguments.price#" cfsqltype="cf_sql_decimal">,
+                            <cfqueryparam value="#arguments.tax#" cfsqltype="cf_sql_double">,
                             <cfqueryparam value="1" cfsqltype="cf_sql_integer">,
                             <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
                             <cfqueryparam value="#session.idadmin#" cfsqltype="cf_sql_integer"> 
@@ -201,6 +203,7 @@
                         productname = <cfqueryparam value="#arguments.productname#" cfsqltype="cf_sql_varchar">,
                         productdesc = <cfqueryparam value="#arguments.productdesc#" cfsqltype="cf_sql_varchar">,
                         price = <cfqueryparam value="#arguments.price#" cfsqltype="cf_sql_decimal">,
+                        tax = <cfqueryparam value="#arguments.tax#" cfsqltype="cf_sql_double">,
                         <cfif arguments.productimage NEQ "">
                             productimage = <cfqueryparam value="#arguments.productimage#" cfsqltype="cf_sql_varchar">,
                         </cfif>
@@ -317,6 +320,7 @@
                 p.productdesc,
                 p.productimage,
                 p.price,
+                p.tax,
                 s.subcategoryname,
                 s.categoryid,
                 c.categoryname
@@ -496,7 +500,8 @@
                 s.quantity,
                 p.productname,
                 p.productdesc,
-                p.price
+                p.price,
+                p.tax
             FROM 
                 shoppingcart s
             INNER JOIN
@@ -661,11 +666,13 @@
         <cfargument name="productid" required="false" type="numeric">
         <cfargument name="quantity" required="false" type="numeric">
         <cfset local.orderid = createUUID()>
+        <cftry>
         <cfif structKeyExists(arguments,"productid") AND structKeyExists(arguments,"quantity")>
             <cfquery name="getProduct">
                 SELECT
                     productid,
-                    price
+                    price,
+                    tax
                 FROM
                     products
                 WHERE
@@ -674,24 +681,26 @@
             </cfquery>
             <cfquery name="createorder">
                 INSERT INTO
-                    orders(orderid,userid,orderdate,amount,addressid)
+                    orders(orderid,userid,orderdate,addressid)
                 VALUES(
                         <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
                         <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
-                        <cfqueryparam value="#arguments.quantity*getProduct.price#" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#session.user.address#" cfsqltype="cf_sql_integer">
                     );
             </cfquery>
+            <cfset local.producttax = (getProduct.price*arguments.quantity*getProduct.tax)/100>
+            <cfset local.totalprice = (getProduct.price*arguments.quantity)+local.producttax>
             <cfquery name="createitems">
                 INSERT INTO
-                    orderitems(orderid,productid,quantity,totalprice)
+                    orderitems(orderid,productid,quantity,producttax,totalprice)
                 VALUES
                     (
                         <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
                         <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#arguments.quantity#" cfsqltype="cf_sql_integer">,
-                        <cfqueryparam value="#arguments.quantity*getProduct.price#" cfsqltype="cf_sql_integer">
+                        <cfqueryparam value="#local.producttax#" cfsqltype="cf_sql_decimal">,
+                        <cfqueryparam value="#local.totalprice#" cfsqltype="cf_sql_decimal">
                     );
             </cfquery>
         <cfelse>
@@ -711,19 +720,50 @@
 
             <cfquery name="createitems">
                 INSERT INTO
-                    orderitems(orderid,productid,quantity,totalprice)
+                    orderitems(orderid,productid,quantity,producttax,totalprice)
                 VALUES
                     <cfoutput query="local.cart">
                         (
                             <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
                             <cfqueryparam value="#local.cart.productid#" cfsqltype="cf_sql_integer">,
                             <cfqueryparam value="#local.cart.quantity#" cfsqltype="cf_sql_integer">,
-                            <cfqueryparam value="#local.cart.quantity*local.cart.price#" cfsqltype="cf_sql_decimal">
+                            <cfqueryparam value="#(local.cart.quantity*local.cart.price*local.cart.tax)/100#" cfsqltype="cf_sql_decimal">,
+                            <cfqueryparam value="#(local.cart.quantity*local.cart.price)
+                            +((local.cart.quantity*local.cart.price*local.cart.tax)/100)#" cfsqltype="cf_sql_decimal">
                         )<cfif currentrow LT local.cart.recordcount>,</cfif>
                     </cfoutput>
                     ;
             </cfquery>
         </cfif>
+        <cfquery name="local.gettax">
+            SELECT
+                sum(producttax) as totaltax
+            FROM
+                orderitems
+            WHERE 
+                orderid = <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">;
+        </cfquery>
+        <cfquery name="local.getfinalprice">
+            SELECT
+                sum(totalprice) as totalprice
+            FROM
+                orderitems
+            WHERE 
+                orderid = <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">;
+        </cfquery>
+        <cfquery name="settotalprice">
+            UPDATE
+                orders
+            SET
+                totaltax = <cfqueryparam value="#local.gettax.totaltax#" cfsqltype="cf_sql_decimal">,
+                amount = <cfqueryparam value="#local.getfinalprice.totalprice#" cfsqltype="cf_sql_decimal">
+            WHERE 
+                orderid = <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">;
+        </cfquery>
+        <cfcatch>
+            <cfdump var="#cfcatch#">
+        </cfcatch>
+        </cftry>
         <cfreturn local.orderid>
     </cffunction>
     <cffunction name="listOrder">
