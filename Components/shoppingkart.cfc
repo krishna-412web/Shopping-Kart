@@ -495,7 +495,8 @@
     <cffunction name="listCart">
         <cfset local.cart = {
             "cartitems": [],
-            "amount": 0
+            "amount": 0,
+            "totaltax" : 0
         }>
         <cfquery name="local.getCart">
             SELECT 
@@ -532,7 +533,20 @@
             AND 
                 sc.userid = 1;
         </cfquery>
-        <cfset local.cart["amount"]=local.getTotalPrice.totalamount>
+        <cfquery name="local.getTotalTax">
+            SELECT 
+                SUM((sc.quantity*p.price*p.tax)/100) AS totaltax
+            FROM 
+                shoppingcart sc
+            INNER JOIN 
+                products p ON sc.productid = p.productid
+            WHERE
+                sc.status = 1
+            AND 
+                sc.userid = 1;
+        </cfquery>
+        <cfset local.cart["amount"]= local.getTotalPrice.totalamount>
+        <cfset local.cart["totaltax"]= local.getTotalTax.totaltax>
         <cfloop query="local.getCart">
             <cfset local.item = {
                 "cartid":local.getCart.cartid,
@@ -751,63 +765,61 @@
                         <cfqueryparam value="#local.totalprice#" cfsqltype="cf_sql_decimal">
                     );
             </cfquery>
+            <cfquery name="local.gettax">
+                SELECT
+                    sum(producttax) as totaltax
+                FROM
+                    orderitems
+                WHERE 
+                    orderid = <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">;
+            </cfquery>
+            <cfquery name="local.getfinalprice">
+                SELECT
+                    sum(totalprice) as totalprice
+                FROM
+                    orderitems
+                WHERE 
+                    orderid = <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">;
+            </cfquery>
+            <cfquery name="settotalprice">
+                UPDATE
+                    orders
+                SET
+                    totaltax = <cfqueryparam value="#local.gettax.totaltax#" cfsqltype="cf_sql_decimal">,
+                    amount = <cfqueryparam value="#local.getfinalprice.totalprice#" cfsqltype="cf_sql_decimal">
+                WHERE 
+                    orderid = <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">;
+            </cfquery>
         <cfelse>
-            <cfset local.amount = getPrice()>
+            <cfset local.cart = listCart()>
             <cfquery name="createorder">
                 INSERT INTO
-                    orders(orderid,userid,orderdate,amount,addressid)
+                    orders(orderid,userid,orderdate,totaltax,amount,addressid)
                 VALUES(
                         <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
                         <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
-                        <cfqueryparam value="#local.amount#" cfsqltype="cf_sql_integer">,
+                        <cfqueryparam value="#local.cart.totaltax#" cfsqltype="cf_sql_integer">,                       
+                        <cfqueryparam value="#local.cart.amount#" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#session.user.address#" cfsqltype="cf_sql_integer">
                     );
             </cfquery>
-            <cfset local.cart = listCart()>
-
             <cfquery name="createitems">
                 INSERT INTO
                     orderitems(orderid,productid,quantity,producttax,totalprice)
                 VALUES
-                    <cfoutput query="local.cart">
+                    <cfloop array="#local.cart.cartitems#" index="local.item">
                         (
                             <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
-                            <cfqueryparam value="#local.cart.productid#" cfsqltype="cf_sql_integer">,
-                            <cfqueryparam value="#local.cart.quantity#" cfsqltype="cf_sql_integer">,
-                            <cfqueryparam value="#(local.cart.quantity*local.cart.price*local.cart.tax)/100#" cfsqltype="cf_sql_decimal">,
-                            <cfqueryparam value="#(local.cart.quantity*local.cart.price)
-                            +((local.cart.quantity*local.cart.price*local.cart.tax)/100)#" cfsqltype="cf_sql_decimal">
+                            <cfqueryparam value="#local.item.productid#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#local.item.quantity#" cfsqltype="cf_sql_integer">,
+                            <cfqueryparam value="#local.item.producttax#" cfsqltype="cf_sql_decimal">,
+                            <cfqueryparam value="#local.item.productprice#" cfsqltype="cf_sql_decimal">
                         )<cfif currentrow LT local.cart.recordcount>,</cfif>
-                    </cfoutput>
+                    </cfloop>
                     ;
             </cfquery>
         </cfif>
-        <cfquery name="local.gettax">
-            SELECT
-                sum(producttax) as totaltax
-            FROM
-                orderitems
-            WHERE 
-                orderid = <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">;
-        </cfquery>
-        <cfquery name="local.getfinalprice">
-            SELECT
-                sum(totalprice) as totalprice
-            FROM
-                orderitems
-            WHERE 
-                orderid = <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">;
-        </cfquery>
-        <cfquery name="settotalprice">
-            UPDATE
-                orders
-            SET
-                totaltax = <cfqueryparam value="#local.gettax.totaltax#" cfsqltype="cf_sql_decimal">,
-                amount = <cfqueryparam value="#local.getfinalprice.totalprice#" cfsqltype="cf_sql_decimal">
-            WHERE 
-                orderid = <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">;
-        </cfquery>
         <cfcatch>
             <cfdump var="#cfcatch#">
         </cfcatch>

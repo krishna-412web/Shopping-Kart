@@ -155,8 +155,8 @@
                                         <td>#item.rate#</td>
                                         <td>
                                             <button class="btn btn-success btn-sm" data-bs-type="increase">+</button>
-                                            <button class="btn btn-warning btn-sm" data-bs-type="decrease">-</button>
                                             <span class="quantity-display">#item.quantity#</span>
+                                            <button class="btn btn-warning btn-sm" data-bs-type="decrease">-</button>
                                         </td>
                                         <td>#item.producttax#</td>
                                         <td>#item.productprice#</td>
