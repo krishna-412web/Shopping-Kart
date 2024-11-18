@@ -596,7 +596,14 @@
             SET
                 status = 0
             WHERE
-                cartid = <cfqueryparam value="#arguments.cartid#" cfsqltype="cf_sql_integer">;
+                status = 1
+            AND
+                <cfif structKeyExists(arguments,"cartid")>
+                    cartid = <cfqueryparam value="#arguments.cartid#" cfsqltype="cf_sql_integer">
+                <cfelse>
+                    userid = <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">
+                </cfif>
+            ;
         </cfquery>
         <cfreturn 1>
     </cffunction>
@@ -1010,6 +1017,8 @@
             SET
                 status = 0
             WHERE
+                status = 1  
+            AND
                 userid = <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">
         </cfquery>
     </cffunction>

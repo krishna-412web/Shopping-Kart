@@ -81,7 +81,7 @@
             <cfif result.value EQ 1>
                 <cfset orderid = obj.addOrder()>
                 <cfset obj.sendmail(orderid = orderid)>
-                <cfset obj.emptycart()>
+                <cfset obj.deleteCart()>
                 <cflocation url="paymentsuccess.cfm?orderid=#orderid#" addToken="no">
             <cfelse>
                 <cflocation url="paymentsuccess.cfm" addToken="no">

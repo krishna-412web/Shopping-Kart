@@ -1,6 +1,6 @@
 <cfset obj = createObject('component', 'Components.shoppingkart')>
 <cfif structKeyExists(url,"emptycart")>
-    <cfset obj.emptycart()>
+    <cfset obj.deleteCart()>
     <cflocation  url="cart.cfm" addToken="no">
 </cfif>
 <!DOCTYPE html>
@@ -146,25 +146,23 @@
                                 </tr>
                             </thead>
                             <tbody>
-                                <cfset i=1>
                                 <cfoutput>
-                                    <cfloop array="#variables.cart.cartitems#" index="item">
+                                    <cfloop array="#variables.cart.cartitems#" item="item" index="i">
                                         <tr class="#item.cartid#">
-                                        <td>#i#</td>
-                                        <td>#item.productname#</td>
-                                        <td>#item.rate#</td>
-                                        <td>
-                                            <button class="btn btn-success btn-sm" data-bs-type="increase">+</button>
-                                            <span class="quantity-display">#item.quantity#</span>
-                                            <button class="btn btn-warning btn-sm" data-bs-type="decrease">-</button>
-                                        </td>
-                                        <td>#item.producttax#</td>
-                                        <td>#item.productprice#</td>
-                                        <td>
-                                            <button class="btn btn-danger btn-sm" data-bs-type="delete">Delete</button>
-                                        </td>
+                                            <td>#i#</td>
+                                            <td>#item.productname#</td>
+                                            <td>#item.rate#</td>
+                                            <td>
+                                                <button class="btn btn-success btn-sm" data-bs-type="increase">+</button>
+                                                <span class="quantity-display">#item.quantity#</span>
+                                                <button class="btn btn-warning btn-sm" data-bs-type="decrease">-</button>
+                                            </td>
+                                            <td>#item.producttax#</td>
+                                            <td>#item.productprice#</td>
+                                            <td>
+                                                <button class="btn btn-danger btn-sm" data-bs-type="delete">Delete</button>
+                                            </td>
                                         </tr>
-                                        <cfset i=i+1>
                                     </cfloop>
                                 </cfoutput>
                                 <!-- Add more rows as needed -->
