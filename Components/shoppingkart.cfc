@@ -804,21 +804,23 @@
                         <cfqueryparam value="#session.user.address#" cfsqltype="cf_sql_integer">
                     );
             </cfquery>
-            <cfquery name="createitems">
-                INSERT INTO
-                    orderitems(orderid,productid,quantity,producttax,totalprice)
-                VALUES
-                    <cfloop array="#local.cart.cartitems#" index="local.item">
-                        (
-                            <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
-                            <cfqueryparam value="#local.item.productid#" cfsqltype="cf_sql_integer">,
-                            <cfqueryparam value="#local.item.quantity#" cfsqltype="cf_sql_integer">,
-                            <cfqueryparam value="#local.item.producttax#" cfsqltype="cf_sql_decimal">,
-                            <cfqueryparam value="#local.item.productprice#" cfsqltype="cf_sql_decimal">
-                        )<cfif currentrow LT local.cart.recordcount>,</cfif>
-                    </cfloop>
-                    ;
-            </cfquery>
+            <cfoutput>
+                <cfquery name="createitems">
+                    INSERT INTO
+                        orderitems(orderid,productid,quantity,producttax,totalprice)
+                    VALUES
+                        <cfloop array="#local.cart.cartitems#" index="local.index" item="local.item">
+                            (
+                                <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
+                                <cfqueryparam value="#local.item.productid#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#local.item.quantity#" cfsqltype="cf_sql_integer">,
+                                <cfqueryparam value="#local.item.producttax#" cfsqltype="cf_sql_decimal">,
+                                <cfqueryparam value="#local.item.productprice#" cfsqltype="cf_sql_decimal">
+                            )<cfif local.index NEQ ArrayLen(local.cart.cartitems)>,</cfif>
+                        </cfloop>
+                        ;
+                </cfquery>
+            </cfoutput>
         </cfif>
         <cfcatch>
             <cfdump var="#cfcatch#">

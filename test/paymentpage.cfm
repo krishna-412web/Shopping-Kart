@@ -17,8 +17,8 @@
                 <cfset variables.product = obj.listProducts(productid = url.pro)>
         </cfif>
         <cfif structKeyExists(url, "cart") AND len(trim(url.cart))>
-                <cfset variables.cart = obj.listCart(userid = session.user.userid)>
-                <cfif variables.cart.RECORDCOUNT EQ 0>
+                <cfset variables.cart = obj.listCart()>
+                <cfif Arraylen(variables.cart.cartitems) EQ 0>
                     <cfset structDelete(variables,"cart")>
                 </cfif>
         </cfif>
@@ -211,21 +211,23 @@
                         <div class="card-body">
                             <div class="d-flex flex-column justify-content-center">
                                 <div class="card h-100 mb-2 p-2">
-                                    <cfoutput query="variables.cart">
-                                        <div class="card-body">
-                                            <div class="d-flex justify-content-between">
-                                                <h6 class="card-title fw-bold">#variables.cart.productname#</h6>
-                                                <div class="d-flex flex-column">
-                                                    <h6 class="card-title text-danger fw-bold" name="productprice">Price: #variables.cart.price#</h6>
-                                                    <h6 class="card-title text-danger fw-bold" name="producttax">Tax: #variables.cart.tax#%</h6>
+                                    <cfoutput>
+                                        <cfloop array="#variables.cart.cartitems#" index="item">
+                                            <div class="card-body">
+                                                <div class="d-flex justify-content-between">
+                                                    <h6 class="card-title fw-bold">#item.productname#</h6>
+                                                    <div class="d-flex flex-column">
+                                                        <h6 class="card-title text-danger fw-bold" name="productprice">Price: #item.productprice#</h6>
+                                                        <h6 class="card-title text-danger fw-bold" name="producttax">Tax: #item.producttax#</h6>
+                                                    </div>
+                                                </div>
+                                                <div class="row align-items-center">
+                                                    <h6 class="card-text small col-3 text-center">Quantity</h6>
+                                                    <input class="col-2 text-center" name="quantity1" type="text" value="#item.quantity#" 
+                                                    style="max-width: 60px;" disabled/>
                                                 </div>
                                             </div>
-                                            <div class="row align-items-center">
-                                                <h6 class="card-text small col-3 text-center">Quantity</h6>
-                                                <input class="col-2 text-center" name="quantity1" type="text" value="#variables.cart.quantity#" 
-                                                style="max-width: 60px;" disabled/>
-                                            </div>
-                                        </div>
+                                        </cfloop>
                                     </cfoutput>
                                     <div class="text-center mt-4">
                                         <p class="fw-bold">SELECTED ADDRESS</p>
