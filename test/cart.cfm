@@ -128,63 +128,73 @@
 <cfelse>
     <cfset obj = createObject('component', 'Components.shoppingkart')>
     <div class="container-fluid">
-        <cfset cartitems = obj.listCart()>
-        <cfif cartitems.RECORDCOUNT NEQ 0>
-            <div class="row">
-                <div class="col-9 col-md-9">
-                    <table id="cartTable" class="table table-bordered table-sm p-1">
-                        <thead>
-                            <tr>
-                            <th>#</th>
-                            <th>List Name</th>
-                            <th>Price</th>
-                            <th>Quantity</th>
-                            <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <cfset i=1>
-                            <cfoutput query="cartitems">
-                                <tr class="#cartitems.cartid#">
-                                <td>#i#</td>
-                                <td>#cartitems.productname#</td>
-                                <td>#cartitems.price#</td>
-                                <td>
-                                    <button class="btn btn-success btn-sm" data-bs-type="increase">+</button>
-                                    <button class="btn btn-warning btn-sm" data-bs-type="decrease">-</button>
-                                    <span class="quantity-display">#cartitems.quantity#</span>
-                                </td>
-                                <td>
-                                    <button class="btn btn-danger btn-sm" data-bs-type="delete">Delete</button>
-                                </td>
+        <cftry>
+            <cfset variables.cart = obj.listCart()>
+            <cfif ArrayLen(variables.cart.cartitems) NEQ 0>
+                <div class="row">
+                    <div class="col-9 col-md-9">
+                        <table id="cartTable" class="table table-bordered table-sm p-1">
+                            <thead>
+                                <tr>
+                                <th>#</th>
+                                <th>Product Name</th>
+                                <th>Rate</th>
+                                <th>Quantity</th>
+                                <th>Tax</th>
+                                <th>Price</th>
+                                <th>Actions</th>
                                 </tr>
-                                <cfset i=i+1>
-                            </cfoutput>
-                            <!-- Add more rows as needed -->
-                        </tbody>
-                    </table>
+                            </thead>
+                            <tbody>
+                                <cfset i=1>
+                                <cfoutput>
+                                    <cfloop array="#variables.cart.cartitems#" index="item">
+                                        <tr class="#item.cartid#">
+                                        <td>#i#</td>
+                                        <td>#item.productname#</td>
+                                        <td>#item.rate#</td>
+                                        <td>
+                                            <button class="btn btn-success btn-sm" data-bs-type="increase">+</button>
+                                            <button class="btn btn-warning btn-sm" data-bs-type="decrease">-</button>
+                                            <span class="quantity-display">#item.quantity#</span>
+                                        </td>
+                                        <td>#item.producttax#</td>
+                                        <td>#item.productprice#</td>
+                                        <td>
+                                            <button class="btn btn-danger btn-sm" data-bs-type="delete">Delete</button>
+                                        </td>
+                                        </tr>
+                                        <cfset i=i+1>
+                                    </cfloop>
+                                </cfoutput>
+                                <!-- Add more rows as needed -->
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="col-3 col-md-3 text-center"> <!-- Centered column -->
+                        <cfoutput><h3>Total Price: <span id="totalPrice">#variables.cart.amount#</span></h3></cfoutput>
+                        <a class="btn btn-primary btn-lg" id="checkoutButton" href="paymentpage.cfm?cart=1">Checkout</a>
+                        <a class="btn btn-secondary btn-lg" href="cart.cfm?emptycart=1" id="emptyCartButton">Empty Cart</a
+                    </div>
                 </div>
-                <div class="col-3 col-md-3 text-center"> <!-- Centered column -->
-                    <cfset cartitems = obj.getPrice()>
-                    <cfoutput><h3>Total Price: <span id="totalPrice">#cartitems#</span></h3></cfoutput> <!-- Placeholder for total price -->
-                    <a class="btn btn-primary btn-lg" id="checkoutButton" href="paymentpage.cfm?cart=1">Checkout</a>
-                    <a class="btn btn-secondary btn-lg" href="cart.cfm?emptycart=1" id="emptyCartButton">Empty Cart</a
+            <cfelse>
+                <div class="content-container">
+                    <div class="cart-message-box">
+                        <!-- Message Title -->
+                        <div class="cart-message-title">Cart is Empty ?</div>
+                        
+                        <!-- Message Text -->
+                        <p>Browse Items</p>
+                        
+                        <!-- Login Button -->
+                        <a class="cart-login-btn" href="homepage.cfm">Browse</a>
+                    </div>
                 </div>
-            </div>
-        <cfelse>
-            <div class="content-container">
-                <div class="cart-message-box">
-                    <!-- Message Title -->
-                    <div class="cart-message-title">Cart is Empty ?</div>
-                    
-                    <!-- Message Text -->
-                    <p>Browse Items</p>
-                    
-                    <!-- Login Button -->
-                    <a class="cart-login-btn" href="homepage.cfm">Browse</a>
-                </div>
-            </div>
-        </cfif>
+            </cfif>
+        <cfcatch type="any">
+            <cfdump var="#cfcatch#">
+        </cfcatch>
+        </cftry>
     </div>
 </cfif>
 <script src="../js/jQuery.js"></script>

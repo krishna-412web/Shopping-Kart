@@ -493,6 +493,10 @@
     </cffunction>
 
     <cffunction name="listCart">
+        <cfset local.cart = {
+            "cartitems": [],
+            "amount": 0
+        }>
         <cfquery name="local.getCart">
             SELECT 
                 s.cartid,
@@ -501,7 +505,9 @@
                 p.productname,
                 p.productdesc,
                 p.price,
-                p.tax
+                p.tax,
+                (s.quantity*p.price*p.tax)/100 AS producttax,
+                ((s.quantity*p.price)+(s.quantity*p.price*p.tax)/100) AS productprice
             FROM 
                 shoppingcart s
             INNER JOIN
@@ -514,7 +520,33 @@
                 s.userid = <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">;
             ;        
         </cfquery>
-        <cfreturn local.getCart/>
+        <cfquery name="local.getTotalPrice">
+            SELECT 
+                SUM((sc.quantity * p.price)+((sc.quantity * p.price*p.tax)/100)) AS totalamount
+            FROM 
+                shoppingcart sc
+            INNER JOIN 
+                products p ON sc.productid = p.productid
+            WHERE
+                sc.status = 1
+            AND 
+                sc.userid = 1;
+        </cfquery>
+        <cfset local.cart["amount"]=local.getTotalPrice.totalamount>
+        <cfloop query="local.getCart">
+            <cfset local.item = {
+                "cartid":local.getCart.cartid,
+                "productid":local.getCart.productid,
+                "quantity":local.getCart.quantity,
+                "productname":local.getCart.productname,
+                "productdesc":local.getCart.productid,
+                "rate":local.getCart.price,
+                "producttax":local.getCart.producttax,
+                "productprice":local.getCart.productprice
+            }>
+            <cfset arrayAppend(local.cart.cartitems,local.item)>
+        </cfloop>
+        <cfreturn local.cart/>
     </cffunction>
 
     <cffunction name="updateCart" access="remote" returnFormat="JSON">
