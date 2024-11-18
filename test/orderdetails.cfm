@@ -56,84 +56,97 @@
         <div id="order-card" class="container m-2 card z-1 bg-light h-100 fw-bold">
         <h1 class="card-header card-title text-white bg-primary">Order History</h1>
         <div class="card-body d-grid gap-5 m-2">
-            <cfif structKeyExists(variables,"orders")>
-                <cfoutput query="variables.orders">
-                    <cfset items = obj.listOrderDetails(orderid=variables.orders.orderid)>
-                    <div class="card">
-                        <div class="card-header d-flex justify-content-evenly bg-primary gap-5">
-                            <h5 class="flex-grow-1">
-                                <span class="text-white">Order No :</span>
-                                <span class="text-white">#variables.orders.orderid#</span>
-                            </h5>
-                            <a class="btn btn-danger" href="invoice.cfm?orderid=#variables.orders.orderid#">pdf</a>
-                        </div>
-                        <ul class="card-body list-group p-0">
-                            <cfloop array="#items.orderitems#" item="product">
-                                <li class="list-group-item d-flex justify-content-between">
-                                    <img src="../admin/images/#ListLast(product.productimage,"/")#" class="col-3 img-fluid" alt="Login" style="height: 135px;width:150px;">
-                                    <div class="col-7 d-flex flex-column">
-                                        <p class="card-text">
-                                            <span class="text-dark">Item :</span>
-                                            <span class="text-muted">#product.productname#</span>
-                                        </p>
-                                        <p class="card-text">
-                                            <span class="text-dark">Quantity :</span>
-                                            <span class="text-muted">#product.quantity#</span>
-                                        </p>
-                                        <p class="card-text">
-                                            <span class="text-dark">Total product tax :</span>
-                                            <span class="text-muted">
-                                                #chr(8377)#
-                                                #product.producttax#
-                                            </span>
-                                        </p>
-                                        <p class="card-text">
-                                            <span class="text-dark">Total price :</span>
-                                            <span class="text-muted">
-                                                #chr(8377)#
-                                                #product.totalprice#
-                                            </span>
-                                        </p>
-                                    </div>
-                                </li>
-                            </cfloop>
-                        </ul>
-                        <div class="card-footer">
-                            <div class="d-flex justify-content-between">
-                                <p class="card-text">
-                                    <span class="text-dark">Date of Purchase :</span>
-                                    <span class="text-primary">#variables.orders.orderdate#</span>
-                                </p>
-                                <p class="card-text">
-                                    <span class="text-dark">Tax Deducted:</span>
-                                    <span class="text-success">
-                                        #chr(8377)#
-                                        #variables.orders.totaltax#
-                                    </span>
-                                </p>
-                                <p class="card-text">
-                                    <span class="text-dark">Amount Paid:</span>
-                                    <span class="text-success">
-                                        #chr(8377)#
-                                        #variables.orders.amount#
+            <cfoutput>
+                <cfif structKeyExists(variables,"orders") AND arrayLen(variables.orders) GT 0>
+                    <cfloop array="#variables.orders#" index="order">
+                        <div class="card">
+                            <div class="card-header d-flex justify-content-evenly bg-primary gap-5">
+                                <h5 class="flex-grow-1">
+                                    <span class="text-white">Order No :</span>
+                                    <span class="text-white">#order.orderid#</span>
+                                </h5>
+                                <a class="btn btn-danger" href="invoice.cfm?orderid=#order.orderid#">pdf</a>
+                            </div>
+                            <ul class="card-body list-group p-0">
+                                <cfloop array="#order.orderitems#" item="product">
+                                    <li class="list-group-item d-flex justify-content-between">
+                                        <img src="../admin/images/#ListLast(product.productimage,"/")#" class="col-3 img-fluid" alt="Login" style="height: 135px;width:150px;">
+                                        <div class="col-7 d-flex flex-column">
+                                            <p class="card-text">
+                                                <span class="text-dark">Item :</span>
+                                                <span class="text-muted">#product.productname#</span>
+                                            </p>
+                                            <p class="card-text">
+                                                <span class="text-dark">Quantity :</span>
+                                                <span class="text-muted">#product.quantity#</span>
+                                            </p>
+                                            <p class="card-text">
+                                                <span class="text-dark">Total product tax :</span>
+                                                <span class="text-muted">
+                                                    #chr(8377)#
+                                                    #product.producttax#
+                                                </span>
+                                            </p>
+                                            <p class="card-text">
+                                                <span class="text-dark">Total price :</span>
+                                                <span class="text-muted">
+                                                    #chr(8377)#
+                                                    #product.productprice#
+                                                </span>
+                                            </p>
+                                        </div>
+                                    </li>
+                                </cfloop>
+                            </ul>
+                            <div class="card-footer">
+                                <div class="d-flex justify-content-between">
+                                    <p class="card-text">
+                                        <span class="text-dark">Date of Purchase :</span>
+                                        <span class="text-primary">#order.orderdate#</span>
+                                    </p>
+                                    <p class="card-text">
+                                        <span class="text-dark">Tax Deducted:</span>
+                                        <span class="text-success">
+                                            #chr(8377)#
+                                            #order.totaltax#
+                                        </span>
+                                    </p>
+                                    <p class="card-text">
+                                        <span class="text-dark">Amount Paid:</span>
+                                        <span class="text-success">
+                                            #chr(8377)#
+                                            #order.amount#
+                                        </span>
+                                    </p>
+                                </div>
+                                <p class="card-text d-flex gap-3">
+                                    <span class="text-dark">Address :</span>
+                                    <span class="col-10 text-primary">
+                                        #order.name# #order.phoneno#<br>
+                                        #order.housename#, #order.street#,
+                                        #order.city#, #order.state#,
+                                        PIN - #order.pincode#
                                     </span>
                                 </p>
                             </div>
-                            <p class="card-text d-flex gap-3">
-                                <span class="text-dark">Address :</span>
-                                <span class="col-10 text-primary">
-                                    #items.orderdetails.name# #items.orderdetails.phoneno#<br>
-                                    #items.orderdetails.housename#, #items.orderdetails.street#,
-                                    #items.orderdetails.city#, #items.orderdetails.state#,
-                                    PIN - #items.orderdetails.pincode#
-                                </span>
-                            </p>
+                        </div>
+                    </cfloop>
+                <cfelse>
+                    <!---Add div to make user to order--->
+                    <div class="content-container">
+                        <div class="cart-message-box">
+                            <!-- Message Title -->
+                            <div class="cart-message-title">Order not Found ?</div>
+                            
+                            <!-- Message Text -->
+                            <p>Browse Items</p>
+                            
+                            <!-- Login Button -->
+                            <a class="cart-login-btn" href="homepage.cfm">Browse</a>
                         </div>
                     </div>
-                </cfoutput>
-            <cfelse>
-                <!---Add div to make user to order--->
-            </cfif>
+                </cfif>
+            </cfoutput>
         </div>
     </div>
     </div>

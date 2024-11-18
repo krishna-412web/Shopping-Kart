@@ -830,24 +830,84 @@
     </cffunction>
     <cffunction name="listOrder">
         <cfargument name="search" required="false" type="string">
-        <cfquery name="getorders">
+        <cfquery name="local.getorders">
             SELECT
-                orderid,
-                orderdate,
-                totaltax,
-                amount,
-                addressid
+                o.orderid,
+                o.orderdate,
+                o.totaltax,
+                o.amount,
+                o.addressid,
+                s.name,
+                s.phoneno,
+                s.housename,
+                s.street,
+                s.city,
+                s.state,
+                s.pincode,
+                oi.itemid,
+                oi.productid,
+                oi.quantity,
+                oi.producttax,
+                oi.totalprice AS productprice,
+                p.productname,
+                p.productimage
             FROM
-                orders
+                orders o
+            INNER JOIN
+                shippingaddress s
+            ON
+                o.addressid = s.addressid
+            INNER JOIN
+                orderitems oi
+            ON
+                o.orderid = oi.orderid
+            INNER JOIN
+                products p
+            ON
+                oi.productid = p.productid
             WHERE
-                userid=<cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">
+                o.userid = <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">
             <cfif structKeyExists(arguments,"search")>
                 AND
-                    orderid = <cfqueryparam value="#arguments.search#" cfsqltype="cf_sql_varchar">
+                    o.orderid LIKE <cfqueryparam value="%#arguments.search#%" cfsqltype="cf_sql_varchar">
             </cfif>
             ;
         </cfquery>
-        <cfreturn getorders>
+        <cfset local.orders = arrayNew(1)>
+        <cfloop query="local.getorders" group="orderid">
+            <cfset local.orderrow = {
+                "orderid":local.getorders.orderid,
+                "orderdate":local.getorders.orderdate,
+                "totaltax":local.getorders.totaltax,
+                "amount":local.getorders.amount,
+                "addressid":local.getorders.addressid,
+                "name":local.getorders.name,
+                "phoneno":local.getorders.phoneno,
+                "housename":local.getorders.housename,
+                "street":local.getorders.street,
+                "city":local.getorders.city,
+                "state":local.getorders.state,
+                "pincode":local.getorders.pincode,
+                "orderitems":[]
+            }>
+            <!---Space to add rest of function--->
+            <cfloop query="local.getorders">
+                <cfif local.getorders.orderid EQ local.orderrow.orderid>
+                    <cfset local.productinfo = {
+                        "productid": local.getorders.productid,
+                        "quantity": local.getorders.quantity,
+                        "producttax": local.getorders.producttax,
+                        "productprice": local.getorders.productprice,
+                        "productname": local.getorders.productname,
+                        "productimage": local.getorders.productimage
+                    }>
+                    <!-- Add the product to the current order -->
+                    <cfset arrayAppend(local.orderrow["orderitems"], local.productinfo)>
+                </cfif>
+            </cfloop>
+            <cfset arrayAppend(local.orders, local.orderrow)>
+        </cfloop>
+        <cfreturn local.orders>
     </cffunction>
     <cffunction name="listOrderDetails">
         <cfargument name="orderid" type="string">
