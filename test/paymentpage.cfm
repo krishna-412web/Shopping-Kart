@@ -217,8 +217,9 @@
                                                 <div class="d-flex justify-content-between">
                                                     <h6 class="card-title fw-bold">#item.productname#</h6>
                                                     <div class="d-flex flex-column">
-                                                        <h6 class="card-title text-danger fw-bold" name="productprice">Price: #item.productprice#</h6>
+                                                        <h6 class="card-title text-danger fw-bold" name="productrate">Rate: #item.rate#</h6>
                                                         <h6 class="card-title text-danger fw-bold" name="producttax">Tax: #item.producttax#</h6>
+                                                        <h6 class="card-title text-danger fw-bold" name="productprice">Price: #item.productprice#</h6>
                                                     </div>
                                                 </div>
                                                 <div class="row align-items-center">
