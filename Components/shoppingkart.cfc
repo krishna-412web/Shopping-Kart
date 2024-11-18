@@ -468,26 +468,40 @@
     <cffunction name="insertCart" access="public" returntype="void">
         <cfargument name="productid" type="numeric" required="true">
         <cfargument name="mode" type="string" required="false">
-        <cfargument name="userid" type="numeric" required="true">
 
         <!--- Check if the item is already in the cart and active --->
         <cfquery name="existingItem">
             SELECT cartid 
             FROM shoppingcart 
             WHERE productid = <cfqueryparam value='#arguments.productid#' cfsqltype='cf_sql_integer'> 
-              AND status = 1
-              AND userid = <cfqueryparam value='#arguments.userid#' cfsqltype='cf_sql_integer'>
+            AND status = 1
+            AND userid = <cfqueryparam value='#session.user.userid#' cfsqltype='cf_sql_integer'>
               ;
         </cfquery>
 
         <!--- If item exists, update the quantity --->
         <cfif existingItem.recordCount EQ 0>
             <cfquery>
-                INSERT INTO shoppingcart (productid, quantity, userid,status) 
+                INSERT INTO 
+                    shoppingcart (productid, quantity, userid,status) 
                 VALUES (<cfqueryparam value='#arguments.productid#' cfsqltype='cf_sql_integer'>, 
                         1,
-                        <cfqueryparam value="#arguments.userid#" cfsqltype='cf_sql_integer'>,  
+                        <cfqueryparam value="#session.user.userid#" cfsqltype='cf_sql_integer'>,  
                         1) 
+            </cfquery>
+        <cfelse>
+            <cfquery>
+                UPDATE 
+                    shoppingcart 
+                SET
+                    quantity=quantity+1
+                WHERE 
+                    productid = <cfqueryparam value='#arguments.productid#' cfsqltype='cf_sql_integer'> 
+                AND 
+                    status = 1
+                AND 
+                    userid = <cfqueryparam value='#session.user.userid#' cfsqltype='cf_sql_integer'>
+                
             </cfquery>
         </cfif>
     </cffunction>

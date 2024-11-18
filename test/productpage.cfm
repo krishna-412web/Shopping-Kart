@@ -4,11 +4,11 @@
     AND structKeyExists(session,"user") AND session.user.value EQ 1>
     <!---update cart --->
     <cfset productid = structKeyExists(url,"pro")? Val(obj.decryptData(url.pro)) : 0>
-    <cfset obj.insertCart(productid = productid,
-                          userid = session.user.userid)>
+    <cfset obj.insertCart(productid = productid)>
     <cflocation url="productpage.cfm?pro=#url.pro#" addToken="no">
   </cfif>
 <cfcatch type="exception">
+  <cfdump var="#cfcatch#">
 </cfcatch>
 </cftry>
 <!DOCTYPE html>
