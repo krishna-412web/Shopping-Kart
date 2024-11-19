@@ -52,8 +52,26 @@ $("button[data-bs-type]").click(function() {
                         console.error("Error updating quantity: " + error);
                     }
                 }); 
-
         }
+        else if (currentQuantity === 1) {
+            var requestData1 = {
+                cartid: $row
+            };
+            $.ajax({
+                url: '../components/shoppingkart.cfc?method=deleteCart', 
+                method: 'POST',
+                data: requestData1,
+                success: function(response) {
+                    // Assuming the response indicates success, redirect to cart.cfm
+                    window.location.href = "cart.cfm";
+                },
+                error: function(xhr, status, error) {
+                    // Handle errors if needed
+                    console.error("Error removing item from cart: " + error);
+                }
+            });
+        }
+        
     } else if (actionType === "delete") {
             var requestData1 = {
             cartid: $row
