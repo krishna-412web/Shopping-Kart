@@ -148,7 +148,7 @@
                             <tbody>
                                 <cfoutput>
                                     <cfloop array="#variables.cart.cartitems#" item="item" index="i">
-                                        <tr class="#item.cartid#">
+                                        <tr class="#obj.encryptText(item.productid)#">
                                             <td>#i#</td>
                                             <td>#item.productname#</td>
                                             <td>#item.rate#</td>

@@ -7,14 +7,14 @@ $("#addCart").click(function(event){
 $("button[data-bs-type]").click(function() {
     var actionType = $(this).data("bs-type");
     var $rowSelected = $(this).parent().parent(); 
-    var $row = $(this).parent().parent().attr("class");
+    var $row = $(this).parent().parent().attr("class").trim();
     var $firstSpan = $("." + $row).find("span").first(); 
     var $cartrow = $firstSpan.html();
     var currentQuantity = parseInt($cartrow); 
     if (actionType === "increase") {
         currentQuantity += 1;
         var requestData = {
-        cartid: $row,
+        productid: $row,
         mode: 1
         };
         $.ajax({
@@ -35,7 +35,7 @@ $("button[data-bs-type]").click(function() {
         if (currentQuantity > 1) { 
             currentQuantity -= 1;
             var requestData = {
-                cartid: $row,
+                productid: $row,
                 mode: 0
                 };
                 $.ajax({
@@ -55,7 +55,7 @@ $("button[data-bs-type]").click(function() {
         }
         else if (currentQuantity === 1) {
             var requestData1 = {
-                cartid: $row
+                productid: $row
             };
             $.ajax({
                 url: '../components/shoppingkart.cfc?method=deleteCart', 
@@ -72,9 +72,9 @@ $("button[data-bs-type]").click(function() {
             });
         }
         
-    } else if (actionType === "delete") {
+     } else if (actionType === "delete") {
             var requestData1 = {
-            cartid: $row
+            productid: $row
             };
             $.ajax({
                 url: '../components/shoppingkart.cfc?method=deleteCart', 
