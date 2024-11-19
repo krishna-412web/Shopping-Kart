@@ -748,6 +748,7 @@
     <cffunction  name="addOrder">
         <cfargument name="productid" required="false" type="numeric">
         <cfargument name="quantity" required="false" type="numeric">
+        <cfargument name="address" required="false" type="numeric">
         <cfset local.orderid = createUUID()>
         <cftry>
         <cfif structKeyExists(arguments,"productid") AND structKeyExists(arguments,"quantity")>
@@ -769,7 +770,7 @@
                         <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">,
                         <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">,
                         <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
-                        <cfqueryparam value="#session.user.address#" cfsqltype="cf_sql_integer">
+                        <cfqueryparam value="#arguments.address#" cfsqltype="cf_sql_integer">
                     );
             </cfquery>
             <cfset local.producttax = (getProduct.price*arguments.quantity*getProduct.tax)/100>
@@ -822,7 +823,7 @@
                         <cfqueryparam value="#now()#" cfsqltype="cf_sql_timestamp">,
                         <cfqueryparam value="#local.cart.totaltax#" cfsqltype="cf_sql_integer">,                       
                         <cfqueryparam value="#local.cart.amount#" cfsqltype="cf_sql_integer">,
-                        <cfqueryparam value="#session.user.address#" cfsqltype="cf_sql_integer">
+                        <cfqueryparam value="#arguments.address#" cfsqltype="cf_sql_integer">
                     );
             </cfquery>
             <cfoutput>

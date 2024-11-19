@@ -4,9 +4,7 @@
         <cfif structKeyExists(url, "select") 
             AND structKeyExists(url, "id")
             AND len(trim(url.id)) GT 0>
-            <cfset obj.setaddress(addressid = Val(url.id),
-                                userid = session.user.userid )>
-            <cfset session.user.address = Val(url.id)>
+            <cfset session.addressid = Val(url.id)>
             <cfif structKeyExists(url,"pro")>
                 <cflocation  url="paymentpage.cfm?pro=#url.pro#" addToken="no">
             <cfelseif structKeyExists(url,"cart")>
@@ -60,26 +58,39 @@
                                             pincode = form.pincode)>
             </cfif>
         <cfelseif structKeyExists(form,"paymentproduct")>
+            <cfif structKeyExists(session,"addressid")>
+                <cfset variables.addressid = session.addressid>
+                <cfset structdelete(session,"addressid")>
+            <cfelse>
+                <cfset variables.addressid = session.user.address>
+            </cfif>
             <cfset result=obj.makepayment(cardnumber=form.cardnumber,
                                     expirationdate=form.expirydate,
                                     cvv=form.cvv,
                                     cardholdername=form.cardholdername)>
             <cfif result.value EQ 1>
                 <cfset productid = structKeyExists(form,"productid")?obj.decryptData(form.productid):0>
-                <cfset orderid = obj.addOrder(productid=productid,
-                                    quantity=form.productquantity)>
+                <cfset orderid = obj.addOrder(productid = productid,
+                                    quantity = form.productquantity,
+                                    address = variables.addressid)>
                 <cfset obj.sendmail(orderid = orderid)>
                 <cflocation url="paymentsuccess.cfm?orderid=#orderid#" addToken="no">
             <cfelse>
                 <cflocation url="paymentsuccess.cfm" addToken="no">
             </cfif>
         <cfelseif structKeyExists(form,"paymentcart")>
+            <cfif structKeyExists(session,"addressid")>
+                <cfset variables.addressid = session.addressid>
+                <cfset structdelete(session,"addressid")>
+            <cfelse>
+                <cfset variables.addressid = session.user.address>
+            </cfif>
             <cfset result=obj.makepayment(cardnumber=form.cardnumber,
                         expirationdate=form.expirydate,
                         cvv=form.cvv,
                         cardholdername=form.cardholdername)>
             <cfif result.value EQ 1>
-                <cfset orderid = obj.addOrder()>
+                <cfset orderid = obj.addOrder(address = variables.addressid)>
                 <cfset obj.sendmail(orderid = orderid)>
                 <cfset obj.deleteCart()>
                 <cflocation url="paymentsuccess.cfm?orderid=#orderid#" addToken="no">
@@ -167,7 +178,11 @@
                                     </cfoutput>
                                     <div class="text-center mt-4">
                                         <p class="fw-bold">SELECTED ADDRESS</p>
-                                        <cfset address = obj.listAddress(addressid = session.user.address)>
+                                        <cfif structKeyExists(session,"addressid")>
+                                            <cfset address = obj.listAddress(addressid = session.addressid)>
+                                        <cfelse>
+                                            <cfset address = obj.listAddress(addressid = session.user.address)>
+                                        </cfif>
                                         <cfif address.recordCount>
                                             <cfset selectedAddress = address.RESULTSET[1]>
                                             <cfoutput> <!--- Get the first address --->
@@ -232,7 +247,16 @@
                                     </cfoutput>
                                     <div class="text-center mt-4">
                                         <p class="fw-bold">SELECTED ADDRESS</p>
-                                        <cfset address = obj.listAddress(addressid = session.user.address)>
+                                        <cftry>
+                                            <cfif structKeyExists(session,"addressid")>
+                                                <cfset address = obj.listAddress(addressid = session.addressid)>
+                                            <cfelse>
+                                                <cfset address = obj.listAddress(addressid = session.user.address)>
+                                            </cfif>
+                                        <cfcatch type="exception">
+                                            <cfdump var="#cfcatch#">
+                                        </cfcatch>
+                                        </cftry>
                                         <cfif address.recordCount>
                                             <cfset selectedAddress = address.RESULTSET[1]>
                                             <cfoutput> <!--- Get the first address --->

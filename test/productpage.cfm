@@ -205,14 +205,17 @@
                                 <div id="carouselExample" class="carousel slide" data-bs-ride="carousel">
                                     <!-- Carousel Items -->
                                     <div class="carousel-inner" style="height:300px;width:300px;">
-                                        <div class="carousel-item active">
-                                            <img src="../admin/images/#ListLast(item.productimage,"/")#" alt="First Slide" class="d-block w-100" style="width:180px;height:300px;">
-                                        </div>
                                         <cfif NOT structKeyExists(variables.images,"value")>
-                                          <cfloop array="#variables.images.imagelist#" index="imageitem">
-                                            <div class="carousel-item">
+                                          <cfloop array="#variables.images.imagelist#" index="row" item="imageitem">
+                                            <cfif row GT 1>
+                                              <div class="carousel-item">
                                                 <img src="../admin/images/#imageitem#" alt="next slide" class="d-block w-100" style="width:180px;height:300px;">
-                                            </div>
+                                              </div>
+                                            <cfelse>
+                                              <div class="carousel-item active">
+                                                <img src="../admin/images/#imageitem#" alt="next slide" class="d-block w-100" style="width:180px;height:300px;">
+                                              </div>
+                                            </cfif>
                                           </cfloop>
                                         </cfif>
                                     </div>
