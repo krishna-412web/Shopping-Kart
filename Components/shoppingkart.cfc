@@ -983,11 +983,11 @@
                                 #local.order[1].state#,#local.order[1].pincode#
                             </h3>
                             <h3>Product Details<br>----------------------------</h3>
-                            <cfloop array="#local.order.orderitems#" index="item">
+                            <cfloop array="#local.order[1].orderitems#" index="item">
                                 <p>Product name: #item.productname#</p>
                                 <p>Product Quantity: #item.quantity#</p>
                                 <p>Product Tax: #item.producttax#</p>
-                                <p>Total Price: #item.totalprice#</p>
+                                <p>Total Price: #item.productprice#</p>
                                 <h3>----------------------------</h3>
                             </cfloop>
                         </body>
