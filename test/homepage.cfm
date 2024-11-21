@@ -192,8 +192,33 @@
           <cfif structKeyExists(url,"cat") OR structKeyExists(url,"sub")>
             <a href="#variables.url#order=desc" class="btn btn-outline-primary me-2">Price: High to Low</a>
             <a href="#variables.url#order=asc" class="btn btn-outline-primary me-2">Price: Low to High</a>
-            <a href="#variables.url#price=above" class="btn btn-outline-primary me-2">Price above 20,000</a>
-            <a href="#variables.url#price=below" class="btn btn-outline-primary me-2">Price below 20,000</a>
+            <div class="dropdown">
+              <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
+              Filter
+              </button>
+              <ul class="dropdown-menu w-75">
+                <div class="d-flex flex-column align-items-center">
+                  <li><a href="#variables.url#price=above" class="btn btn-sm btn-primary">Price above 20,000</a></li>
+                  <li class="mt-1"><a href="#variables.url#price=below" class="btn btn-sm btn-primary">Price below 20,000</a></li>
+                  <li>
+                    <form id="filterForm" class="mt-1" action="" method="POST">
+                        <div class="g-1 d-flex flex-column justify-content-center align-items-center">
+                          <div>
+                            <input type="number" class="form-control" id="minPrice" name="min" placeholder="MIN">
+                          </div>
+                          <div>
+                            <label for="maxPrice" class="form-label mb-0 text-primary">AND</label>
+                          </div>
+                          <div>
+                            <input type="number" class="form-control" id="maxPrice" name="max" placeholder="MAX">
+                          </div>
+                          <button type="submit" name="rangesubmit" class="btn btn-primary btn-sm mt-1">Apply</button>
+                        </div>
+                    </form>
+                  </li>
+                </div>
+              </ul>
+            </div>
           </cfif>
         </cfoutput>
       </div>
@@ -202,7 +227,21 @@
               <h1>Products</h1>
               <div class="product-grid">
               <cfif structKeyExists(url,"sub")>
-                  <cfif structKeyExists(url, 'order') AND structKeyExists(url, 'price')>
+                  <cfif structKeyExists(form,"rangesubmit")>
+                    <cfif form.max GT 0 AND form.min GT 0 AND form.max GT form.min>
+                      <cfset products = obj.listProducts(subcategoryid = url.sub,
+                                                        max = form.max,
+                                                        min = form.min)>
+                    <cfelseif form.min GT 0>
+                      <cfset products = obj.listProducts(subcategoryid = url.sub,
+                                                        min = form.min)>
+                    <cfelseif form.max GT 0>
+                      <cfset products = obj.listProducts(subcategoryid = url.sub,
+                                                        max = form.max)>
+                    <cfelse>
+                       <cfset products = obj.listProducts(subcategoryid = url.sub)>                     
+                    </cfif>
+                  <cfelseif structKeyExists(url, 'order') AND structKeyExists(url, 'price')>
                     <cfset products = obj.listProducts(subcategoryid = url.sub,order = url.order,price = url.price)>
                   <cfelseif structKeyExists(url, 'order')>
                     <cfset products = obj.listProducts(subcategoryid = url.sub,order = url.order)>
@@ -225,7 +264,21 @@
                       </cfoutput>
                     </cfloop>
                 <cfelseif structKeyExists(url,"cat")>
-                  <cfif structKeyExists(url, 'order') AND structKeyExists(url, 'price')>
+                  <cfif structKeyExists(form,"rangesubmit")>
+                    <cfif form.max GT 0 AND form.min GT 0 AND form.max GT form.min>
+                      <cfset products = obj.listProducts(categoryid = url.cat,
+                                                        max = form.max,
+                                                        min = form.min)>
+                    <cfelseif form.min GT 0>
+                      <cfset products = obj.listProducts(categoryid = url.cat,
+                                                        min = form.min)>
+                    <cfelseif form.max GT 0>
+                      <cfset products = obj.listProducts(categoryid = url.cat,
+                                                        max = form.max)>
+                    <cfelse>
+                       <cfset products = obj.listProducts(categoryid = url.cat)>                     
+                    </cfif>
+                  <cfelseif structKeyExists(url, 'order') AND structKeyExists(url, 'price')>
                     <cfset products = obj.listProducts(categoryid = url.cat,order = url.order,price = url.price)>
                   <cfelseif structKeyExists(url, 'order')>
                     <cfset products = obj.listProducts(categoryid = url.cat,order = url.order)>

@@ -305,6 +305,8 @@
         <cfargument  name="limit" type="numeric" required="false">
         <cfargument name="order" type="string" required="false">
         <cfargument name="price" type="string" required="false">
+        <cfargument  name="max" type="numeric" required="false">
+        <cfargument  name="min" type="numeric" required="false">
         <cfif structKeyExists(arguments, "productid")>
             <cfset local.productid = Val(decryptData(arguments.productid))>
         <cfelseif structKeyExists(arguments, "categoryid")>
@@ -360,6 +362,17 @@
             <cfelseif structKeyExists(arguments,"price") AND arguments.price EQ "below" >
                 AND
                     p.price<20000
+            </cfif>
+            <cfif   structKeyExists(arguments,"max") AND 
+                    structKeyExists(arguments,"min") AND 
+                    arguments.max GT 0 AND 
+                    arguments.max GT arguments.min>
+                AND price BETWEEN <cfqueryparam value="#arguments.min#" cfsqltype="cf_sql_integer"> 
+                AND <cfqueryparam value="#arguments.max#" cfsqltype="cf_sql_integer">
+            <cfelseif structKeyExists(arguments,"min") AND arguments.min neq 0>
+                AND price > <cfqueryparam value="#arguments.min#" cfsqltype="cf_sql_integer">
+            <cfelseif structKeyExists(arguments,"max") AND arguments.max neq 0>
+                AND price < <cfqueryparam value="#arguments.max#" cfsqltype="cf_sql_integer">
             </cfif>
             <cfif structKeyExists(arguments,"limit")>
                 ORDER BY rand()
@@ -1055,5 +1068,5 @@
         <cfargument name="inputtext" type="string">
         <cfset local.encryptedText= encrypt(toString(arguments.inputtext),variables.key,"AES","Hex")>
         <cfreturn local.encryptedText>
-    </cffunction>
+      </cffunction>
 </cfcomponent>
