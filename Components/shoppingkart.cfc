@@ -483,7 +483,7 @@
         <cfargument name="mode" type="string" required="false">
 
         <!--- Check if the item is already in the cart and active --->
-        <cfquery name="existingItem">
+        <cfquery name="local.existingItem">
             SELECT cartid 
             FROM shoppingcart 
             WHERE productid = <cfqueryparam value='#arguments.productid#' cfsqltype='cf_sql_integer'> 
@@ -493,7 +493,7 @@
         </cfquery>
 
         <!--- If item exists, update the quantity --->
-        <cfif existingItem.recordCount EQ 0>
+        <cfif local.existingItem.recordCount EQ 0>
             <cfquery>
                 INSERT INTO 
                     shoppingcart (productid, quantity, userid,status) 
