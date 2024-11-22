@@ -260,6 +260,7 @@
         </cfloop>
         <cfreturn local.getCategories>
     </cffunction>
+
     <cffunction name="listSubCategory" access="remote" returnFormat="JSON">
         <cfargument name="subcategoryid" type="string" required="false">
         <cfargument name="categoryid" type="string" required="false">
@@ -297,6 +298,7 @@
         </cfloop>
         <cfreturn local.getSubCategories>
     </cffunction>
+
     <cffunction name="listProducts" access="remote" returnFormat="JSON">
         <cfargument name="productid" type="string" required="false">
         <cfargument name="subcategoryid" type="string" required="false">
@@ -395,6 +397,7 @@
         </cfloop>
         <cfreturn local.getProducts> 
     </cffunction>
+
     <cffunction name="deleteItems">
         <cfargument name="deleteid" type="numeric">
         <cfargument name="section" type="string">
@@ -652,7 +655,7 @@
     </cffunction>
 
     <cffunction  name="getAmount" access="remote" returnFormat="JSON">
-        <cfquery name="getTotalPrice">
+        <cfquery name="local.getTotalPrice">
             SELECT 
                 SUM((sc.quantity * p.price)+((sc.quantity * p.price*p.tax)/100)) AS totalamount
             FROM 
@@ -664,7 +667,7 @@
             AND 
                 sc.userid = 1;
         </cfquery>
-        <cfreturn getTotalPrice.totalamount/>
+        <cfreturn local.getTotalPrice.totalamount/>
     </cffunction>
 
     <cffunction name="listAddress" access="remote" returnFormat="JSON">
@@ -696,6 +699,7 @@
         </cfquery>
         <cfreturn local.getAddress/>
     </cffunction>
+
     <cffunction name="setaddress">
         <cfargument name="addressid" required="false" type="numeric">
         <cfargument name="userid" required="false" type="numeric">
@@ -708,6 +712,7 @@
                 userid = <cfqueryparam value="#arguments.userid#" cfsqltype="cf_sql_integer">;
         </cfquery>
     </cffunction>
+
     <cffunction name="updateAddress">
         <cfargument name="addressid" required="false" type="numeric">
         <cfargument name="name" required="false" type="string">
@@ -758,6 +763,7 @@
             </cfquery>
         </cfif>
     </cffunction>
+
     <cffunction  name="addOrder">
         <cfargument name="productid" required="false" type="numeric">
         <cfargument name="quantity" required="false" type="numeric">
@@ -776,7 +782,7 @@
                     productid = <cfqueryparam value="#arguments.productid#" cfsqltype="cf_sql_integer">
                 ;
             </cfquery>
-            <cfquery name="createorder">
+            <cfquery name="local.createorder">
                 INSERT INTO
                     orders(orderid,userid,orderdate,addressid)
                 VALUES(
@@ -788,7 +794,7 @@
             </cfquery>
             <cfset local.producttax = (getProduct.price*arguments.quantity*getProduct.tax)/100>
             <cfset local.totalprice = (getProduct.price*arguments.quantity)+local.producttax>
-            <cfquery name="createitems">
+            <cfquery name="local.createitems">
                 INSERT INTO
                     orderitems(orderid,productid,quantity,producttax,totalprice)
                 VALUES
@@ -816,7 +822,7 @@
                 WHERE 
                     orderid = <cfqueryparam value="#local.orderid#" cfsqltype="cf_sql_varchar">;
             </cfquery>
-            <cfquery name="settotalprice">
+            <cfquery name="local.settotalprice">
                 UPDATE
                     orders
                 SET
@@ -827,7 +833,7 @@
             </cfquery>
         <cfelse>
             <cfset local.cart = listCart()>
-            <cfquery name="createorder">
+            <cfquery name="local.createorder">
                 INSERT INTO
                     orders(orderid,userid,orderdate,totaltax,amount,addressid)
                 VALUES(
@@ -840,7 +846,7 @@
                     );
             </cfquery>
             <cfoutput>
-                <cfquery name="createitems">
+                <cfquery name="local.createitems">
                     INSERT INTO
                         orderitems(orderid,productid,quantity,producttax,totalprice)
                     VALUES
@@ -863,6 +869,7 @@
         </cftry>
         <cfreturn local.orderid>
     </cffunction>
+
     <cffunction name="listOrder">
         <cfargument name="search" required="false" type="string">
         <cfquery name="local.getorders">
@@ -946,6 +953,7 @@
         </cfloop>
         <cfreturn local.orders>
     </cffunction>
+
     <cffunction  name="makePayment">
         <cfargument name="cardnumber" required="true" type="string">
         <cfargument name="expirationdate" required="true" type="string">
@@ -973,6 +981,7 @@
         </cfif>
         <cfreturn local.result>
     </cffunction>
+
     <cffunction name="sendmail">
         <cfargument name="orderid" type="string">
         <cfset local.order = listOrder(orderid = arguments.orderid)>
@@ -1013,6 +1022,7 @@
             </cfcatch>
         </cftry>
     </cffunction>
+
     <cffunction  name="getimages" access="remote" returnFormat="JSON">
         <cfargument name="productid" type="string">
         <cfif structKeyExists(arguments, "productid")>
@@ -1052,6 +1062,7 @@
         </cfif>
         <cfreturn local.images>
     </cffunction>
+
     <cffunction  name="deleteimage" access="remote" returnFormat="JSON">
         <cfargument name="imageid" type="numeric">
         <cfquery name="local.imagedelete">
@@ -1064,9 +1075,10 @@
         </cfquery>
         <cfreturn 1>
     </cffunction>
+
     <cffunction name="encryptText">
         <cfargument name="inputtext" type="string">
         <cfset local.encryptedText= encrypt(toString(arguments.inputtext),variables.key,"AES","Hex")>
         <cfreturn local.encryptedText>
-      </cffunction>
+    </cffunction>
 </cfcomponent>
