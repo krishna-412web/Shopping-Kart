@@ -111,9 +111,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart Product Page</title>
     <!-- Bootstrap CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/cart.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/userpage.css"><!--- 
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/cart.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/userpage.css"><!--- 
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.min.js"></script> --->
 </head>

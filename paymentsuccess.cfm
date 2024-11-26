@@ -10,7 +10,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart Home Page</title>
   <!-- Bootstrap CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
   <style>
     /* Additional custom styles */
     .navbar-main {
@@ -140,8 +140,8 @@
 
 
   <!-- Bootstrap JS Bundle -->
-  <script src="../js/jQuery.js"></script>
-  <script src="../js/search.js"></script>
-  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jQuery.js"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

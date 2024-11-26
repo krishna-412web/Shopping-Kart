@@ -17,7 +17,6 @@ $("button[data-bs-type]").click(function() {
         productid: $row,
         mode: 1
         };
-        console.log(requestData.productid);
         $.ajax({
             url: '../components/shoppingkart.cfc?method=updateCart', 
             method: 'POST',

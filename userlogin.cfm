@@ -20,8 +20,8 @@
     		<meta name="viewport" content="width=device-width, initial-scale=1.0">
     		<meta http-equiv="X-UA-Compatible" content="ie=edge">
     		<title>Shopping cart-User</title>
-		<link href="../css/bootstrap.min.css" rel="stylesheet" >
-    	<script src="../js/bootstrap.min.js"></script>
+		<link href="/css/bootstrap.min.css" rel="stylesheet" >
+    	<script src="/js/bootstrap.min.js"></script>
 		<!---<link href="../css/styles.css" rel="stylesheet">11111--->
   	</head>
   	<body class="bg-light">

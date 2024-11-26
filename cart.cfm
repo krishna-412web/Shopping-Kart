@@ -9,7 +9,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping cart-Cart</title>
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
 <style>
     /* Custom styling for the header */
     .navbar {
@@ -91,7 +91,7 @@
     <div class="container-fluid row">
         <!-- Logo and Brand Name -->
         <div class="d-flex flex-row justify-content-between">
-            <a class="navbar-brand" href="homepage.cfm">Shoppingcart</a>
+            <a class="navbar-brand" href="/test/homepage.cfm">Shoppingcart</a>
 
         <!-- Search Bar -->
         <!---<form class="d-flex search-bar">
@@ -197,8 +197,8 @@
         </cftry>
     </div>
 </cfif>
-<script src="../js/jQuery.js"></script>
-<script src="../js/cart.js"></script>
-<script src="../js/bootstrap.bundle.min.js"></script>
+<script src="/js/jQuery.js"></script>
+<script src="/js/cart.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

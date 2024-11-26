@@ -57,9 +57,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Shopping Cart Product Page</title>
     <!-- Bootstrap CSS -->
-    <link href="../css/bootstrap.min.css" rel="stylesheet">
-    <link href="../css/cart.css" rel="stylesheet">
-    <link rel="stylesheet" href="../css/userpage.css">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/cart.css" rel="stylesheet">
+    <link rel="stylesheet" href="/css/userpage.css">
 </head>
 <body>
     <!-- Navigation Bar -->
@@ -230,9 +230,9 @@
 
     <!-- Bootstrap JS (for components that require JavaScript) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/jQuery.js"></script>
-    <script src="../js/address.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jQuery.js"></script>
+    <script src="/js/address.js"></script>
     
 </body>
 </html>

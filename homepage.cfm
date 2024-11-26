@@ -8,7 +8,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Shopping Cart Home Page</title>
   <!-- Bootstrap CSS -->
-  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="/css/bootstrap.min.css" rel="stylesheet">
   <style>
     /* Additional custom styles */
     .navbar-main {
@@ -131,7 +131,7 @@
               </cfloop>
             </ul>
             <a class="nav-item" href="homepage.cfm">SHOPPING CART - HOME PAGE</a>
-            <a class="nav-item" href="cart.cfm">Cart</a>
+            <a class="nav-item" href="/cart">Cart</a>
             <cfif structKeyExists(session,"user") AND session.user.value EQ 1>
               <a class="nav-item" href="userpage.cfm"><cfoutput>#session.user.username#</cfoutput></a>
             <cfelse>
@@ -183,7 +183,7 @@
       <cfdump var="#URL#">--->
       <cfset variables.url = cgi.HTTP_URL>
       <!--- Remove both 'order' and 'price' parameters from the URL --->
-      <cfset variables.url = REReplace(variables.url, "[&?](order|price)=[^&]*", "", "all")>
+      <cfset variables.url = REReplace(variables.url, "[&?](order|price|range|min|max)=[^&]*", "", "all")>
       <!--- Check if there is already a query string, to append with '&' or start with '?' --->
       <cfset variables.url = variables.url & (find('?', variables.url) ? '&' : '?')>
 
@@ -204,13 +204,13 @@
                     <form id="filterForm" class="mt-1" action="" method="POST">
                         <div class="g-1 d-flex flex-column justify-content-center align-items-center">
                           <div>
-                            <input type="number" class="form-control" id="minPrice" name="min" placeholder="MIN">
+                            <input type="number" class="form-control" id="min" name="min" placeholder="MIN">
                           </div>
                           <div>
-                            <label for="maxPrice" class="form-label mb-0 text-primary">AND</label>
+                            <label for="max" class="form-label mb-0 text-primary">AND</label>
                           </div>
                           <div>
-                            <input type="number" class="form-control" id="maxPrice" name="max" placeholder="MAX">
+                            <input type="number" class="form-control" id="max" name="max" placeholder="MAX">
                           </div>
                           <button type="submit" name="rangesubmit" class="btn btn-primary btn-sm mt-1">Apply</button>
                         </div>
@@ -227,17 +227,21 @@
               <h1>Products</h1>
               <div class="product-grid">
               <cfif structKeyExists(url,"sub")>
-                  <cfif structKeyExists(form,"rangesubmit")>
-                    <cfif form.max GT 0 AND form.min GT 0 AND form.max GT form.min>
+                  <cfif structKeyExists(url,"range") AND (structKeyExists(url,"max") OR structKeyExists(url,"min"))>
+                    <cfif structKeyExists(url,"max") AND 
+                          structKeyExists(url,"min") AND 
+                          url.max GT 0 AND 
+                          url.min GT 0 AND 
+                          url.max GT url.min>
                       <cfset products = obj.listProducts(subcategoryid = url.sub,
-                                                        max = form.max,
-                                                        min = form.min)>
-                    <cfelseif form.min GT 0>
+                                                        max = url.max,
+                                                        min = url.min)>
+                    <cfelseif structKeyExists(url,"min") AND url.min GT 0>
                       <cfset products = obj.listProducts(subcategoryid = url.sub,
-                                                        min = form.min)>
-                    <cfelseif form.max GT 0>
+                                                        min = url.min)>
+                    <cfelseif structKeyExists(url,"max") AND url.max GT 0>
                       <cfset products = obj.listProducts(subcategoryid = url.sub,
-                                                        max = form.max)>
+                                                        max = url.max)>
                     <cfelse>
                        <cfset products = obj.listProducts(subcategoryid = url.sub)>                     
                     </cfif>
@@ -264,17 +268,21 @@
                       </cfoutput>
                     </cfloop>
                 <cfelseif structKeyExists(url,"cat")>
-                  <cfif structKeyExists(form,"rangesubmit")>
-                    <cfif form.max GT 0 AND form.min GT 0 AND form.max GT form.min>
+                  <cfif structKeyExists(url,"range") AND (structKeyExists(url,"max") OR structKeyExists(url,"min"))>
+                    <cfif structKeyExists(url,"max") AND 
+                          structKeyExists(url,"min") AND 
+                          url.max GT 0 AND 
+                          url.min GT 0 AND 
+                          url.max GT url.min>
                       <cfset products = obj.listProducts(categoryid = url.cat,
-                                                        max = form.max,
-                                                        min = form.min)>
-                    <cfelseif form.min GT 0>
+                                                        max = url.max,
+                                                        min = url.min)>
+                    <cfelseif structKeyExists(url,"min") AND url.min GT 0>
                       <cfset products = obj.listProducts(categoryid = url.cat,
-                                                        min = form.min)>
-                    <cfelseif form.max GT 0>
+                                                        min = url.min)>
+                    <cfelseif structKeyExists(url,"max") AND url.max GT 0>
                       <cfset products = obj.listProducts(categoryid = url.cat,
-                                                        max = form.max)>
+                                                        max = url.max)>
                     <cfelse>
                        <cfset products = obj.listProducts(categoryid = url.cat)>                     
                     </cfif>
@@ -356,8 +364,8 @@
 
 
   <!-- Bootstrap JS Bundle -->
-  <script src="../js/jQuery.js"></script>
-  <script src="../js/search.js"></script>
-  <script src="../js/bootstrap.bundle.min.js"></script>
+  <script src="/js/jQuery.js"></script>
+  <script src="/js/search.js"></script>
+  <script src="/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
