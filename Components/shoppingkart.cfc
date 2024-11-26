@@ -537,13 +537,14 @@
                 p.productdesc,
                 p.price,
                 p.tax,
+                p.productimage,
                 (s.quantity*p.price*p.tax)/100 AS producttax,
                 ((s.quantity*p.price)+(s.quantity*p.price*p.tax)/100) AS productprice
             FROM 
                 shoppingcart s
             INNER JOIN
                 products p
-            WHERE
+            ON
                 s.productid = p.productid
             AND
                 s.status = 1
@@ -551,32 +552,6 @@
                 s.userid = <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">;
             ;        
         </cfquery>
-        <cfquery name="local.getTotalPrice">
-            SELECT 
-                SUM((sc.quantity * p.price)+((sc.quantity * p.price*p.tax)/100)) AS totalamount
-            FROM 
-                shoppingcart sc
-            INNER JOIN 
-                products p ON sc.productid = p.productid
-            WHERE
-                sc.status = 1
-            AND 
-                sc.userid = 1;
-        </cfquery>
-        <cfquery name="local.getTotalTax">
-            SELECT 
-                SUM((sc.quantity*p.price*p.tax)/100) AS totaltax
-            FROM 
-                shoppingcart sc
-            INNER JOIN 
-                products p ON sc.productid = p.productid
-            WHERE
-                sc.status = 1
-            AND 
-                sc.userid = 1;
-        </cfquery>
-        <cfset local.cart["amount"]= local.getTotalPrice.totalamount>
-        <cfset local.cart["totaltax"]= local.getTotalTax.totaltax>
         <cfloop query="local.getCart">
             <cfset local.item = {
                 "cartid":local.getCart.cartid,
@@ -588,6 +563,8 @@
                 "producttax":local.getCart.producttax,
                 "productprice":local.getCart.productprice
             }>
+            <cfset local.cart["totaltax"] = local.cart["totaltax"] + local.getCart.producttax>
+            <cfset local.cart["amount"] = local.cart["amount"] + local.getCart.productprice>
             <cfset arrayAppend(local.cart.cartitems,local.item)>
         </cfloop>
         <cfreturn local.cart/>
@@ -935,19 +912,17 @@
                 "orderitems":[]
             }>
             <!---Space to add rest of function--->
-            <cfloop query="local.getorders">
-                <cfif local.getorders.orderid EQ local.orderrow.orderid>
-                    <cfset local.productinfo = {
-                        "productid": local.getorders.productid,
-                        "quantity": local.getorders.quantity,
-                        "producttax": local.getorders.producttax,
-                        "productprice": local.getorders.productprice,
-                        "productname": local.getorders.productname,
-                        "productimage": local.getorders.productimage
-                    }>
-                    <!-- Add the product to the current order -->
-                    <cfset arrayAppend(local.orderrow["orderitems"], local.productinfo)>
-                </cfif>
+            <cfloop>
+                <cfset local.productinfo = {
+                    "productid": local.getorders.productid,
+                    "quantity": local.getorders.quantity,
+                    "producttax": local.getorders.producttax,
+                    "productprice": local.getorders.productprice,
+                    "productname": local.getorders.productname,
+                    "productimage": local.getorders.productimage
+                }>
+                <!-- Add the product to the current order -->
+                <cfset arrayAppend(local.orderrow["orderitems"], local.productinfo)>
             </cfloop>
             <cfset arrayAppend(local.orders, local.orderrow)>
         </cfloop>

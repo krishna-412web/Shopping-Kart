@@ -466,10 +466,10 @@
 
     <!-- Bootstrap JS (for components that require JavaScript) -->
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
-    <script src="../js/bootstrap.min.js"></script>
-    <script src="../js/jQuery.js"></script>
-    <script src="../js/address.js"></script>
-    <script src="../js/productadd.js"></script>
+    <script src="/js/bootstrap.min.js"></script>
+    <script src="/js/jQuery.js"></script>
+    <script src="/js/address.js"></script>
+    <script src="/js/productadd.js"></script>
     
 </body>
 </html>
