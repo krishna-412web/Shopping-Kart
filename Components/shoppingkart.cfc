@@ -522,7 +522,11 @@
         </cfif>
     </cffunction>
 
-    <cffunction name="listCart">
+    <cffunction name="listCart" access="remote" returnFormat="JSON">
+        <cfargument  name="productid" type="string" required="false">
+        <cfif structKeyExists(arguments,"productid")>
+            <cfset local.productid = Val(decryptData(arguments.productid))>
+        </cfif>
         <cfset local.cart = {
             "cartitems": [],
             "amount": 0,
@@ -549,7 +553,11 @@
             AND
                 s.status = 1
             AND 
-                s.userid = <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">;
+                s.userid = <cfqueryparam value="#session.user.userid#" cfsqltype="cf_sql_integer">
+            <cfif structKeyExists(local,"productid")>
+                AND
+                    s.productid = <cfqueryparam value="#local.productid#" cfsqltype="cf_sql_varchar">
+            </cfif>
             ;        
         </cfquery>
         <cfloop query="local.getCart">
@@ -568,6 +576,9 @@
             <cfset local.cart["amount"] = local.cart["amount"] + local.getCart.productprice>
             <cfset arrayAppend(local.cart.cartitems,local.item)>
         </cfloop>
+        <cfif structKeyExists(arguments,"productid")>
+            <cfset local.cart["amount"] = getAmount()>
+        </cfif>
         <cfreturn local.cart/>
     </cffunction>
 
@@ -606,7 +617,8 @@
                 ;
             </cfquery>        
         </cfif>
-        <cfreturn 1>
+        <cfset local.productinfo = listCart(productid = arguments.productid)>
+        <cfreturn local.productinfo>
     </cffunction>
 
     <cffunction name="deleteCart" access="remote" returnFormat="JSON">

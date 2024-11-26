@@ -17,19 +17,24 @@ $("button[data-bs-type]").click(function() {
         productid: $row,
         mode: 1
         };
+        console.log(requestData.productid);
         $.ajax({
             url: '../components/shoppingkart.cfc?method=updateCart', 
             method: 'POST',
-            data: requestData,
-            success: function(response) {
-                // Assuming the response indicates success, redirect to cart.cfm
-                window.location.href="cart.cfm";
-                $firstSpan.html(currentQuantity); 
-            },
-            error: function(xhr, status, error) {
-                // Handle errors if needed
-                console.error("Error updating quantity: " + error);
-            }
+            data: requestData
+        })
+        .done(function(response) {
+                    var result = JSON.parse(response);
+                    var priceSelect = `.${requestData.productid} .price`;
+                    var taxSelect = `.${requestData.productid} .tax`;
+                    var totalSelect =`#totalPrice`;
+                    $(priceSelect).text(result.cartitems[0].productprice);
+                    $(taxSelect).text(result.cartitems[0].producttax);
+                    $(totalSelect).text(result.amount);
+                    $firstSpan.html(currentQuantity);
+        })
+        .fail(function(xhr, status, error) {
+            console.error("Error updating quantity: " + error);
         }); 
     } else if (actionType === "decrease") {
         if (currentQuantity > 1) { 
@@ -41,16 +46,20 @@ $("button[data-bs-type]").click(function() {
                 $.ajax({
                     url: '../components/shoppingkart.cfc?method=updateCart', 
                     method: 'POST',
-                    data: requestData,
-                    success: function(response) {
-                        // Assuming the response indicates success, redirect to cart.cfm
-                        window.location.href="cart.cfm";
-                        $firstSpan.html(currentQuantity); 
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle errors if needed
-                        console.error("Error updating quantity: " + error);
-                    }
+                    data: requestData
+                })
+                .done(function(response) {
+                            var result = JSON.parse(response);
+                            var priceSelect = `.${requestData.productid} .price`;
+                            var taxSelect = `.${requestData.productid} .tax`;
+                            var totalSelect =`#totalPrice`;
+                            $(priceSelect).text(result.cartitems[0].productprice);
+                            $(taxSelect).text(result.cartitems[0].producttax);
+                            $(totalSelect).text(result.amount);
+                            $firstSpan.html(currentQuantity);
+                })
+                .fail(function(xhr, status, error) {
+                    console.error("Error updating quantity: " + error);
                 }); 
         }
         else if (currentQuantity === 1) {

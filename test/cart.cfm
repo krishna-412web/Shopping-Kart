@@ -159,8 +159,8 @@
                                                 <span class="quantity-display">#item.quantity#</span>
                                                 <button class="btn btn-warning btn-sm" data-bs-type="decrease">-</button>
                                             </td>
-                                            <td>#item.producttax#</td>
-                                            <td>#item.productprice#</td>
+                                            <td class="tax">#item.producttax#</td>
+                                            <td class="price">#item.productprice#</td>
                                             <td>
                                                 <button class="btn btn-danger btn-sm" data-bs-type="delete">Delete</button>
                                             </td>
