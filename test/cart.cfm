@@ -137,6 +137,7 @@
                             <thead>
                                 <tr>
                                 <th>#</th>
+                                <th>Image</th>
                                 <th>Product Name</th>
                                 <th>Rate</th>
                                 <th>Quantity</th>
@@ -150,6 +151,7 @@
                                     <cfloop array="#variables.cart.cartitems#" item="item" index="i">
                                         <tr class="#obj.encryptText(item.productid)#">
                                             <td>#i#</td>
+                                            <td><img src="/admin/images/#ListLast(item.productimage,"/")#" height="70" width="70" alt="productimg"/></td>
                                             <td>#item.productname#</td>
                                             <td>#item.rate#</td>
                                             <td>

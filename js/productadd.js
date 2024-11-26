@@ -10,7 +10,7 @@ $(document).ready(function(){
             let tax = $("#tax").text();
             console.log(tax);
             let totalprice = (price*currentQuantity)+((price*currentQuantity*tax)/100);
-            $("#finalprice").text(`Final price: ${totalprice}`);
+            $("#finalprice").text(`Final Price: ${totalprice}`);
         } else if (actionType === "decrease") {
             if (currentQuantity > 1) { 
                 currentQuantity -= 1;
@@ -18,7 +18,7 @@ $(document).ready(function(){
                 let price = $("#price").text();
                 let tax = $("#tax").text();
                 let totalprice = (price*currentQuantity)+((price*currentQuantity*tax)/100);
-                $("#finalprice").text(`Final price: ${totalprice}`);    
+                $("#finalprice").text(`Final Price: ${totalprice}`);    
             }
         } 
     });

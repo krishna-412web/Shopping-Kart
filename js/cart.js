@@ -92,28 +92,4 @@ $("button[data-bs-type]").click(function() {
                 }
             }); // Exit the function to prevent further processing
     }
-
-    // Update the displayed quantity
-    
-
-    // Prepare data for AJAX request
-    /*var requestData = {
-        productId: productId,
-        quantity: currentQuantity
-    };
-
-    // Call AJAX function to update quantity
-    $.ajax({
-        url: 'updateQuantity.cfm', // URL of your ColdFusion script to handle the update
-        method: 'POST',
-        data: requestData,
-        success: function(response) {
-            // Assuming the response indicates success, redirect to cart.cfm
-            window.location.href = 'cart.cfm'; 
-        },
-        error: function(xhr, status, error) {
-            // Handle errors if needed
-            console.error("Error updating quantity: " + error);
-        }
-    });*/
 });

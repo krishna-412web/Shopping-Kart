@@ -203,15 +203,10 @@
                                 </div>
                         </div>
                         <div class="card-footer d-flex justify-content-around">
-                            <cfoutput><h4 class="card-text fw-bold" id="finalprice">Final Price:#product.RESULTSET[1].price#</h4></cfoutput>
-                            <cfif StructKeyExists(CGI, "HTTP_REFERER") AND 
-                                len(trim(CGI.HTTP_REFERER)) NEQ 0>
-                                <cfset previousPage = CGI.HTTP_REFERER>
-                            <cfelse>
-                                <cfset previousPage="/test/homepage.cfm" >
-                            </cfif>
+                            <cfoutput><h4 class="card-text fw-bold" id="finalprice">Final Price:#product.RESULTSET[1].price+
+                                ((product.RESULTSET[1].price*product.RESULTSET[1].tax)/100)#</h4></cfoutput>
                             <cfoutput>
-                                <a href="#previouspage#" class="btn btn-sm btn-outline-secondary me-2">Cancel</a>
+                                <a href="/test/productpage.cfm?pro=#url.pro#" class="btn btn-sm btn-outline-secondary me-2">Cancel</a>
                             </cfoutput>
                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Place Order</button>
                         </div>
@@ -281,14 +276,8 @@
                         </div>
                         <div class="card-footer mt-1 d-flex justify-content-around">
                             <!--- <cfoutput><h4 class="card-text fw-bold" id="finalprice">Final Price:#obj.getPrice()#</h4></cfoutput> --->
-                            <cfif StructKeyExists(CGI, "HTTP_REFERER") AND 
-                                len(trim(CGI.HTTP_REFERER)) NEQ 0>
-                                <cfset previousPage = CGI.HTTP_REFERER>
-                            <cfelse>
-                                <cfset previousPage="/test/homepage.cfm" >
-                            </cfif>
                             <cfoutput>
-                                <a href="#previouspage#" class="btn btn-sm btn-outline-secondary me-2">Cancel</a>
+                                <a href="/test/cart.cfm" class="btn btn-sm btn-outline-secondary me-2">Cancel</a>
                             </cfoutput>
                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Place Order</button>
                         </div>
