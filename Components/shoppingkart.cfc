@@ -559,6 +559,7 @@
                 "quantity":local.getCart.quantity,
                 "productname":local.getCart.productname,
                 "productdesc":local.getCart.productid,
+                "productimage":local.getCart.productimage,
                 "rate":local.getCart.price,
                 "producttax":local.getCart.producttax,
                 "productprice":local.getCart.productprice
@@ -891,7 +892,7 @@
                     o.orderid LIKE <cfqueryparam value="%#arguments.search#%" cfsqltype="cf_sql_varchar">
             </cfif>
             ORDER BY
-                o.orderdate DESC
+                o.orderdate DESC, o.orderid ASC
             ;
         </cfquery>
         <cfset local.orders = arrayNew(1)>
