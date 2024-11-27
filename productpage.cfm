@@ -5,7 +5,7 @@
     <!---update cart --->
     <cfset productid = structKeyExists(url,"pro")? Val(obj.decryptData(url.pro)) : 0>
     <cfset obj.insertCart(productid = productid)>
-    <cflocation url="cart.cfm" addToken="no">
+    <cflocation url="cart" addToken="no">
   </cfif>
 <cfcatch type="exception">
   <cfdump var="#cfcatch#">

@@ -1,7 +1,7 @@
 <cfset obj = createObject('component', 'Components.shoppingkart')>
 <cfif structKeyExists(url,"emptycart")>
     <cfset obj.deleteCart()>
-    <cflocation  url="cart.cfm" addToken="no">
+    <cflocation  url="cart" addToken="no">
 </cfif>
 <!DOCTYPE html>
 <html lang="en">
@@ -91,7 +91,7 @@
     <div class="container-fluid row">
         <!-- Logo and Brand Name -->
         <div class="d-flex flex-row justify-content-between">
-            <a class="navbar-brand" href="/test/homepage.cfm">Shoppingcart</a>
+            <a class="navbar-brand" href="homepage.cfm">Shoppingcart</a>
 
         <!-- Search Bar -->
         <!---<form class="d-flex search-bar">
@@ -149,7 +149,8 @@
                             <tbody>
                                 <cfoutput>
                                     <cfloop array="#variables.cart.cartitems#" item="item" index="i">
-                                        <tr class="#obj.encryptText(item.productid)#">
+                                        <cfset variables.cartproduct = obj.encryptText(item.productid)>
+                                        <tr class="#variables.cartproduct#">
                                             <td>#i#</td>
                                             <td><img src="/admin/images/#ListLast(item.productimage,"/")#" height="70" width="70" alt="productimg"/></td>
                                             <td>#item.productname#</td>
@@ -162,7 +163,11 @@
                                             <td class="tax">#item.producttax#</td>
                                             <td class="price">#item.productprice#</td>
                                             <td>
-                                                <button class="btn btn-danger btn-sm" data-bs-type="delete">Delete</button>
+                                                <button class="btn btn-danger btn-sm" 
+                                                        data-bs-type="delete" 
+                                                        data-bs-id="#variables.cartproduct#" >
+                                                            Delete
+                                                </button>
                                             </td>
                                         </tr>
                                     </cfloop>
@@ -174,7 +179,29 @@
                     <div class="col-3 col-md-3 text-center"> <!-- Centered column -->
                         <cfoutput><h3>Total Price: <span id="totalPrice">#variables.cart.amount#</span></h3></cfoutput>
                         <a class="btn btn-primary btn-lg" id="checkoutButton" href="paymentpage.cfm?cart=1">Checkout</a>
-                        <a class="btn btn-secondary btn-lg" href="cart.cfm?emptycart=1" id="emptyCartButton">Empty Cart</a
+                        <button class="btn btn-secondary btn-lg" id="emptyCartButton" data-bs-type="empty">Empty Cart</button>
+                    </div>
+                </div>
+                <div class="modal" id="delModal">
+                    <div class="modal-dialog ">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                </div>
+                                <div class="modal-body">
+                                <form action="" method="post" id="delForm">
+                                    <div class="row">
+                                        <h5 class="text-dark" id="delText">Do you wish to delete the item?</h5>
+                                    </div>
+                                    <input type="hidden" id="delInput" name="input" />
+                                    <div class="row">
+                                        <div class="col-4"><button type="submit" class="btn btn-sm btn-danger w-100" id="deleteSubmit" name="deleteSubmit">Yes</button></div>
+                                        <div class="col-4"></div>
+                                        <div class="col-4"><button type="button" class="btn btn-sm btn-primary w-100" name="close" data-bs-dismiss="modal" data-bs-target="#delModal">No</button></div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             <cfelse>

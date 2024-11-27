@@ -68,7 +68,7 @@
           <a class="nav-item" href="homepage.cfm?search=true">Search</a>
           <a class="nav-item" href=""></a>
           <a class="nav-item text-center" href="homepage.cfm">SHOPPING CART</a>
-          <a class="nav-item" href="cart.cfm">Cart</a>
+          <a class="nav-item" href="cart">Cart</a>
           <cfif structKeyExists(session,"user") AND session.user.value EQ 1>
             <a class="nav-item" href="userpage.cfm"><cfoutput>#session.user.username#</cfoutput></a>
           <cfelse>
