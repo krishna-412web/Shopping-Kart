@@ -116,8 +116,8 @@
   <cftry>
     <nav class="navbar navbar-expand-lg navbar-main">
       <div class="container">
-            <a class="nav-item" href="homepage.cfm?search=true">Search</a>
-            <a class="nav-item dropdown-toggle" href="" role="button" data-bs-toggle="dropdown">
+            <a class="nav-item" href="/homepage.cfm?search=true">Search</a>
+            <a class="nav-item dropdown-toggle" href="/" role="button" data-bs-toggle="dropdown">
                 Menu
             </a>
             <ul class="dropdown-menu">
@@ -125,17 +125,17 @@
               <cfloop array="#categories.RESULTSET#" item="item">
                   <cfoutput>
                       <li>
-                          <a id="#item.categoryid#" class="dropdown-item text-dark" href="homepage.cfm?cat=#item.categoryid#">#item.categoryname#</a>
+                          <a id="#item.categoryid#" class="dropdown-item text-dark" href="/homepage.cfm?cat=#item.categoryid#">#item.categoryname#</a>
                       </li>
                   </cfoutput>
               </cfloop>
             </ul>
-            <a class="nav-item" href="homepage.cfm">SHOPPING CART - HOME PAGE</a>
+            <a class="nav-item" href="/homepage.cfm">SHOPPING CART - HOME PAGE</a>
             <a class="nav-item" href="/cart">Cart</a>
             <cfif structKeyExists(session,"user") AND session.user.value EQ 1>
-              <a class="nav-item" href="userpage.cfm"><cfoutput>#session.user.username#</cfoutput></a>
+              <a class="nav-item" href="/userpage.cfm"><cfoutput>#session.user.username#</cfoutput></a>
             <cfelse>
-              <a class="nav-item" href="userlogin.cfm">Login/Signup</a>
+              <a class="nav-item" href="/userlogin.cfm">Login/Signup</a>
             </cfif>
       </div>
     </nav>
@@ -190,16 +190,16 @@
       <div class="sort-links d-flex justify-content-start my-2">
         <cfoutput>
           <cfif structKeyExists(url,"cat") OR structKeyExists(url,"sub")>
-            <a href="#variables.url#order=desc" class="btn btn-outline-primary me-2">Price: High to Low</a>
-            <a href="#variables.url#order=asc" class="btn btn-outline-primary me-2">Price: Low to High</a>
+            <a href="/#variables.url#order=desc" class="btn btn-outline-primary me-2">Price: High to Low</a>
+            <a href="/#variables.url#order=asc" class="btn btn-outline-primary me-2">Price: Low to High</a>
             <div class="dropdown">
               <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
               Filter
               </button>
               <ul class="dropdown-menu w-75">
                 <div class="d-flex flex-column align-items-center">
-                  <li><a href="#variables.url#price=above" class="btn btn-sm btn-primary">Price above 20,000</a></li>
-                  <li class="mt-1"><a href="#variables.url#price=below" class="btn btn-sm btn-primary">Price below 20,000</a></li>
+                  <li><a href="/#variables.url#price=above" class="btn btn-sm btn-primary">Price above 20,000</a></li>
+                  <li class="mt-1"><a href="/#variables.url#price=below" class="btn btn-sm btn-primary">Price below 20,000</a></li>
                   <li>
                     <form id="filterForm" class="mt-1" action="" method="POST">
                         <div class="g-1 d-flex flex-column justify-content-center align-items-center">
@@ -256,7 +256,7 @@
                   </cfif>
                     <cfloop array="#products.RESULTSET#" index="item">
                       <cfoutput>
-                          <a href="productpage.cfm?pro=#item.productid#">
+                          <a href="/productpage.cfm?pro=#item.productid#">
                             <div class="product-card h-100" >
                               <img class="img-fluid" style="height: 135px;width:150px;" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
                               <div class="product-info">
@@ -297,7 +297,7 @@
                   </cfif>
                     <cfloop array="#products.RESULTSET#" index="item">
                       <cfoutput>
-                          <a href="productpage.cfm?pro=#item.productid#">
+                          <a href="/productpage.cfm?pro=#item.productid#">
                             <div class="product-card h-100">
                               <img class="img-fluid" style="height: 135px;width:150px;" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
                               <div class="product-info">
@@ -322,7 +322,7 @@
                   </cfif>
                     <cfloop array="#products1.RESULTSET#" index="item">
                       <cfoutput>
-                          <a href="productpage.cfm?pro=#item.productid#">
+                          <a href="/productpage.cfm?pro=#item.productid#">
                             <div class="product-card h-100">
                               <img class="img-fluid" style="height: 135px;width:150px;" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
                               <div class="product-info">
@@ -337,9 +337,9 @@
                   <cfset products = obj.listProducts(limit = 5)>
                     <cfloop array="#products.RESULTSET#" index="item">
                       <cfoutput>
-                          <a href="productpage.cfm?pro=#item.productid#">
+                          <a href="/product/#item.productid#">
                             <div class="product-card h-100">
-                              <img class="img-fluid" style="height: 135px;width:150px;" src="../admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
+                              <img class="img-fluid" style="height: 135px;width:150px;" src="/admin/images/#ListLast(item.productimage,"/")#" alt="Product Image">
                               <div class="product-info">
                                   <div class="product-name">#item.productname#</div>
                                   <div class="product-price">#item.price#</div>

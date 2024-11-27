@@ -127,7 +127,7 @@
   <!-- Main Navigation Bar -->
   <nav class="navbar navbar-expand-lg navbar-main">
     <div class="container">
-          <a class="nav-item" href="#">Search</a>
+          <a class="nav-item" href="/homepage.cfm">SHOPPING CART</a>
           <a class="nav-item dropdown-toggle" href="" role="button" data-bs-toggle="dropdown">
               Menu
           </a>
@@ -136,14 +136,13 @@
             <cfloop array="#categories.RESULTSET#" item="item">
                 <cfoutput>
                     <li>
-                        <a id="#item.categoryid#" class="dropdown-item text-dark" href="#cgi.HTTP_URL#&cat=#item.categoryid#">#item.categoryname#</a>
+                        <a id="#item.categoryid#" class="dropdown-item text-dark" href="/homepage.cfm?cat=#item.categoryid#">#item.categoryname#</a>
                     </li>
                 </cfoutput>
             </cfloop>
           </ul>
-          <a class="nav-item" href="homepage.cfm">SHOPPING CART</a>
-          <a class="nav-item" href="cart.cfm">Cart</a>
-          <a class="nav-item" href="userlogin.cfm">Login/Signup</a>
+          <a class="nav-item" href="/cart">Cart</a>
+          <a class="nav-item" href="/userlogin.cfm">Login/Signup</a>
     </div>
   </nav>
 
@@ -177,7 +176,7 @@
                   <p>product details are unavailable or corrupted</p>
                   
                   <!-- Login Button -->
-                  <a class="btn btn-outline-primary" href="homepage.cfm">Browse</a>
+                  <a class="btn btn-outline-primary" href="/homepage.cfm">Browse</a>
               </div>
        		</div>
         </cfcatch>
@@ -187,8 +186,8 @@
           <cfoutput>
             <nav aria-label="breadcrumb">
               <ol class="breadcrumb ms-2">
-                <li class="breadcrumb-item"><a href="homepage.cfm?cat=#variables.products.RESULTSET[1].categoryid#">#variables.products.RESULTSET[1].categoryname#</a></li>
-                <li class="breadcrumb-item"><a href="homepage.cfm?cat=#variables.products.RESULTSET[1].categoryid#&sub=#variables.products.RESULTSET[1].subcategoryid#">#variables.products.RESULTSET[1].subcategoryname#</a></li>
+                <li class="breadcrumb-item"><a href="/homepage.cfm?cat=#variables.products.RESULTSET[1].categoryid#">#variables.products.RESULTSET[1].categoryname#</a></li>
+                <li class="breadcrumb-item"><a href="/homepage.cfm?cat=#variables.products.RESULTSET[1].categoryid#&sub=#variables.products.RESULTSET[1].subcategoryid#">#variables.products.RESULTSET[1].subcategoryname#</a></li>
                 <li class="breadcrumb-item active" aria-current="page">#variables.products.RESULTSET[1].productname#</li>
               </ol>
             </nav>
@@ -248,7 +247,7 @@
                               
                               <!-- Call-to-Action Button -->
                               <a href="" class="btn btn-primary btn-lg mt-4" id="addCart">Add to Cart</a>
-                              <a href="paymentpage.cfm?pro=#item.productid#" class="btn btn-info btn-lg mt-4" id="buyNow">Buy now</a>
+                              <a href="/paymentpage.cfm?pro=#item.productid#" class="btn btn-info btn-lg mt-4" id="buyNow">Buy now</a>
                           </div>
                       </div>
                   </div>
