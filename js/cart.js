@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    var state;
     $("#addCart").click(function(event){
         event.preventDefault(); // Prevent the default button action if it's a link
         let url=window.location.href;
@@ -67,19 +68,14 @@ $(document).ready(function() {
                 var requestData1 = {
                     productid: $row
                 };
-                $.ajax({
-                    url: '../components/shoppingkart.cfc?method=deleteCart', 
-                    method: 'POST',
-                    data: requestData1,
-                    success: function(response) {
-                        // Assuming the response indicates success, redirect to cart.cfm
-                        window.location.href = "cart.cfm";
-                    },
-                    error: function(xhr, status, error) {
-                        // Handle errors if needed
-                        console.error("Error removing item from cart: " + error);
-                    }
-                });
+                var delid = requestData1.productid;
+                var text = "Do you wish to delete the item?";
+                if (delid && typeof delid === "string" && delid.length > 0) {
+                    $("#delInput").val(delid);                
+                    $("#delText").text(text);
+                    $("#deleteSubmit").attr('data-bs-type', 'delete');
+                    $('#delModal').modal('show');
+                }
             }
             
         } 
@@ -117,7 +113,15 @@ $(document).ready(function() {
             $("#delText").text(delprompt);
             $("#deleteSubmit").attr('data-bs-type', 'empty');
             $('#delModal').modal('show');
-            //window.location.href="cart.cfm?emptycart=1";
+        }
+    });
+    $('#delForm').submit(function(event) {
+        $('#delModal').modal('hide');
+        var submitType = $("#deleteSubmit").data("bs-type");
+        if(submitType === 'empty')
+        {
+            event.preventDefault();
+            window.location.href="cart.cfm?emptycart=1";
         }
     });
 });

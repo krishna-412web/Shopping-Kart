@@ -148,7 +148,7 @@
                                                             #item.street#, #item.city#<br>
                                                             #item.state#,#item.pincode#
                                                         </p>
-                                                        <a class="btn btn-primary" href="/test/userpage.cfm?select=1&id=#item.addressid#">Select</a>
+                                                        <a class="btn btn-primary" href="userpage.cfm?select=1&id=#item.addressid#">Select</a>
                                                         <button class="btn btn-info edit" id="#item.addressid#" data-bs-toggle="modal" data-bs-target="#chr(35)#addAddress">Edit</button>
                                                     </div>
                                                 </div>

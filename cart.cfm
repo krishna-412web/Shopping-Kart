@@ -2,6 +2,8 @@
 <cfif structKeyExists(url,"emptycart")>
     <cfset obj.deleteCart()>
     <cflocation  url="cart" addToken="no">
+<cfelseif structKeyExists(form,"deleteSubmit")>
+    <cfset obj.deleteCart(productid = form.input)>
 </cfif>
 <!DOCTYPE html>
 <html lang="en">
