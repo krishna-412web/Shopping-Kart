@@ -142,7 +142,13 @@
             </cfloop>
           </ul>
           <a class="nav-item" href="/cart">Cart</a>
-          <a class="nav-item" href="/userlogin.cfm">Login/Signup</a>
+          <cfoutput>
+            <cfif structKeyExists(session,"user")>
+              <a class="nav-item" href="/userlogin.cfm">#session.user.username#</a>
+            <cfelse>
+              <a class="nav-item" href="/userlogin.cfm">Login/Signup</a>
+            </cfif>
+          </cfoutput>
     </div>
   </nav>
 
@@ -246,7 +252,7 @@
                               </p>
                               
                               <!-- Call-to-Action Button -->
-                              <a href="" class="btn btn-primary btn-lg mt-4" id="addCart">Add to Cart</a>
+                              <a class="btn btn-primary btn-lg mt-4" id="addCart">Add to Cart</a>
                               <a href="/paymentpage.cfm?pro=#item.productid#" class="btn btn-info btn-lg mt-4" id="buyNow">Buy now</a>
                           </div>
                       </div>

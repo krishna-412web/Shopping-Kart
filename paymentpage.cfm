@@ -278,7 +278,7 @@
                             <!--- <cfoutput><h4 class="card-text fw-bold" id="finalprice">Final Price:#obj.getPrice()#</h4></cfoutput> --->
                             <cfoutput>
                                 <a href="/cart" class="btn btn-sm btn-outline-secondary me-2">Cancel</a>
-                            </cfoutput>
+                            </cfoutput>  
                             <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#paymentModal">Place Order</button>
                         </div>
                     </div>

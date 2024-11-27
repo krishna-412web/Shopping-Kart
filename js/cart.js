@@ -2,8 +2,9 @@ $(document).ready(function() {
     var state;
     $("#addCart").click(function(event){
         event.preventDefault(); // Prevent the default button action if it's a link
-        let url=window.location.href;
-        url = url + "&add=1"
+        let path = window.location.pathname; // "/product/B3ACCAFA118981EA3EE1186244FE2458"
+        let productHash = path.substring(path.lastIndexOf("/") + 1);
+        let url = `/productpage.cfm?pro=${productHash}&add=1`;
         window.location.href = url;
     });
     $("button[data-bs-type]").click(function() {
