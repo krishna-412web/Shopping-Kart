@@ -32,7 +32,7 @@ $(document).ready(function() {
                         var totalSelect =`#totalPrice`;
                         $(priceSelect).text(result.cartitems[0].productprice);
                         $(taxSelect).text(result.cartitems[0].producttax);
-                        $(totalSelect).text(result.amount);
+                        $(totalSelect).text(parseFloat(result.amount.toFixed(2)));
                         $firstSpan.html(currentQuantity);
             })
             .fail(function(xhr, status, error) {
@@ -58,7 +58,7 @@ $(document).ready(function() {
                                 var totalSelect =`#totalPrice`;
                                 $(priceSelect).text(result.cartitems[0].productprice);
                                 $(taxSelect).text(result.cartitems[0].producttax);
-                                $(totalSelect).text(result.amount);
+                                $(totalSelect).text(parseFloat(result.amount.toFixed(2)));
                                 $firstSpan.html(currentQuantity);
                     })
                     .fail(function(xhr, status, error) {
