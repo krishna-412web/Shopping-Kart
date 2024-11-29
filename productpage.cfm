@@ -1,11 +1,14 @@
 <cftry>
   <cfset obj = createObject('component', 'Components.shoppingkart')>
-  <cfif structKeyExists(url, "pro") AND structKeyExists(url, "add") AND url.add EQ 1
-    AND structKeyExists(session,"user") AND session.user.value EQ 1>
+  <cfif structKeyExists(url, "pro") AND structKeyExists(url, "add") AND url.add EQ 1>
+    <cfif structKeyExists(session,"user") AND session.user.value EQ 1>
+      <cfset productid = structKeyExists(url,"pro")? Val(obj.decryptData(url.pro)) : 0>
+      <cfset obj.insertCart(productid = productid)>
+      <cflocation url="cart" addToken="no">
+    <cfelse>
+      <cflocation url="userlogin.cfm" addToken="no">
+    </cfif>
     <!---update cart --->
-    <cfset productid = structKeyExists(url,"pro")? Val(obj.decryptData(url.pro)) : 0>
-    <cfset obj.insertCart(productid = productid)>
-    <cflocation url="cart" addToken="no">
   </cfif>
 <cfcatch type="exception">
   <cfdump var="#cfcatch#">
