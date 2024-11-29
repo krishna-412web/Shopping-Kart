@@ -190,16 +190,16 @@
       <div class="sort-links d-flex justify-content-start my-2">
         <cfoutput>
           <cfif structKeyExists(url,"cat") OR structKeyExists(url,"sub")>
-            <a href="/#variables.url#order=desc" class="btn btn-outline-primary me-2">Price: High to Low</a>
-            <a href="/#variables.url#order=asc" class="btn btn-outline-primary me-2">Price: Low to High</a>
+            <a href="#variables.url#order=desc" class="btn btn-outline-primary me-2">Price: High to Low</a>
+            <a href="#variables.url#order=asc" class="btn btn-outline-primary me-2">Price: Low to High</a>
             <div class="dropdown">
               <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
               Filter
               </button>
               <ul class="dropdown-menu w-75">
                 <div class="d-flex flex-column align-items-center">
-                  <li><a href="/#variables.url#price=above" class="btn btn-sm btn-primary">Price above 20,000</a></li>
-                  <li class="mt-1"><a href="/#variables.url#price=below" class="btn btn-sm btn-primary">Price below 20,000</a></li>
+                  <li><a href="#variables.url#price=above" class="btn btn-sm btn-primary">Price above 20,000</a></li>
+                  <li class="mt-1"><a href="#variables.url#price=below" class="btn btn-sm btn-primary">Price below 20,000</a></li>
                   <li>
                     <form id="filterForm" class="mt-1" action="" method="POST">
                         <div class="g-1 d-flex flex-column justify-content-center align-items-center">
