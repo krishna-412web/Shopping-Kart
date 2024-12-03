@@ -1,9 +1,9 @@
 <cfif NOT (structKeyExists(session,"result") AND session.result.value EQ 1)>
-	<cflocation url="index.cfm" addToken="no">	
+	<cflocation url="/admin" addToken="no">	
 </cfif>
 <cfif structKeyExists(url,"logout")>
 	<cfset structClear(session)>
-	<cflocation url="index.cfm" addToken="no">
+	<cflocation url="/admin" addToken="no">
 </cfif>
 <cfset obj = createObject('component', 'Components.shoppingkart')>
 

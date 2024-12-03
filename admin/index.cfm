@@ -3,7 +3,7 @@
 		<cfset obj = createObject('component', 'Components.shoppingkart')>
 		<cfset session.result = obj.accessAdmin(data = form)>
 		<cfif session.result.value EQ 1>
-				<cflocation url="dashboard.cfm" addToken="no">
+				<cflocation url="/admin/dashboard.cfm" addToken="no">
 		<cfelse>
 			<cfset errorMessage="*unauthorized user">
 		</cfif>
