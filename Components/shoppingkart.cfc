@@ -350,13 +350,8 @@
                 AND p.subcategoryid = <cfqueryparam value="#local.subcategoryid#" cfsqltype="cf_sql_integer">
             </cfif>
             <cfif structKeyExists(local, "categoryid")>
-                AND p.subcategoryid IN (
-                    SELECT
-                        subcategoryid
-                    FROM
-                        subcategory
-                    WHERE
-                        categoryid = <cfqueryparam value="#local.categoryid#" cfsqltype="cf_sql_integer">)
+                AND 
+                    s.categoryid = <cfqueryparam value="#local.categoryid#" cfsqltype="cf_sql_integer">
             </cfif>
             <cfif structKeyExists(arguments,"price") AND arguments.price EQ "above">
                 AND
