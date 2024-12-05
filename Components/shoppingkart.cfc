@@ -344,10 +344,12 @@
                 AND p.productname LIKE <cfqueryparam value="%#arguments.search#%" cfsqltype="cf_sql_varchar">
             </cfif>           
             <cfif structKeyExists(local, "productid")>
-                AND p.productid = <cfqueryparam value="#local.productid#" cfsqltype="cf_sql_integer">
+                AND 
+                    p.productid = <cfqueryparam value="#local.productid#" cfsqltype="cf_sql_integer">
             </cfif>
             <cfif structKeyExists(local, "subcategoryid")>
-                AND p.subcategoryid = <cfqueryparam value="#local.subcategoryid#" cfsqltype="cf_sql_integer">
+                AND 
+                    p.subcategoryid = <cfqueryparam value="#local.subcategoryid#" cfsqltype="cf_sql_integer">
             </cfif>
             <cfif structKeyExists(local, "categoryid")>
                 AND 
@@ -364,21 +366,25 @@
                     structKeyExists(arguments,"min") AND 
                     arguments.max GT 0 AND 
                     arguments.max GT arguments.min>
-                AND price BETWEEN <cfqueryparam value="#arguments.min#" cfsqltype="cf_sql_integer"> 
-                AND <cfqueryparam value="#arguments.max#" cfsqltype="cf_sql_integer">
+                AND 
+                    price BETWEEN <cfqueryparam value="#arguments.min#" cfsqltype="cf_sql_integer"> 
+                    AND 
+                    <cfqueryparam value="#arguments.max#" cfsqltype="cf_sql_integer">
             <cfelseif structKeyExists(arguments,"min") AND arguments.min neq 0>
-                AND price > <cfqueryparam value="#arguments.min#" cfsqltype="cf_sql_integer">
+                AND 
+                    price > <cfqueryparam value="#arguments.min#" cfsqltype="cf_sql_integer">
             <cfelseif structKeyExists(arguments,"max") AND arguments.max neq 0>
-                AND price < <cfqueryparam value="#arguments.max#" cfsqltype="cf_sql_integer">
-            </cfif>
-            <cfif structKeyExists(arguments,"limit")>
-                ORDER BY rand()
-                LIMIT <cfqueryparam value="#arguments.limit#" cfsqltype="cf_sql_integer">
+                AND 
+                    price < <cfqueryparam value="#arguments.max#" cfsqltype="cf_sql_integer">
             </cfif>
             <cfif structKeyExists(arguments,"order") AND arguments.order EQ "asc">
                 ORDER BY p.price ASC
             <cfelseif structKeyExists(arguments,"order") AND arguments.order EQ "desc">
                 ORDER BY p.price DESC
+            </cfif>
+            <cfif structKeyExists(arguments,"limit")>
+                ORDER BY rand()
+                LIMIT <cfqueryparam value="#arguments.limit#" cfsqltype="cf_sql_integer">
             </cfif>
             ;
         </cfquery> 
