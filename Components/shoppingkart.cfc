@@ -363,7 +363,7 @@
                 AND
                     p.price<20000
             </cfif>
-            <cfif   structKeyExists(arguments,"max") AND 
+            <!---<cfif   structKeyExists(arguments,"max") AND 
                     structKeyExists(arguments,"min") AND 
                     arguments.max GT 0 AND 
                     arguments.max GT arguments.min>
@@ -377,11 +377,21 @@
             <cfelseif structKeyExists(arguments,"max") AND arguments.max neq 0>
                 AND 
                     price < <cfqueryparam value="#arguments.max#" cfsqltype="cf_sql_integer">
+            </cfif>--->      
+            <cfif structKeyExists(arguments,"min") AND arguments.min neq 0>
+                AND 
+                    price >= <cfqueryparam value="#arguments.min#" cfsqltype="cf_sql_integer">
             </cfif>
-            <cfif structKeyExists(arguments,"order") AND arguments.order EQ "asc">
-                ORDER BY p.price ASC
-            <cfelseif structKeyExists(arguments,"order") AND arguments.order EQ "desc">
-                ORDER BY p.price DESC
+            <cfif structKeyExists(arguments,"max") AND arguments.max neq 0>
+                AND 
+                    price <= <cfqueryparam value="#arguments.max#" cfsqltype="cf_sql_integer">
+            </cfif>
+            <cfif structKeyExists(arguments,"order")>
+                ORDER BY 
+                    p.price 
+                    <cfif arguments.order EQ "desc">DESC
+                    <cfelse>ASC
+                    </cfif>
             </cfif>
             <cfif structKeyExists(arguments,"limit")>
                 ORDER BY rand()
