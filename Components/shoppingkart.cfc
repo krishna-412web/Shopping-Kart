@@ -341,7 +341,8 @@
             WHERE
                 p.status = 1
              <cfif structKeyExists(arguments, "search")>
-                AND p.productname LIKE <cfqueryparam value="%#arguments.search#%" cfsqltype="cf_sql_varchar">
+                AND 
+                    CONCAT(p.productname,p.productdesc) LIKE <cfqueryparam value="%#arguments.search#%" cfsqltype="cf_sql_varchar">
             </cfif>           
             <cfif structKeyExists(local, "productid")>
                 AND 
