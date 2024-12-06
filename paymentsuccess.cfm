@@ -1,5 +1,5 @@
 <cftry>
-  <cfset obj = createObject('component', 'Components.shoppingkart')>
+  <cfset application.obj = createObject('component', 'Components.shoppingkart')>
 <cfcatch type="exception">
 </cfcatch>
 </cftry>
@@ -73,7 +73,7 @@
               Menu
           </a>
           <ul class="dropdown-menu">
-            <cfset categories = obj.listCategory()>
+            <cfset categories = application.obj.listCategory()>
             <cfloop array="#categories.RESULTSET#" item="item">
                 <cfoutput>
                     <li>
