@@ -1,6 +1,6 @@
 <cfinclude template="admin.cfm">
-<cfset categories = obj.listCategory()>
-<cfset subcategories = obj.listSubCategory()>
+<cfset categories = application.obj.listCategory()>
+<cfset subcategories = application.obj.listSubCategory()>
 <!DOCTYPE html>
 <html lang="en">
 <head>

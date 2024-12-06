@@ -5,27 +5,27 @@
 	<cfset structClear(session)>
 	<cflocation url="/admin" addToken="no">
 </cfif>
-<cfset obj = createObject('component', 'Components.shoppingkart')>
+<!---<cfset application.obj = createObject('component', 'Components.shoppingkart')>--->
 
 <cftry>
 	<cfif structKeyExists(form, "deleteSubmit")>
-		<cfset deleteid = Val(obj.decryptData(form.deleteid))>
-		<cfset variables.result = obj.deleteItems(
+		<cfset deleteid = Val(application.obj.decryptData(form.deleteid))>
+		<cfset variables.result = application.obj.deleteItems(
 							deleteid = deleteid,
 							section = form.section
 							)>
 	</cfif>
 
 	<cfif structKeyExists(form,"categorySubmit")>
-		<cfset categoryid = structKeyExists(form, "categoryId")? Val(obj.decryptData(form.categoryId)) : 0>
-		<cfset variables.result = obj.updateCategory(
+		<cfset categoryid = structKeyExists(form, "categoryId")? Val(application.obj.decryptData(form.categoryId)) : 0>
+		<cfset variables.result = application.obj.updateCategory(
 											categoryName = form.categoryName,
 											categoryid = categoryId
 											)>
 	<cfelseif structKeyExists(form,"subCategorySubmit")>
-		<cfset subcategoryid = structKeyExists(form, "subCategoryId")? Val(obj.decryptData(form.subCategoryId)): 0>
-		<cfset categorySelect = structKeyExists(form, "categorySelect")? Val(obj.decryptData(form.categorySelect)): 0>
-		<cfset variables.result = obj.updateSubCategory(	categorySelect = categorySelect,
+		<cfset subcategoryid = structKeyExists(form, "subCategoryId")? Val(application.obj.decryptData(form.subCategoryId)): 0>
+		<cfset categorySelect = structKeyExists(form, "categorySelect")? Val(application.obj.decryptData(form.categorySelect)): 0>
+		<cfset variables.result = application.obj.updateSubCategory(	categorySelect = categorySelect,
 												subCategoryName = form.subCategoryName,
 												subcategoryid = subcategoryid)>
 	<cfelseif structKeyExists(form,"productSubmit")>
@@ -60,14 +60,14 @@
 			</cfif>
 			<!---<cfdump var="#variables.imgArray#"> --->
 		</cfif>
-		<cfset productid = structKeyExists(form, "productid")? Val(obj.decryptData(form.productid)): 0>
-		<cfset productsubcategory = structKeyExists(form, "productsubcategory")? Val(obj.decryptData(form.productsubcategory)): 0>
+		<cfset productid = structKeyExists(form, "productid")? Val(application.obj.decryptData(form.productid)): 0>
+		<cfset productsubcategory = structKeyExists(form, "productsubcategory")? Val(application.obj.decryptData(form.productsubcategory)): 0>
 		<cfif structKeyExists(variables, "imgArray") AND ArrayLen(variables.imgArray) GT 0>
 			<cfset imagearray = variables.imgArray>
 		<cfelse>
 			<cfset imagearray = arraynew(1)>
 		</cfif>
-		<cfset variables.result = obj.updateProduct( subcategoryid = productsubcategory,
+		<cfset variables.result = application.obj.updateProduct( subcategoryid = productsubcategory,
 												productname   = form.productname,
 												productdesc = form.productdesc,
 												productimage = imgPath,
