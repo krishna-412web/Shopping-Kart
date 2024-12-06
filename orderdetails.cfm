@@ -1,4 +1,4 @@
-<cfset application.obj = createObject('component', 'Components.shoppingkart')>
+<!---<cfset application.obj = createObject('component', 'Components.shoppingkart')>--->
 <cfif structKeyExists(session,"user") AND session.user.value EQ 1 >
     <cfif structKeyExists(form, "searchSubmit") AND len(trim(form.searchString)) GT 0>
         <cfset variables.orders = application.obj.listOrder(search = form.searchString)>
