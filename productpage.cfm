@@ -1,9 +1,9 @@
 <cftry>
-  <cfset obj = createObject('component', 'Components.shoppingkart')>
+  <!---<cfset application.obj = createObject('component', 'Components.shoppingkart')>--->
   <cfif structKeyExists(url, "pro") AND structKeyExists(url, "add") AND url.add EQ 1>
     <cfif structKeyExists(session,"user") AND session.user.value EQ 1>
-      <cfset productid = structKeyExists(url,"pro")? Val(obj.decryptData(url.pro)) : 0>
-      <cfset obj.insertCart(productid = productid)>
+      <cfset productid = structKeyExists(url,"pro")? Val(application.obj.decryptData(url.pro)) : 0>
+      <cfset application.obj.insertCart(productid = productid)>
       <cflocation url="cart" addToken="no">
     <cfelse>
       <cflocation url="userlogin.cfm" addToken="no">
@@ -135,7 +135,7 @@
               Menu
           </a>
           <ul class="dropdown-menu">
-            <cfset categories = obj.listCategory()>
+            <cfset categories = application.obj.listCategory()>
             <cfloop array="#categories.RESULTSET#" item="item">
                 <cfoutput>
                     <li>
@@ -157,7 +157,7 @@
 
   <!-- Category Menu -->
   <cfif structKeyExists(url,"cat") OR structKeyExists(url,"sub")>
-    <cfset subcategories = obj.listSubCategory(categoryid = url.cat)>
+    <cfset subcategories = application.obj.listSubCategory(categoryid = url.cat)>
     <div class="category-menu">
       <div class="container d-flex justify-content-between">
         <cfloop array="#subcategories.RESULTSET#" index="item">
@@ -172,8 +172,8 @@
     <div class="product-section">
         <cftry>
           <cfif structKeyExists(url,"pro")>
-            <cfset variables.products = obj.listProducts(productid = url.pro)>
-            <cfset variables.images = obj.getimages(productid = url.pro)>
+            <cfset variables.products = application.obj.listProducts(productid = url.pro)>
+            <cfset variables.images = application.obj.getimages(productid = url.pro)>
           </cfif>
         <cfcatch type="any">
           <div class="content-container">
