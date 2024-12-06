@@ -1,5 +1,5 @@
 
-<cfset obj = createObject('component', 'Components.shoppingkart')>
+<!---<cfset obj = createObject('component', 'Components.shoppingkart')>--->
 <!--- <cfdump var="#session.user#"> --->
 <!DOCTYPE html>
 <html lang="en">
@@ -121,7 +121,7 @@
                 Menu
             </a>
             <ul class="dropdown-menu">
-              <cfset categories = obj.listCategory()>
+              <cfset categories = application.obj.listCategory()>
               <cfloop array="#categories.RESULTSET#" item="item">
                   <cfoutput>
                       <li>
@@ -159,7 +159,7 @@
 
     <!-- Category Menu -->
     <cfif structKeyExists(url,"cat") OR structKeyExists(url,"sub")>
-        <cfset subcategories = obj.listSubCategory(categoryid = url.cat)>
+        <cfset subcategories = application.obj.listSubCategory(categoryid = url.cat)>
         <div class="category-menu">
           <div class="container d-flex justify-content-between">
             <cfloop array="#subcategories.RESULTSET#" index="item">
@@ -233,26 +233,26 @@
                           url.max GT 0 AND 
                           url.min GT 0 AND 
                           url.max GT url.min>
-                      <cfset products = obj.listProducts(subcategoryid = url.sub,
+                      <cfset products = application.obj.listProducts(subcategoryid = url.sub,
                                                         max = url.max,
                                                         min = url.min)>
                     <cfelseif structKeyExists(url,"min") AND url.min GT 0>
-                      <cfset products = obj.listProducts(subcategoryid = url.sub,
+                      <cfset products = application.obj.listProducts(subcategoryid = url.sub,
                                                         min = url.min)>
                     <cfelseif structKeyExists(url,"max") AND url.max GT 0>
-                      <cfset products = obj.listProducts(subcategoryid = url.sub,
+                      <cfset products = application.obj.listProducts(subcategoryid = url.sub,
                                                         max = url.max)>
                     <cfelse>
-                       <cfset products = obj.listProducts(subcategoryid = url.sub)>                     
+                       <cfset products = application.obj.listProducts(subcategoryid = url.sub)>                     
                     </cfif>
                   <cfelseif structKeyExists(url, 'order') AND structKeyExists(url, 'price')>
-                    <cfset products = obj.listProducts(subcategoryid = url.sub,order = url.order,price = url.price)>
+                    <cfset products = application.obj.listProducts(subcategoryid = url.sub,order = url.order,price = url.price)>
                   <cfelseif structKeyExists(url, 'order')>
-                    <cfset products = obj.listProducts(subcategoryid = url.sub,order = url.order)>
+                    <cfset products = application.obj.listProducts(subcategoryid = url.sub,order = url.order)>
                   <cfelseif structKeyExists(url, 'price')>
-                    <cfset products = obj.listProducts(subcategoryid = url.sub,price = url.price)>
+                    <cfset products = application.obj.listProducts(subcategoryid = url.sub,price = url.price)>
                   <cfelse>
-                    <cfset products = obj.listProducts(subcategoryid = url.sub)>
+                    <cfset products = application.obj.listProducts(subcategoryid = url.sub)>
                   </cfif>
                     <cfloop array="#products.RESULTSET#" index="item">
                       <cfoutput>
@@ -274,26 +274,26 @@
                           url.max GT 0 AND 
                           url.min GT 0 AND 
                           url.max GT url.min>
-                      <cfset products = obj.listProducts(categoryid = url.cat,
+                      <cfset products = application.obj.listProducts(categoryid = url.cat,
                                                         max = url.max,
                                                         min = url.min)>
                     <cfelseif structKeyExists(url,"min") AND url.min GT 0>
-                      <cfset products = obj.listProducts(categoryid = url.cat,
+                      <cfset products = application.obj.listProducts(categoryid = url.cat,
                                                         min = url.min)>
                     <cfelseif structKeyExists(url,"max") AND url.max GT 0>
-                      <cfset products = obj.listProducts(categoryid = url.cat,
+                      <cfset products = application.obj.listProducts(categoryid = url.cat,
                                                         max = url.max)>
                     <cfelse>
-                       <cfset products = obj.listProducts(categoryid = url.cat)>                     
+                       <cfset products = application.obj.listProducts(categoryid = url.cat)>                     
                     </cfif>
                   <cfelseif structKeyExists(url, 'order') AND structKeyExists(url, 'price')>
-                    <cfset products = obj.listProducts(categoryid = url.cat,order = url.order,price = url.price)>
+                    <cfset products = application.obj.listProducts(categoryid = url.cat,order = url.order,price = url.price)>
                   <cfelseif structKeyExists(url, 'order')>
-                    <cfset products = obj.listProducts(categoryid = url.cat,order = url.order)>
+                    <cfset products = application.obj.listProducts(categoryid = url.cat,order = url.order)>
                   <cfelseif structKeyExists(url, 'price')>
-                    <cfset products = obj.listProducts(categoryid = url.cat,price = url.price)>
+                    <cfset products = application.obj.listProducts(categoryid = url.cat,price = url.price)>
                   <cfelse>
-                    <cfset products = obj.listProducts(categoryid = url.cat)>
+                    <cfset products = application.obj.listProducts(categoryid = url.cat)>
                   </cfif>
                     <cfloop array="#products.RESULTSET#" index="item">
                       <cfoutput>
@@ -312,13 +312,13 @@
                           structKeyExists(url, "string") AND 
                           len(trim(url.string)) GT 0>
                   <cfif structKeyExists(url, 'order') AND structKeyExists(url, 'price')>
-                    <cfset products1 = obj.listProducts(search = url.string,order = url.order,price = url.price)>
+                    <cfset products1 = application.obj.listProducts(search = url.string,order = url.order,price = url.price)>
                   <cfelseif structKeyExists(url, 'order')>
-                    <cfset products1 = obj.listProducts(search = url.string,order = url.order)>
+                    <cfset products1 = application.obj.listProducts(search = url.string,order = url.order)>
                   <cfelseif structKeyExists(url, 'price')>
-                    <cfset products1 = obj.listProducts(search = url.string,price = url.price)>
+                    <cfset products1 = application.obj.listProducts(search = url.string,price = url.price)>
                   <cfelse>
-                    <cfset products1 = obj.listProducts(search = url.string)>
+                    <cfset products1 = application.obj.listProducts(search = url.string)>
                   </cfif>
                     <cfloop array="#products1.RESULTSET#" index="item">
                       <cfoutput>
@@ -334,7 +334,7 @@
                       </cfoutput>
                     </cfloop>
                 <cfelse>
-                  <cfset products = obj.listProducts(limit = 5)>
+                  <cfset products = application.obj.listProducts(limit = 5)>
                     <cfloop array="#products.RESULTSET#" index="item">
                       <cfoutput>
                           <a href="/product/#item.productid#">
