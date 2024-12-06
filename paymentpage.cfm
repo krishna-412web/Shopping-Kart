@@ -1,5 +1,5 @@
 <cftry>
-<cfset obj = createObject('component', 'Components.shoppingkart')>
+<!---<cfset application.obj = createObject('component', 'Components.shoppingkart')>--->
 <cfif structKeyExists(session,"user") AND session.user.value EQ 1 >
         <cfif structKeyExists(url, "select") 
             AND structKeyExists(url, "id")
@@ -12,10 +12,10 @@
             </cfif>
         </cfif>
         <cfif structKeyExists(url, "pro") AND len(trim(url.pro))>
-                <cfset variables.product = obj.listProducts(productid = url.pro)>
+                <cfset variables.product = application.obj.listProducts(productid = url.pro)>
         </cfif>
         <cfif structKeyExists(url, "cart") AND len(trim(url.cart))>
-                <cfset variables.cart = obj.listCart()>
+                <cfset variables.cart = application.obj.listCart()>
                 <cfif Arraylen(variables.cart.cartitems) EQ 0>
                     <cfset structDelete(variables,"cart")>
                 </cfif>
@@ -47,7 +47,7 @@
                 <cfset arrayAppend(variables.errors, "*Pincode required")>
             </cfif>
             <cfif Arraylen(variables.errors) EQ 0>
-                <cfset obj.updateAddress(addressid = addressid,
+                <cfset application.obj.updateAddress(addressid = addressid,
                                             userid = userid,
                                             name = form.name,
                                             phoneno = form.phone,
@@ -64,16 +64,16 @@
             <cfelse>
                 <cfset variables.addressid = session.user.address>
             </cfif>
-            <cfset result=obj.makepayment(cardnumber=form.cardnumber,
+            <cfset result=application.obj.makepayment(cardnumber=form.cardnumber,
                                     expirationdate=form.expirydate,
                                     cvv=form.cvv,
                                     cardholdername=form.cardholdername)>
             <cfif result.value EQ 1>
-                <cfset productid = structKeyExists(form,"productid")?obj.decryptData(form.productid):0>
-                <cfset orderid = obj.addOrder(productid = productid,
+                <cfset productid = structKeyExists(form,"productid")?application.obj.decryptData(form.productid):0>
+                <cfset orderid = application.obj.addOrder(productid = productid,
                                     quantity = form.productquantity,
                                     address = variables.addressid)>
-                <cfset obj.sendmail(orderid = orderid)>
+                <cfset application.obj.sendmail(orderid = orderid)>
                 <cflocation url="paymentsuccess.cfm?orderid=#orderid#" addToken="no">
             <cfelse>
                 <cflocation url="paymentsuccess.cfm" addToken="no">
@@ -85,14 +85,14 @@
             <cfelse>
                 <cfset variables.addressid = session.user.address>
             </cfif>
-            <cfset result=obj.makepayment(cardnumber=form.cardnumber,
+            <cfset result=application.obj.makepayment(cardnumber=form.cardnumber,
                         expirationdate=form.expirydate,
                         cvv=form.cvv,
                         cardholdername=form.cardholdername)>
             <cfif result.value EQ 1>
-                <cfset orderid = obj.addOrder(address = variables.addressid)>
-                <cfset obj.sendmail(orderid = orderid)>
-                <cfset obj.deleteCart()>
+                <cfset orderid = application.obj.addOrder(address = variables.addressid)>
+                <cfset application.obj.sendmail(orderid = orderid)>
+                <cfset application.obj.deleteCart()>
                 <cflocation url="paymentsuccess.cfm?orderid=#orderid#" addToken="no">
             <cfelse>
                 <cflocation url="paymentsuccess.cfm" addToken="no">
@@ -179,9 +179,9 @@
                                     <div class="text-center mt-4">
                                         <p class="fw-bold">SELECTED ADDRESS</p>
                                         <cfif structKeyExists(session,"addressid")>
-                                            <cfset address = obj.listAddress(addressid = session.addressid)>
+                                            <cfset address = application.obj.listAddress(addressid = session.addressid)>
                                         <cfelse>
-                                            <cfset address = obj.listAddress(addressid = session.user.address)>
+                                            <cfset address = application.obj.listAddress(addressid = session.user.address)>
                                         </cfif>
                                         <cfif address.recordCount>
                                             <cfset selectedAddress = address.RESULTSET[1]>
@@ -244,9 +244,9 @@
                                         <p class="fw-bold">SELECTED ADDRESS</p>
                                         <cftry>
                                             <cfif structKeyExists(session,"addressid")>
-                                                <cfset address = obj.listAddress(addressid = session.addressid)>
+                                                <cfset address = application.obj.listAddress(addressid = session.addressid)>
                                             <cfelse>
-                                                <cfset address = obj.listAddress(addressid = session.user.address)>
+                                                <cfset address = application.obj.listAddress(addressid = session.user.address)>
                                             </cfif>
                                         <cfcatch type="exception">
                                             <cfdump var="#cfcatch#">
@@ -271,11 +271,11 @@
                                     </div>
                                 </div>
                                 <div>
-                                    <cfoutput><h4 class="card-text text-danger fw-bold" id="finalamount" name="finalamount">Payable Amount:#obj.getAmount()#</h4></cfoutput>
+                                    <cfoutput><h4 class="card-text text-danger fw-bold" id="finalamount" name="finalamount">Payable Amount:#application.obj.getAmount()#</h4></cfoutput>
                                 </div>
                         </div>
                         <div class="card-footer mt-1 d-flex justify-content-around">
-                            <!--- <cfoutput><h4 class="card-text fw-bold" id="finalprice">Final Price:#obj.getPrice()#</h4></cfoutput> --->
+                            <!--- <cfoutput><h4 class="card-text fw-bold" id="finalprice">Final Price:#application.obj.getPrice()#</h4></cfoutput> --->
                             <cfoutput>
                                 <a href="/cart" class="btn btn-sm btn-outline-secondary me-2">Cancel</a>
                             </cfoutput>  
@@ -311,7 +311,7 @@
                             <div class="d-flex flex-column">
                                 <!-- Example Address 1 -->
                                 <div>
-                                    <cfset address1 = obj.listAddress(userid = session.user.userid)>
+                                    <cfset address1 = application.obj.listAddress(userid = session.user.userid)>
                                     <cfif address1.recordCount NEQ 0>
                                         <cfoutput>
                                             <cfloop array="#address1.RESULTSET#" index="item">
