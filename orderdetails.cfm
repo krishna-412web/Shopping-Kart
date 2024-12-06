@@ -1,9 +1,9 @@
-<cfset obj = createObject('component', 'Components.shoppingkart')>
+<cfset application.obj = createObject('component', 'Components.shoppingkart')>
 <cfif structKeyExists(session,"user") AND session.user.value EQ 1 >
     <cfif structKeyExists(form, "searchSubmit") AND len(trim(form.searchString)) GT 0>
-        <cfset variables.orders = obj.listOrder(search = form.searchString)>
+        <cfset variables.orders = application.obj.listOrder(search = form.searchString)>
     <cfelse>
-        <cfset variables.orders = obj.listOrder()>
+        <cfset variables.orders = application.obj.listOrder()>
     </cfif>
 <cfelse>
     <cflocation url="userlogin.cfm" addtoken="no">
