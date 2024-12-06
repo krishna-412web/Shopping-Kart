@@ -2,12 +2,12 @@
     <cfset structDelete(session, "user")>
     <cflocation  url="homepage.cfm" addToken="no">
 </cfif>
-<cfset obj = createObject('component', 'Components.shoppingkart')>
+<!---<cfset application.obj = createObject('component', 'Components.shoppingkart')>--->
 <cfif structKeyExists(session,"user") AND session.user.value EQ 1 >
     <cfif structKeyExists(url, "select") 
             AND structKeyExists(url, "id")
             AND len(trim(url.id)) GT 0>
-            <cfset obj.setaddress(addressid = Val(url.id),
+            <cfset application.obj.setaddress(addressid = Val(url.id),
                                 userid = session.user.userid )>
             <cfset session.user.address = Val(url.id)>
             <cflocation  url="userpage.cfm" addToken="no">
@@ -38,7 +38,7 @@
             <cfset arrayAppend(variables.errors, "*Pincode required")>
         </cfif>
         <cfif Arraylen(variables.errors) EQ 0>
-            <cfset obj.updateAddress(addressid = addressid,
+            <cfset application.obj.updateAddress(addressid = addressid,
                                         userid = userid,
                                         name = form.name,
                                         phoneno = form.phone,
@@ -99,7 +99,7 @@
 
                 <div class="text-center mt-4">
                     <p class="fw-bold">SELECTED ADDRESS</p>
-                    <cfset address = obj.listAddress(addressid = session.user.address)>
+                    <cfset address = application.obj.listAddress(addressid = session.user.address)>
                      <cfif address.recordCount>
                         <cfset selectedAddress = address.RESULTSET[1]>
                         <cfoutput> <!--- Get the first address --->
@@ -136,7 +136,7 @@
                             <div class="d-flex flex-column">
                                 <!-- Example Address 1 -->
                                 <div>
-                                    <cfset address1 = obj.listAddress(userid = session.user.userid)>
+                                    <cfset address1 = application.obj.listAddress(userid = session.user.userid)>
                                     <cfif address1.recordCount NEQ 0>
                                         <cfoutput>
                                             <cfloop array="#address1.RESULTSET#" index="item">

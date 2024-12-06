@@ -1,7 +1,7 @@
 <cfif NOT (structKeyExists(session,"user") AND session.user.value EQ 1)>
 	<cfif structKeyExists(form,"userSubmit")>
-		<cfset obj = createObject('component', 'Components.shoppingkart')>
-		<cfset session.user = obj.accessUser(data = form)>
+		<!---<cfset application.obj = createObject('component', 'Components.shoppingkart')>--->
+		<cfset session.user = application.obj.accessUser(data = form)>
 		<cfif session.user.value EQ 1>
 				<cflocation url="homepage.cfm" addToken="no">
 		<cfelse>
