@@ -1,9 +1,9 @@
-<cfset obj = createObject('component', 'Components.shoppingkart')>
+<!---<cfset application.obj = createObject('component', 'Components.shoppingkart')>--->
 <cfif structKeyExists(url,"emptycart")>
-    <cfset obj.deleteCart()>
+    <cfset application.obj.deleteCart()>
     <cflocation  url="cart" addToken="no">
 <cfelseif structKeyExists(form,"deleteSubmit")>
-    <cfset obj.deleteCart(productid = form.input)>
+    <cfset application.obj.deleteCart(productid = form.input)>
 </cfif>
 <!DOCTYPE html>
 <html lang="en">
@@ -128,10 +128,10 @@
         </div>
     </div>
 <cfelse>
-    <cfset obj = createObject('component', 'Components.shoppingkart')>
+    <!---<cfset application.obj = createObject('component', 'Components.shoppingkart')>--->
     <div class="container-fluid">
         <cftry>
-            <cfset variables.cart = obj.listCart()>
+            <cfset variables.cart = application.obj.listCart()>
             <cfif ArrayLen(variables.cart.cartitems) NEQ 0>
                 <div class="row">
                     <div class="col-9 col-md-9">
@@ -151,7 +151,7 @@
                             <tbody>
                                 <cfoutput>
                                     <cfloop array="#variables.cart.cartitems#" item="item" index="i">
-                                        <cfset variables.cartproduct = obj.encryptText(item.productid)>
+                                        <cfset variables.cartproduct = application.obj.encryptText(item.productid)>
                                         <tr class="#variables.cartproduct#">
                                             <td>#i#</td>
                                             <td><img src="/admin/images/#ListLast(item.productimage,"/")#" height="70" width="70" alt="productimg"/></td>
